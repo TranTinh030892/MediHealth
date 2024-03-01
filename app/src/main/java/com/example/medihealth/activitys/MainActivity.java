@@ -1,10 +1,12 @@
-package com.example.medihealth;
+package com.example.medihealth.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.medihealth.R;
 
 public class MainActivity extends AppCompatActivity {
     private Button btn;
