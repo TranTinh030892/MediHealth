@@ -1,6 +1,8 @@
 package com.example.medihealth.fragments.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Menu_Fragment extends Fragment implements View.OnClickListener {
+    SharedPreferences sharedPreferences;
     GoogleSignInClient googleSignInClient;
     RelativeLayout btnLogout;
     public Menu_Fragment() {
@@ -36,6 +39,7 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View itemView =  inflater.inflate(R.layout.fragment_menu, container, false);
+        sharedPreferences = getContext().getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -58,6 +62,9 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_logout){
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("profile","empty");
+            editor.apply();
             FirebaseAuth.getInstance().signOut();
             googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override

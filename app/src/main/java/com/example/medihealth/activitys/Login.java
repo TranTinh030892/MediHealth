@@ -310,5 +310,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("profile",displayName+";"+photoUrl);
         editor.apply();
+
     }
 }
