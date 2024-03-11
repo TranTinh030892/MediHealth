@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -101,6 +102,14 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
 //            Intent intent = new Intent(getActivity(), InforBook.class);
 //            startActivity(intent);
         }
+        if (v.getId() == R.id.form_inside_one_above){
+            Toast.makeText(getActivity(), "Son", Toast.LENGTH_SHORT).show();
+            // menu nhắc lịch
+        }
+        if (v.getId() == R.id.form_inside_two_above){
+            Toast.makeText(getActivity(), "Thu", Toast.LENGTH_SHORT).show();
+            // menu quản lý đơn thuốc
+        }
     }
 
     private void initView(View itemView) {
@@ -117,10 +126,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         // menu
         menuBook = itemView.findViewById(R.id.block_book_outside);
         menuReminder = itemView.findViewById(R.id.form_inside_one_above);
-        menuPrescription = itemView.findViewById(R.id.form_inside_one_below);
-        menuService = itemView.findViewById(R.id.form_inside_two_above);
-        menuPayment = itemView.findViewById(R.id.form_inside_two_below);
-        menuSearch = itemView.findViewById(R.id.form_inside_three_above);
+        menuPrescription = itemView.findViewById(R.id.form_inside_two_above);
+        menuService = itemView.findViewById(R.id.form_inside_three_above);
+        menuPayment = itemView.findViewById(R.id.form_inside_one_below);
+        menuSearch = itemView.findViewById(R.id.form_inside_two_below);
         menuProfile = itemView.findViewById(R.id.form_inside_three_below);
         // slide
         formSlide = itemView.findViewById(R.id.slide);
