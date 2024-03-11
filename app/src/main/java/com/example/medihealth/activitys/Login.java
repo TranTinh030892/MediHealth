@@ -48,6 +48,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
+    Dialog dialog;
     SharedPreferences sharedPreferences;
     EditText emailUser, passWord;
     TextView register,loginGoogle;
@@ -70,10 +71,24 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        dialog = new Dialog(this);
         initView();
         setButtonLogin();
         initOnclick();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dialog.dismiss();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        dialog.dismiss();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -87,9 +102,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     public void run() {
                         fireBaseAuth(account.getIdToken());
                     }
-                }, 1000);
+                }, 2000);
             }catch (Exception e){
-
+                Log.e("ERROR","ERROR",e);
             }
         }
     }
@@ -229,13 +244,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 Toast.makeText(this, "Điền đủ thông tin", Toast.LENGTH_SHORT).show();
                 return;
             }
-            showDialogLoadingLogin(Gravity.CENTER);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    onClickLogin(email,pass);
-                }
-            }, 2000);
+            onClickLogin(email,pass);
         }
         else if (v.getId() == R.id.login_google){
             loginGoogle();
@@ -243,7 +252,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void showDialogLoadingLogin(int center) {
-        final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_loading);
         Window window = dialog.getWindow();
@@ -270,7 +278,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
                             String currentUserid = mAuth.getCurrentUser().getUid();
-                            checkProfile(currentUserid);
+                            showDialogLoadingLogin(Gravity.CENTER);
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    checkProfile(currentUserid);
+                                }
+                            }, 2000);
                         }
                         else {
                             Toast.makeText(Login.this, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show();
