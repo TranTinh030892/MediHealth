@@ -1,0 +1,26 @@
+<!-- res/drawable/button_custom.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Trạng thái khi được nhấn -->
+    <item android:state_pressed="true" >
+        <layer-list>
+            <item >
+                <shape android:shape="rectangle" >
+                    <solid android:color="@color/mainColor" /> <!-- Màu nền khi nhấn -->
+                    <corners android:radius="10dp" /> <!-- Bo góc -->
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <!-- Trạng thái mặc định -->
+    <item>
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="#E7ECFB" />
+                    <corners android:radius="10dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

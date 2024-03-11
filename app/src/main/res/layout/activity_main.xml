@@ -4,22 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
     tools:context=".activitys.MainActivity">
-
-    <Button
-        android:id="@+id/btn"
-        android:text="Dang nhap"
+    <FrameLayout
+        android:id="@+id/page_home"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_button_1"/>
-    <EditText
-        android:id="@+id/edit"
-        android:layout_marginTop="20dp"
-        android:hint="edit"
+        android:layout_height="match_parent"
+        android:layout_above="@id/menu">
+    </FrameLayout>
+    <!--    menu-->
+    <RelativeLayout
+        android:id="@+id/menu"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/custom_form_bottomnavigation_home"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_edittext_1"
-        android:layout_below="@id/btn"/>
+        android:layout_height="57dp">
 
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/menuBottom"
+            android:layout_width="match_parent"
+            android:background="@drawable/custom_form_bottomnavigation_home"
+            android:layout_height="match_parent"
+            app:itemIconTint="@color/itemcolor"
+            app:labelVisibilityMode="labeled"
+            app:itemTextColor="@color/itemcolor"
+            app:menu="@menu/menu_home" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@color/white"
+            android:paddingTop="5dp"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btnHome"
+                android:background="@drawable/circular_bg"
+                android:backgroundTint="@color/mainColor"
+                android:drawableStart="@drawable/icon_heart"
+                android:layout_centerHorizontal="true"
+                android:paddingStart="9dp"
+                android:paddingTop="4dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"/>
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+    </RelativeLayout>
 </RelativeLayout>
