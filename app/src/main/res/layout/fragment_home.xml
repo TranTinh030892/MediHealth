@@ -254,6 +254,95 @@
                             </RelativeLayout>
                         </RelativeLayout>
                     </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/not_logged"
+                        android:layout_width="365dp"
+                        android:background="@drawable/custom_toplayout_home_2"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:layout_height="132dp"
+                        android:paddingEnd="5dp"
+                        android:elevation="2dp">
+                        <RelativeLayout
+                            android:id="@+id/block_left"
+                            android:layout_width="120dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/advice"/>
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_toEndOf="@id/block_left">
+                            <TextView
+                                android:id="@+id/text1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:textColor="@color/text_Color"
+                                android:text="Hãy"/>
+                            <TextView
+                                android:id="@+id/text2"
+                                android:layout_marginLeft="4dp"
+                                android:layout_toEndOf="@id/text1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Đăng nhập"
+                                android:textSize="15sp"
+                                android:textColor="@color/text_Color"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:id="@+id/text3"
+                                android:layout_marginLeft="4dp"
+                                android:layout_toEndOf="@id/text2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:textColor="@color/text_Color"
+                                android:text="để có trải"/>
+                            <TextView
+                                android:id="@+id/tex4"
+                                android:layout_below="@id/text1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="nghiệm tốt hơn"
+                                android:textColor="@color/text_Color"
+                                android:layout_marginTop="3dp"/>
+                            <Button
+                                android:id="@+id/btn_login"
+                                android:text="Đăng nhập"
+                                android:textColor="@color/white"
+                                android:textAllCaps="false"
+                                android:layout_below="@id/tex4"
+                                android:layout_marginTop="25dp"
+                                android:background="@drawable/custom_button_google"
+                                android:backgroundTint="@color/colorCircleSelected"
+                                android:layout_width="match_parent"
+                                android:layout_height="27dp"/>
+                        </RelativeLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/block_loading_form"
+                        android:layout_width="365dp"
+                        android:background="@drawable/custom_toplayout_home_2"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:layout_height="132dp">
+                        <ProgressBar
+                            android:id="@+id/loading_form"
+                            android:layout_width="27dp"
+                            android:layout_height="27dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"/>
+                    </RelativeLayout>
                 </RelativeLayout>
                 <!--    end top-->
 
@@ -634,11 +723,11 @@
     </ScrollView>
     //
     <RelativeLayout
+        android:id="@+id/btn_chat"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:clickable="true"
         android:background="@drawable/circular_bg"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="670dp"

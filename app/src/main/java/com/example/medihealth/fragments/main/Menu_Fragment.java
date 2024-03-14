@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.Login;
+import com.example.medihealth.activitys.MainActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -70,7 +71,7 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     // Chuyển người dùng đến màn hình đăng nhập
-                    Intent intent = new Intent(getActivity(), Login.class);
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                 }
             });

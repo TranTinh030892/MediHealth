@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.medihealth.models.Employee;
 import com.example.medihealth.models.UserModel;
 
 
@@ -29,20 +30,17 @@ public class AndroidUtil {
         return userModel;
     }
 
-//    public static void passDoctorModelAsIntent(Intent intent, Doctor model){
-//        intent.putExtra("fullName",model.getFullName());
-//        intent.putExtra("phoneNumber",model.getPhoneNumber());
-//        intent.putExtra("specialist",model.getSpecialist());
-//        intent.putExtra("userId",model.getUserId());
-//    }
-//    public static Doctor getDoctorModelFromIntent(Intent intent){
-//        Doctor doctor = new Doctor();
-//        doctor.setFullName(intent.getStringExtra("fullName"));
-//        doctor.setPhoneNumber(intent.getStringExtra("phoneNumber"));
-//        doctor.setSpecialist(intent.getStringExtra("specialist"));
-//        doctor.setUserId(intent.getStringExtra("userId"));
-//        return doctor;
-//    }
+    public static void passEmployeeModelAsIntent(Intent intent, Employee model){
+        intent.putExtra("fullName",model.getFullName());
+        intent.putExtra("userId",model.getUserId());
+    }
+    public static Employee getEmployeeModelFromIntent(Intent intent){
+        Employee employee = new Employee();
+        employee.setFullName(intent.getStringExtra("fullName"));
+        employee.setUserId(intent.getStringExtra("userId"));
+        employee.setTokenId(intent.getStringExtra("tokenId"));
+        return employee;
+    }
 
     public static void setProfilePic(Context context, Uri imageUri, ImageView imageView){
         Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(imageView);

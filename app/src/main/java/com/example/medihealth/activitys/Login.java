@@ -20,6 +20,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -88,7 +89,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         super.onStop();
         dialog.dismiss();
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -221,6 +221,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                 int isRole = isRoleNumber.intValue();
                                 if (isRole == 3) {
                                     Intent intent = new Intent(Login.this, MainActivity.class);
+                                    intent.putExtra("requestCodeLoadingFormUser",1102);
                                     startActivity(intent);
                                     finish();
                                 } else if (isRole == 2){

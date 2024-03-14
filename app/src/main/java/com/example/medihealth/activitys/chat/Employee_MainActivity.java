@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.example.medihealth.R;
 
-public class Chat_Activity extends AppCompatActivity {
+public class Employee_MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_employee_main);
     }
 }

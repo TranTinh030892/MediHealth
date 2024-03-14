@@ -1,16 +1,22 @@
 package com.example.medihealth.fragments.main;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -24,7 +30,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 import com.example.medihealth.R;
+import com.example.medihealth.activitys.Login;
+import com.example.medihealth.activitys.chat.ListEmployee;
 import com.example.medihealth.adapters.main.SlidePagerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -41,18 +51,19 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Home_Fragment extends Fragment implements View.OnClickListener {
+    FirebaseAuth mAuth;
     SharedPreferences sharedPreferences;
     RelativeLayout menuBook, menuReminder, menuPrescription, menuService, menuPayment,
-    menuSearch, menuProfile;
+    menuSearch, menuProfile, formUser, formLogin, loadingForm, menuChat;
     private SlidePagerAdapter slidePagerAdapter;
     private Timer timer;
     ViewPager2 formSlide;
-    private Button btnCalendar;
-
+    private Button btnCalendar,btnLogin;
     private TextView textTemp, textName, textGender_Birth, textHeight, textWeight, textBMI;
     private ImageButton circleOne, circleTwo, circleThree, circleFour, circleFive, circleSix;
     ImageView imageAccount;
     private List<ImageButton>listCircles = new ArrayList<>();
+    Dialog dialog ;
     public Home_Fragment() {
         // Required empty public constructor
     }
@@ -67,15 +78,16 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View itemView =  inflater.inflate(R.layout.fragment_home, container, false);
+        mAuth = FirebaseAuth.getInstance();
         sharedPreferences = getContext().getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         initView(itemView);
+        setViewFormUser();
         callApiWeather();
         setOnlclick();
         createCalendarAnimation();
         createSlide();
         return itemView;
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -88,6 +100,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         callApiWeather();
     }
     private void setOnlclick() {
+        btnLogin.setOnClickListener(this);
         menuBook.setOnClickListener(this);
         menuReminder.setOnClickListener(this);
         menuPrescription.setOnClickListener(this);
@@ -95,9 +108,14 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         menuPayment.setOnClickListener(this);
         menuSearch.setOnClickListener(this);
         menuProfile.setOnClickListener(this);
+        menuChat.setOnClickListener(this);
     }
     @Override
     public void onClick(View v) {
+        if (v.getId() == R.id.btn_login){
+            Intent intent = new Intent(getActivity(), Login.class);
+            startActivity(intent);
+        }
         if (v.getId() == R.id.block_book_outside){
 //            Intent intent = new Intent(getActivity(), InforBook.class);
 //            startActivity(intent);
@@ -110,9 +128,62 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity(), "Thu", Toast.LENGTH_SHORT).show();
             // menu quản lý đơn thuốc
         }
+        if (v.getId() == R.id.btn_chat){
+            if (mAuth.getCurrentUser() == null){
+                showDialogLogin(Gravity.CENTER);
+            }
+            else {
+                Intent intent = new Intent(getActivity(), ListEmployee.class);
+                startActivity(intent);
+            }
+        }
     }
 
+    private void showDialogLogin(int center) {
+        dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialog_notice_login_logout);
+        Window window = dialog.getWindow();
+        if (window == null){
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = center;
+        window.setAttributes(windowAttributes);
+        if (Gravity.BOTTOM == center){
+            dialog.setCancelable(false);
+        }
+        else{
+            dialog.setCancelable(true);
+        }
+        RelativeLayout btnCancel, btnLogin;
+        btnCancel = dialog.findViewById(R.id.cancel);
+        btnLogin = dialog.findViewById(R.id.agree);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), Login.class);
+                startActivity(intent);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+
     private void initView(View itemView) {
+        loadingForm = itemView.findViewById(R.id.block_loading_form);
+        formUser = itemView.findViewById(R.id.infor_user);
+        formLogin = itemView.findViewById(R.id.not_logged);
+        btnLogin = itemView.findViewById(R.id.btn_login);
         // profile
         imageAccount = itemView.findViewById(R.id.image_account_google);
         setImageAccount();
@@ -131,6 +202,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         menuPayment = itemView.findViewById(R.id.form_inside_one_below);
         menuSearch = itemView.findViewById(R.id.form_inside_two_below);
         menuProfile = itemView.findViewById(R.id.form_inside_three_below);
+        menuChat = itemView.findViewById(R.id.btn_chat);
         // slide
         formSlide = itemView.findViewById(R.id.slide);
         circleOne = itemView.findViewById(R.id.circle_one);listCircles.add(circleOne);
@@ -140,7 +212,42 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         circleFive = itemView.findViewById(R.id.circle_five);listCircles.add(circleFive);
         circleSix = itemView.findViewById(R.id.circle_six);listCircles.add(circleSix);
     }
-
+    private void setViewFormUser() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        Intent intent = getActivity().getIntent();
+        if (intent != null) {
+            int code = intent.getIntExtra("requestCodeLoadingFormUser", 1);
+            if (code == 1102) {
+                intent.removeExtra("requestCodeLoadingFormUser");
+                createProgressBarLoadingFormUser(currentUser);
+            }
+            else {
+                if (currentUser != null){
+                    setFormUser(true);
+                }
+                else {
+                    setFormUser(false);
+                }
+            }
+        }
+    }
+    private void createProgressBarLoadingFormUser(FirebaseUser currentUser){
+        loadingForm.setVisibility(View.VISIBLE);
+        formUser.setVisibility(View.GONE);
+        formLogin.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingForm.setVisibility(View.GONE);
+                if (currentUser != null){
+                    setFormUser(true);
+                }
+                else {
+                    setFormUser(false);
+                }
+            }
+        },2000);
+    }
     private void setImageAccount() {
         String profileString = sharedPreferences.getString("profile", "empty");
         if (!profileString.equals("empty")){
@@ -300,6 +407,17 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                     listCircles.get(i).setBackgroundTintList(ColorStateList.valueOf(colorDefault));
                 }
             }
+        }
+    }
+
+    private void setFormUser(boolean b){
+        if (b){
+            formUser.setVisibility(View.VISIBLE);
+            formLogin.setVisibility(View.GONE);
+        }
+        else {
+            formUser.setVisibility(View.GONE);
+            formLogin.setVisibility(View.VISIBLE);
         }
     }
 }

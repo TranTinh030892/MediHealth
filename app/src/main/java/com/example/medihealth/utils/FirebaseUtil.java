@@ -70,8 +70,8 @@ public class FirebaseUtil {
     public static CollectionReference allUserCollectionReference(){
         return FirebaseFirestore.getInstance().collection("users");
     }
-    public static CollectionReference allDoctorCollectionReference(){
-        return FirebaseFirestore.getInstance().collection("doctor");
+    public static CollectionReference allEmployeeCollectionReference(){
+        return FirebaseFirestore.getInstance().collection("employee");
     }
     // thêm một đối tượng appointment vào document của collection appointment với id được lấy tự động
     public static CollectionReference getAppointmentCollectionReference(){
