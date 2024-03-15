@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/edit_text_rounded_corner"
+        android:background="@drawable/custom_edittext_chat"
         android:backgroundTint="@color/light_gray"
         android:padding="8dp"
         android:layout_marginEnd="80dp"
@@ -24,7 +24,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/edit_text_rounded_corner"
+        android:background="@drawable/custom_edittext_chat"
         android:backgroundTint="@color/chat_color_sender"
         android:layout_alignParentEnd="true"
         android:padding="8dp"

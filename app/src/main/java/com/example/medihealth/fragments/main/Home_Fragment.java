@@ -33,6 +33,8 @@ import com.example.medihealth.R;
 import com.example.medihealth.activitys.Login;
 import com.example.medihealth.activitys.chat.ListEmployee;
 import com.example.medihealth.adapters.main.SlidePagerAdapter;
+import com.example.medihealth.models.UserModel;
+import com.example.medihealth.utils.FirebaseUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -413,11 +415,34 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     private void setFormUser(boolean b){
         if (b){
             formUser.setVisibility(View.VISIBLE);
+            setDataUser();
             formLogin.setVisibility(View.GONE);
         }
         else {
             formUser.setVisibility(View.GONE);
             formLogin.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setDataUser() {
+        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                UserModel currentUser = task.getResult().toObject(UserModel.class);
+                textName.setText(currentUser.getFullName());
+                textGender_Birth.setText(currentUser.getGender()+" - "+currentUser.getBirth());
+                textHeight.setText(String.valueOf(currentUser.getHeight()));
+                textWeight.setText(String.valueOf(currentUser.getWeight())); ;
+                textBMI.setText(getBMI(currentUser.getHeight(), currentUser.getWeight()));
+            }
+            else{
+                Log.e("ERROR","ERROR");
+            }
+        });
+    }
+    private String getBMI(int height, int weight){
+        double heightDouble = (double) height/100;
+        double BMI = (double) weight/(heightDouble * heightDouble);
+        double roundedNumber = Math.round(BMI * 10) / 10.0;
+        return String.valueOf(roundedNumber);
     }
 }

@@ -286,7 +286,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    checkUserOrEmployee(currentUserid);
+                                    getAllUserIdAndCheck(currentUserid);
                                 }
                             }, 2000);
                         }
@@ -317,7 +317,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                 });
                             }
                             String currentUserid = mAuth.getCurrentUser().getUid();
-                            checkUserOrEmployee(currentUserid);
+                            getAllUserIdAndCheck(currentUserid);
                         }
                     }
                 });
@@ -330,20 +330,21 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         editor.apply();
 
     }
-    private List<String> getAllUserId(){
-        List<String> listUserId = new ArrayList<>();
+    private void getAllUserIdAndCheck(String currentUserId){
         FirebaseFirestore.getInstance().collection("users").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
+                List<String> listAllUserId = new ArrayList<>();
                 QuerySnapshot querySnapshot = task.getResult();
                 for (QueryDocumentSnapshot document : querySnapshot) {
-                    listUserId.add(document.getId());
+                    listAllUserId.add(document.getId());
                 }
+                checkUserOrEmployee(currentUserId, listAllUserId);
+            } else {
+                Log.e("ERROR","ERROR");
             }
         });
-        return listUserId;
     }
-    private void checkUserOrEmployee(String currentUserId){
-        List<String> listAllUserId = getAllUserId();
+    private void checkUserOrEmployee(String currentUserId,List<String> listAllUserId){
         if (listAllUserId.contains(currentUserId)){
             checkProfile(currentUserId);
         }

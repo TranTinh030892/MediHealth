@@ -103,15 +103,26 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
             String phone = phoneNumber.getText().toString();
             String addressUser = address.getText().toString();
             String birthUser = birth.getText().toString();
+            int userHeight = Integer.parseInt(height.getText().toString());
+            int userWeight = Integer.parseInt(weight.getText().toString());
             if (name.equals("") || gender.equals("") || phone.equals("")
-            || addressUser.equals("") || birthUser.equals("")){
+            || addressUser.equals("") || birthUser.equals("") || height.getText().toString().equals("")
+            || weight.getText().toString().equals("")){
                 Toast.makeText(this, "Vui lòng điền đầy đủ thông tin hồ sơ", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (userHeight <=0){
+                Toast.makeText(this, "Chiều cao không hợp lệ", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (userWeight <=0){
+                Toast.makeText(this, "Cân nặng không hợp lệ", Toast.LENGTH_SHORT).show();
                 return;
             }
             // Lưu dữ liệu
             FirebaseUser currentUser = mAuth.getCurrentUser();
-            UserModel userModel = new UserModel(name,gender,phone,addressUser,birthUser
-            , Timestamp.now(),currentUser.getUid());
+            UserModel userModel = new UserModel(name,gender,phone,addressUser,birthUser,userHeight
+            ,userWeight, Timestamp.now(),currentUser.getUid());
             FirebaseFirestore.getInstance().collection("users").document(currentUser.getUid())
                     .set(userModel).addOnCompleteListener(task -> {
                         if (task.isSuccessful()){

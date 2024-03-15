@@ -76,7 +76,8 @@ tools:context=".activitys.chat.UserChat_Activity">
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:layout_toLeftOf="@id/message_send_btn"
-        android:background="@drawable/edit_text_rounded_corner"
+        android:backgroundTint="#ECEBEB"
+        android:background="@drawable/custom_edittext_chat"
         android:elevation="4dp"
         android:padding="10dp" />
 
