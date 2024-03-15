@@ -10,12 +10,12 @@ tools:context=".activitys.chat.UserChat_Activity">
     android:background="@color/mainColor"
     android:padding="10dp"
     android:layout_height="wrap_content">
+
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="32dp"
-        android:layout_centerVertical="true"
         android:layout_height="32dp"
-        android:background="@drawable/icon_back"/>
+        android:background="@drawable/icon_back" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

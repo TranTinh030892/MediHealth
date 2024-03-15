@@ -61,5 +61,6 @@ public class MainApplication extends Application implements Application.Activity
 
     @Override
     public void onActivityDestroyed(Activity activity) {
+
     }
 }

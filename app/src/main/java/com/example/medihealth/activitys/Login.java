@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
+import com.example.medihealth.activitys.chat.Employee_MainActivity;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -44,8 +45,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
@@ -62,12 +67,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     protected void onStart() {
         super.onStart();
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null){
-            checkProfile(user.getUid());
-            finish();
-        }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,7 +131,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     checkInputEmail = true;
                 }
                 else checkInputEmail = false;
-                Log.e("checkemail",checkInputEmail+"");
                 if (checkInputEmail && checkInputPass){
                     btnLoginDisabled.setVisibility(View.GONE);
                     btnLogin.setVisibility(View.VISIBLE);
@@ -158,7 +158,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     checkInputPass = true;
                 }
                 else checkInputPass = false;
-                Log.e("checkpass",checkInputPass+"");
                 if (checkInputEmail && checkInputPass){
                     btnLoginDisabled.setVisibility(View.GONE);
                     btnLogin.setVisibility(View.VISIBLE);
@@ -219,14 +218,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             Number isRoleNumber = documentSnapshot.getLong("isRole");
                             if(isRoleNumber != null){
                                 int isRole = isRoleNumber.intValue();
+                                Intent intent = null;
                                 if (isRole == 3) {
-                                    Intent intent = new Intent(Login.this, MainActivity.class);
-                                    intent.putExtra("requestCodeLoadingFormUser",1102);
+                                    intent = new Intent(Login.this, MainActivity.class);
+                                } else if (isRole == 2){
+                                    intent = new Intent(Login.this, Employee_MainActivity.class);
+                                    intent.putExtra("requestCodeEmployee", 1103);
+                                }
+                                if (intent != null) {
+                                    intent.putExtra("requestCodeLoadingFormUser", 1102);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);
                                     finish();
-                                } else if (isRole == 2){
-//                                    Intent intent = new Intent(Login.this, Employee.class);
-//                                    startActivity(intent);
                                 }
                             }
                         } else {
@@ -283,7 +286,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    checkProfile(currentUserid);
+                                    checkUserOrEmployee(currentUserid);
                                 }
                             }, 2000);
                         }
@@ -314,7 +317,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                 });
                             }
                             String currentUserid = mAuth.getCurrentUser().getUid();
-                            checkProfile(currentUserid);
+                            checkUserOrEmployee(currentUserid);
                         }
                     }
                 });
@@ -326,5 +329,24 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         editor.putString("profile",displayName+";"+photoUrl);
         editor.apply();
 
+    }
+    private List<String> getAllUserId(){
+        List<String> listUserId = new ArrayList<>();
+        FirebaseFirestore.getInstance().collection("users").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                QuerySnapshot querySnapshot = task.getResult();
+                for (QueryDocumentSnapshot document : querySnapshot) {
+                    listUserId.add(document.getId());
+                }
+            }
+        });
+        return listUserId;
+    }
+    private void checkUserOrEmployee(String currentUserId){
+        List<String> listAllUserId = getAllUserId();
+        if (listAllUserId.contains(currentUserId)){
+            checkProfile(currentUserId);
+        }
+        else checkRole(currentUserId);
     }
 }

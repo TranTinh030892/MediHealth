@@ -7,13 +7,16 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.medihealth.R;
+import com.example.medihealth.activitys.chat.EmployeeChat_Activity;
 import com.example.medihealth.models.UserModel;
+import com.example.medihealth.utils.AndroidUtil;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -24,7 +27,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-
         // Xử lý dữ liệu từ thông báo FCM
         if (remoteMessage.getData().size() > 0) {
             String title = remoteMessage.getData().get("title");
@@ -54,10 +56,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(channel);
         }
 
-//        Intent intent = new Intent(this, ChatActivityDoctor.class);
-//        AndroidUtil.passUserModelAsIntent(intent,user);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(this, EmployeeChat_Activity.class);
+        AndroidUtil.passUserModelAsIntent(intent,user);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Tăng ID thông báo cho mỗi thông báo mới
         notificationId++;
@@ -68,7 +70,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentText(body)
                 .setSmallIcon(R.drawable.notification)
                 .setColor(ContextCompat.getColor(this, R.color.Red))
-//                .setContentIntent(pendingIntent)
+                .setContentIntent(pendingIntent)
                 .setAutoCancel(true); // Đảm bảo thông báo sẽ tự động biến mất sau khi click
 
         // Sử dụng ID thông báo duy nhất cho mỗi thông báo

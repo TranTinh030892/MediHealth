@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,6 +24,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -72,6 +75,7 @@ public class UserChat_Activity extends AppCompatActivity {
     private void initView() {
         textViewName = findViewById(R.id.fullName_Chat);
         editTextChat = findViewById(R.id.chat_message_input);
+        editTextChat.requestFocus();
         btnSend = findViewById(R.id.message_send_btn);
         recyclerView = findViewById(R.id.chat_recycler_view);
     }
@@ -145,21 +149,20 @@ public class UserChat_Activity extends AppCompatActivity {
 
     private void sendNotification(String message) {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
+            if (task.isSuccessful()){
                 UserModel currentUser = task.getResult().toObject(UserModel.class);
                 try {
                     JSONObject jsonObject = new JSONObject();
 
                     JSONObject dataObj = new JSONObject();
-                    dataObj.put("title", currentUser.getFullName()); 
-                    dataObj.put("body", message); 
-                    
+                    dataObj.put("title", currentUser.getFullName());
+                    dataObj.put("body", message);
+
                     dataObj.put("userId", currentUser.getUserId());
                     jsonObject.put("data", dataObj);
-                    jsonObject.put("to", "dW0KqNCZT9KuZ-yWTF9I0n:APA91bENe2U_mTjprPKucgdPT1ioN7hPRnV6z7XWdoSbvlD_pGtByhYY92LO2BpXgghMh2k0ZcUjtDshUhLPTHiR9CuMiax5jUTcNHpT7qM_5rKDj3evLYn-htrR2mY6O1KLQsGX301V");
+                    jsonObject.put("to", "cbMWBzodQoO-7B8Pc5dEqM:APA91bFDdI26h7v211ZIDgwAe-BSBhyqcWnkQ7Li1vM854w_ilpoPFm_bTLW0cKA3_HqCQdzhU3SlFZTyIXJ8au_jfBxEev0lWi0RuDr4fnETwkfsP7Si3OIKgBhcV6Qi8qz-j8y1qWm");
 
                     callApi(jsonObject);
-
                 } catch (Exception e) {
                     e.printStackTrace(); // Thêm xử lý lỗi ở đây nếu cần thiết
                 }
@@ -175,7 +178,7 @@ public class UserChat_Activity extends AppCompatActivity {
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
-                .header("Authorization", "AAAA2YcskTU:APA91bGQYIzYQoYEhEdw8qBaVG7aStLn_CMOieBVbhPkqg_fKkN94-j2RrEX7IpwAD5SBfjSlIPVuEaugWmvbi3Oba52rh3Upw2R26lkbekw2KmWHRExhjAQdi-v5nlK9MhpLGdvRuSx")
+                .header("Authorization", "Bearer AAAA2YcskTU:APA91bFbJHA1gMDoHTkHauaDOJZfuzxcYqq6TjBqUoyAp-0I8YHhjIxh3VvtJUS39Od1biRCgomTSO_C5AOMsAHf_ovnSCR6IwO_MglmxIUgWZuL-ADA0MRXqA-leMYLGODLnHx_v7AN")
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override

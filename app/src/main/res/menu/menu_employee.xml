@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/item_user" android:title="Tư vấn" android:icon="@drawable/chat_icon"/>
-    <item android:id="@+id/item_home" android:title=""/>
-    <item android:id="@+id/item_menu_bar" android:title="Duyệt lịch hẹn" android:icon="@drawable/icon_contract"/>
+    <item android:id="@+id/item_chat" android:title="Tư vấn" android:icon="@drawable/chat_icon"/>
+    <item android:id="@+id/item_appointment" android:title="Duyệt lịch hẹn" android:icon="@drawable/icon_contract"/>
+    <item android:id="@+id/item_menu" android:title="Khác" android:icon="@drawable/icon_menu"/>
 </menu>

@@ -50,7 +50,7 @@ dependencies {
     implementation ("androidx.cardview:cardview:1.0.0")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation ("com.firebaseui:firebase-ui-firestore:8.0.2")
-    implementation("com.google.firebase:firebase-messaging:23.4.0")
+    implementation("com.google.firebase:firebase-messaging:23.4.1")
     implementation ("com.squareup.retrofit2:retrofit:2.1.0")
     implementation("com.squareup.retrofit2:converter-gson:2.1.0")
     implementation("com.google.code.gson:gson:2.10.1")
