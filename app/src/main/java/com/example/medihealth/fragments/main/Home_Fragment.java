@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -31,9 +33,12 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.Login;
+import com.example.medihealth.activitys.book_appointment.Infor_Appoitment_Activity;
 import com.example.medihealth.activitys.chat.ListEmployee;
 import com.example.medihealth.adapters.main.SlidePagerAdapter;
+import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.UserModel;
+import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -119,8 +124,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             startActivity(intent);
         }
         if (v.getId() == R.id.block_book_outside){
-//            Intent intent = new Intent(getActivity(), InforBook.class);
-//            startActivity(intent);
+            Intent intent = new Intent(getActivity(), Infor_Appoitment_Activity.class);
+            startActivity(intent);
         }
         if (v.getId() == R.id.form_inside_one_above){
             Toast.makeText(getActivity(), "Son", Toast.LENGTH_SHORT).show();
@@ -414,8 +419,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
 
     private void setFormUser(boolean b){
         if (b){
-            formUser.setVisibility(View.VISIBLE);
             setDataUser();
+            formUser.setVisibility(View.VISIBLE);
             formLogin.setVisibility(View.GONE);
         }
         else {
@@ -425,24 +430,18 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     }
 
     private void setDataUser() {
-        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                UserModel currentUser = task.getResult().toObject(UserModel.class);
-                textName.setText(currentUser.getFullName());
-                textGender_Birth.setText(currentUser.getGender()+" - "+currentUser.getBirth());
-                textHeight.setText(String.valueOf(currentUser.getHeight()));
-                textWeight.setText(String.valueOf(currentUser.getWeight())); ;
-                textBMI.setText(getBMI(currentUser.getHeight(), currentUser.getWeight()));
+        String inforFormUser = sharedPreferences.getString("inforFormUser", "empty");
+        if (!inforFormUser.equals("empty")){
+            String[] array = inforFormUser.split(";");
+            if (array.length > 0) {
+                textName.setText(array[0]);
+                textGender_Birth.setText(array[1]);
+                textHeight.setText(array[2]);
+                textWeight.setText(array[3]); ;
+                textBMI.setText(array[4]);
+            } else {
+                Log.e("ERROR", "profileString rỗng");
             }
-            else{
-                Log.e("ERROR","ERROR");
-            }
-        });
-    }
-    private String getBMI(int height, int weight){
-        double heightDouble = (double) height/100;
-        double BMI = (double) weight/(heightDouble * heightDouble);
-        double roundedNumber = Math.round(BMI * 10) / 10.0;
-        return String.valueOf(roundedNumber);
+        }
     }
 }

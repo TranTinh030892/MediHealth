@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.medihealth.R;
 import com.example.medihealth.fragments.main.BookAppointment_Fragment;
@@ -20,6 +21,8 @@ import com.example.medihealth.fragments.main.Home_Fragment;
 import com.example.medihealth.fragments.main.Menu_Fragment;
 import com.example.medihealth.fragments.main.Notification_Fragment;
 import com.example.medihealth.fragments.main.Profile_Fragment;
+import com.example.medihealth.models.CustomToast;
+import com.example.medihealth.utils.AndroidUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        showResultConnectNetwork();
         setLoadingFormUserSharedPreferences();
         setBotomNavigation();
         btnHome.setOnClickListener(new View.OnClickListener() {
@@ -92,5 +96,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Chọn Fragment mặc định khi mở ứng dụng
         bottomNavigationView.setSelectedItemId(R.id.item_home);
+    }
+    private void showResultConnectNetwork(){
+        if (!AndroidUtil.isInternetAvailable(getApplicationContext())){
+            CustomToast.showToast(getApplicationContext(),"Không có kết nối mạng", Toast.LENGTH_LONG);
+        }
     }
 }

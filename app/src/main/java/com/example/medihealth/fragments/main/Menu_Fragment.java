@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,6 +24,8 @@ import androidx.fragment.app.Fragment;
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.Login;
 import com.example.medihealth.activitys.MainActivity;
+import com.example.medihealth.models.CustomToast;
+import com.example.medihealth.utils.AndroidUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -76,6 +79,11 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
         dialog.dismiss();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     private void initView(View itemView) {
         btnLogout = itemView.findViewById(R.id.btn_logout);
         setbtnLogout();
@@ -126,9 +134,7 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
     }
 
     private void sigout() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("profile","empty");
-        editor.apply();
+        removeAllSharedPreferences();
         FirebaseAuth.getInstance().signOut();
         googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -138,5 +144,10 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-
+    private void removeAllSharedPreferences(){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("profile","empty");
+        editor.putString("inforFormUser","empty");
+        editor.apply();
+    }
 }

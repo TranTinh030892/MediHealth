@@ -12,11 +12,13 @@ public class UserModel {
     private int weight;
     private Timestamp createdTimestamp;
     private String userId;
+    String tokenId;
 
     public UserModel() {
     }
 
-    public UserModel(String fullName, String gender, String phoneNumber, String address, String birth, int height, int weight, Timestamp createdTimestamp, String userId) {
+    public UserModel(String fullName, String gender, String phoneNumber, String address, String birth, int height, int weight,
+                     Timestamp createdTimestamp, String userId) {
         this.fullName = fullName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;

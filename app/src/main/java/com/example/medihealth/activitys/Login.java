@@ -28,6 +28,9 @@ import android.widget.Toast;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.chat.Employee_MainActivity;
+import com.example.medihealth.models.CustomToast;
+import com.example.medihealth.models.Employee;
+import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -47,6 +50,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,10 +67,20 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     GoogleSignInClient googleSignInClient;
     int RC_SIGN_IN = 20;
     Boolean checkInputEmail = false,checkInputPass = false;
+    String tokenId;
     @Override
     protected void onStart() {
         super.onStart();
         mAuth = FirebaseAuth.getInstance();
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        tokenId = task.getResult();
+                        Log.e("TOKEN",tokenId);
+                    } else {
+                        Log.e("EROR","Khong lay duoc Token");
+                    }
+                });
     }
 
     @Override
@@ -107,6 +121,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             }catch (Exception e){
                 Log.e("ERROR","ERROR",e);
             }
+        }
+        else{
+            CustomToast.showToast(getApplicationContext(),"Lỗi kết nối mạng",Toast.LENGTH_LONG);
         }
     }
     private void initView() {
@@ -206,6 +223,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 });
     }
     private void checkRole(String currentUserid) {
+        setTokenId();
         FirebaseFirestore.getInstance().collection("role")
                 .document(currentUserid)
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -221,9 +239,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                 Intent intent = null;
                                 if (isRole == 3) {
                                     intent = new Intent(Login.this, MainActivity.class);
+                                    setSharedPreferencesDataUser();
                                 } else if (isRole == 2){
                                     intent = new Intent(Login.this, Employee_MainActivity.class);
                                     intent.putExtra("requestCodeEmployee", 1103);
+                                    setSharedPreferencesDataEmployee();
                                 }
                                 if (intent != null) {
                                     intent.putExtra("requestCodeLoadingFormUser", 1102);
@@ -237,6 +257,19 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         }
                     }
                 });
+    }
+
+    private void setTokenId() {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null){
+            Map<String, String> token = new HashMap<>();
+            token.put("tokenId", tokenId);
+            FirebaseUtil.setTokenId().set(token).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Log.e("SetTokenId_RESULT","SUCESSFULL");
+                }
+            });
+        }
     }
 
     @Override
@@ -291,7 +324,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             }, 2000);
                         }
                         else {
-                            Toast.makeText(Login.this, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+                            CustomToast.showToast(getApplicationContext(),"Lỗi kết nối mạng",Toast.LENGTH_LONG);
                         }
                     }
                 });
@@ -318,6 +351,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             }
                             String currentUserid = mAuth.getCurrentUser().getUid();
                             getAllUserIdAndCheck(currentUserid);
+                        }
+                        else {
+                            CustomToast.showToast(getApplicationContext(),"Lỗi kết nối mạng",Toast.LENGTH_LONG);
                         }
                     }
                 });
@@ -349,5 +385,48 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             checkProfile(currentUserId);
         }
         else checkRole(currentUserId);
+    }
+    private void setSharedPreferencesDataUser() {
+        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                UserModel currentUser = task.getResult().toObject(UserModel.class);
+                if (currentUser != null) {
+                    sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("inforFormUser",currentUser.getFullName()+";"+currentUser.getGender()+" - "+currentUser.getBirth()+";"+
+                            String.valueOf(currentUser.getHeight())+";"+String.valueOf(currentUser.getWeight())+";"+
+                            getBMI(currentUser.getHeight(), currentUser.getWeight()));
+                    editor.apply();
+                } else {
+                    Log.e("ERROR", "currentUser is null");
+                }
+            } else {
+                Log.e("ERROR", "task is not successful or result is null");
+            }
+        });
+    }
+    private void setSharedPreferencesDataEmployee() {
+        FirebaseUtil.currentEmployeeDetails().get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                Employee currentEmployee = task.getResult().toObject(Employee.class);
+                if (currentEmployee != null) {
+                    sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("inforFormEmployee",currentEmployee.getFullName());
+                    editor.apply();
+                } else {
+                    Log.e("ERROR", "currentEmployee is null");
+                }
+            } else {
+                Log.e("ERROR", "task is not successful or result is null");
+            }
+        });
+    }
+
+    private String getBMI(int height, int weight){
+        double heightDouble = (double) height/100;
+        double BMI = (double) weight/(heightDouble * heightDouble);
+        double roundedNumber = Math.round(BMI * 10) / 10.0;
+        return String.valueOf(roundedNumber);
     }
 }

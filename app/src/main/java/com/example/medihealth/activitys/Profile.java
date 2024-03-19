@@ -4,19 +4,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -144,29 +151,63 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
             signOut();
         }
         else if (v.getId() == R.id.birth_user){
-            getBirthDay();
+            showDialogCalendar(Gravity.CENTER);
         }
     }
 
-    private void getBirthDay() {
-        int year = 0, month = 0, day = 0;
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth) {
-                        String dayOfMonthStr = String.valueOf(dayOfMonth),
-                                monthOfYearStr = String.valueOf(monthOfYear+1);
-                        if (dayOfMonth < 10) dayOfMonthStr = "0" + dayOfMonthStr;
-                        if (monthOfYear < 10) monthOfYearStr = "0" + monthOfYearStr;
-                        String date = dayOfMonthStr + "/" + monthOfYearStr + "/" + year;
-                        birth.setText(date);
-                    }
-                }, year, month, day);
-        // Hiển thị DatePickerDialog
-        datePickerDialog.show();
-    }
+    private void showDialogCalendar(int center) {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialog_datepicker);
+        Window window = dialog.getWindow();
+        if (window == null){
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = center;
+        window.setAttributes(windowAttributes);
+        if (Gravity.BOTTOM == center){
+            dialog.setCancelable(false);
+        }
+        else{
+            dialog.setCancelable(true);
+        }
+        DatePicker datePicker;
+        RelativeLayout btnCancel, btnSelect;
+        datePicker = dialog.findViewById(R.id.datePicker);
+        btnCancel = dialog.findViewById(R.id.cancel);
+        btnSelect = dialog.findViewById(R.id.select);
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getBirthDay(datePicker);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+    private void getBirthDay(DatePicker datePicker) {
+        int dayOfMonth = datePicker.getDayOfMonth();
+        int monthOfYear = datePicker.getMonth();
+        int year = datePicker.getYear();
+        String dayOfMonthStr = String.valueOf(dayOfMonth),
+                monthOfYearStr = String.valueOf(monthOfYear+1);
+        if (dayOfMonth < 10) dayOfMonthStr = "0" + dayOfMonthStr;
+        if (monthOfYear < 10) monthOfYearStr = "0" + monthOfYearStr;
+        String date = dayOfMonthStr + "/" + monthOfYearStr + "/" + year;
+        birth.setText(date);
+    }
     private void signOut() {
         mAuth.signOut();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

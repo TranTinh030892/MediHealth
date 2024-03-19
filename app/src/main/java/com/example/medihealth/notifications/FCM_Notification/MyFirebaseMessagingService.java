@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
@@ -15,6 +16,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.chat.EmployeeChat_Activity;
+import com.example.medihealth.models.NotificationDismissReceiver;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,12 +24,19 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
+    SharedPreferences sharedPreferences;
     private static int notificationId = 1;
     private UserModel userModel;
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+        sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
+        String isCloseNotice = sharedPreferences.getString("isCloseNotice", "No");
+        if (isCloseNotice.equals("Yes")){
+            return;
+        }
         // Xử lý dữ liệu từ thông báo FCM
+
         if (remoteMessage.getData().size() > 0) {
             String title = remoteMessage.getData().get("title");
             String body = remoteMessage.getData().get("body");
@@ -48,7 +57,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     @SuppressLint("ObsoleteSdkInt")
-    private void showNotificationChat(String title, String body,UserModel user) {
+    private void showNotificationChat(String title, String body, UserModel user) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -57,13 +66,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         Intent intent = new Intent(this, EmployeeChat_Activity.class);
-        AndroidUtil.passUserModelAsIntent(intent,user);
+        AndroidUtil.passUserModelAsIntent(intent, user);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // Tăng ID thông báo cho mỗi thông báo mới
-        notificationId++;
-
+        Intent dismissIntent = new Intent(this, NotificationDismissReceiver.class);
+        int notificationId = generateNotificationId(); // Tạo notificationId mới
+        dismissIntent.putExtra("notificationId", notificationId); // Truyền ID của thông báo
+        PendingIntent dismissPendingIntent = PendingIntent.getBroadcast(this, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, MyApplicationFCM.CHANNEL_ID)
                 .setContentTitle(title)
@@ -73,8 +83,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true); // Đảm bảo thông báo sẽ tự động biến mất sau khi click
 
-        // Sử dụng ID thông báo duy nhất cho mỗi thông báo
+        // Thêm action tắt thông báo
+        NotificationCompat.Action dismissAction = new NotificationCompat.Action(
+                R.drawable.icon_cloud, "Tắt thông báo", dismissPendingIntent);
+        notificationBuilder.addAction(dismissAction);
+
+        // Sử dụng notificationId mới
         notificationManager.notify(notificationId, notificationBuilder.build());
+    }
+
+
+    private int generateNotificationId() {
+        return (int) System.currentTimeMillis(); // Sử dụng thời gian hiện tại làm notificationId
     }
 
 }

@@ -34,6 +34,9 @@ public class FirebaseUtil {
     public static DocumentReference currentUserDetails(){
         return FirebaseFirestore.getInstance().collection("users").document(currentUserId());
     }
+    public static DocumentReference currentEmployeeDetails(){
+        return FirebaseFirestore.getInstance().collection("employee").document(currentUserId());
+    }
 
 //    public static DocumentReference statusUser(){
 //        return FirebaseFirestore.getInstance().collection("status").document(currentUserId());
@@ -66,12 +69,20 @@ public class FirebaseUtil {
     public static DocumentReference roleUser(){
         return FirebaseFirestore.getInstance().collection("role").document(currentUserId());
     }
-
+    public static DocumentReference setTokenId(){
+        return FirebaseFirestore.getInstance().collection("token").document(currentUserId());
+    }
+    public static DocumentReference getTokenId(String documentId){
+        return FirebaseFirestore.getInstance().collection("token").document(documentId);
+    }
     public static CollectionReference allUserCollectionReference(){
         return FirebaseFirestore.getInstance().collection("users");
     }
     public static CollectionReference allEmployeeCollectionReference(){
         return FirebaseFirestore.getInstance().collection("employee");
+    }
+    public static CollectionReference allDoctorCollectionReference(){
+        return FirebaseFirestore.getInstance().collection("doctor");
     }
     // thêm một đối tượng appointment vào document của collection appointment với id được lấy tự động
     public static CollectionReference getAppointmentCollectionReference(){

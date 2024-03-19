@@ -38,16 +38,6 @@ public class Employee_Chat_Fragment extends Fragment {
         // Inflate the layout for this fragment
         View iteamView = inflater.inflate(R.layout.fragment_employee__chat_, container, false);
         recyclerView = iteamView.findViewById(R.id.recyler_view);
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        String token = task.getResult();
-                        Log.e("TOKEN",token);
-                    } else {
-                        // Xử lý khi không lấy được token
-                        Log.e("EROR","Khong lay duoc Token");
-                    }
-                });
         setupRecyclerView();
         return  iteamView;
     }

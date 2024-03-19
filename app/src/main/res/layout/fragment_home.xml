@@ -125,7 +125,6 @@
                                     android:id="@+id/fullName_user"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Trần Đình Tính"
                                     android:textSize="18sp"
                                     android:fontFamily="sans-serif-medium"
                                     android:textColor="#012537" />
@@ -173,7 +172,6 @@
                                         android:layout_height="wrap_content"
                                         android:layout_below="@id/text_heigth"
                                         android:layout_centerHorizontal="true"
-                                        android:text="167 cm"
                                         android:textColor="@color/mainColor"
                                         android:textSize="17dp"
                                         android:textStyle="bold" />
@@ -211,8 +209,7 @@
                                         android:textColor="@color/mainColor"
                                         android:textSize="17dp"
                                         android:textStyle="bold"
-                                        android:layout_height="wrap_content"
-                                        android:text="58 kg"/>
+                                        android:layout_height="wrap_content"/>
                                 </RelativeLayout>
                                 <!-- Gạch dọc thứ hai -->
                                 <View
@@ -249,8 +246,7 @@
                                         android:textColor="@color/mainColor"
                                         android:textSize="17dp"
                                         android:textStyle="bold"
-                                        android:layout_height="wrap_content"
-                                        android:text="20.3"/>
+                                        android:layout_height="wrap_content" />
                                 </RelativeLayout>
                             </RelativeLayout>
                         </RelativeLayout>
@@ -718,6 +714,22 @@
                         android:layout_toEndOf="@id/circle_five"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
+                </RelativeLayout>
+                <!--news-->
+                <RelativeLayout
+                    android:id="@+id/block_news"
+                    android:layout_below="@id/circles"
+                    android:layout_width="match_parent"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:layout_marginTop="17dp"
+                    android:layout_height="235dp">
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:backgroundTint="@color/mainColor"
+                        android:id="@+id/news"
+                        android:background="@drawable/custom_form_slide_home"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
                 </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>

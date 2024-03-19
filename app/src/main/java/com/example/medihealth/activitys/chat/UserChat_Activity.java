@@ -24,9 +24,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -45,13 +44,20 @@ import okhttp3.Response;
 
 public class UserChat_Activity extends AppCompatActivity {
     Employee employee;
-    String chatroomId;
+    String chatroomId , employeeTokenId = "";
     ChatRoom chatRoom;
     TextView textViewName;
     EditText editTextChat;
     ImageButton btnSend;
     ChatRecyclerAdapter adapter;
     RecyclerView recyclerView;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getTokenId();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,13 +147,35 @@ public class UserChat_Activity extends AppCompatActivity {
                     if(task.isSuccessful()){
                         boolean state = task.getResult().getBoolean("isState");
                         if (!state){
-                            sendNotification(message);
+                            if (!employeeTokenId.equals("")){
+                                Log.e("CHECKTOKEN",employeeTokenId);
+                                sendNotification(message,"cbMWBzodQoO-7B8Pc5dEqM:APA91bFDdI26h7v211ZIDgwAe-BSBhyqcWnkQ7Li1vM854w_ilpoPFm_bTLW0cKA3_HqCQdzhU3SlFZTyIXJ8au_jfBxEev0lWi0RuDr4fnETwkfsP7Si3OIKgBhcV6Qi8qz-j8y1qWm");
+                            }
                         }
+                    }
+                    else {
+                        Log.e("ERROR","ERROR");
                     }
                 });
     }
-
-    private void sendNotification(String message) {
+    private void getTokenId(){
+        FirebaseUtil.getTokenId(employee.getUserId()).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot documentSnapshot = task.getResult();
+                String tokenStr = "";
+                tokenStr = documentSnapshot.getString("tokenId");
+                if (!tokenStr.equals("")){
+                    employeeTokenId = tokenStr;
+                }
+                else {
+                    Log.e("ERROR", "Không có dữ liệu");
+                }
+            } else {
+                Log.e("ERROR", "Lỗi kết nối Firebase");
+            }
+        });
+    }
+    private void sendNotification(String message,String tokenId) {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
                 UserModel currentUser = task.getResult().toObject(UserModel.class);
@@ -160,11 +188,11 @@ public class UserChat_Activity extends AppCompatActivity {
 
                     dataObj.put("userId", currentUser.getUserId());
                     jsonObject.put("data", dataObj);
-                    jsonObject.put("to", "cbMWBzodQoO-7B8Pc5dEqM:APA91bFDdI26h7v211ZIDgwAe-BSBhyqcWnkQ7Li1vM854w_ilpoPFm_bTLW0cKA3_HqCQdzhU3SlFZTyIXJ8au_jfBxEev0lWi0RuDr4fnETwkfsP7Si3OIKgBhcV6Qi8qz-j8y1qWm");
+                    jsonObject.put("to", tokenId);
 
                     callApi(jsonObject);
                 } catch (Exception e) {
-                    e.printStackTrace(); // Thêm xử lý lỗi ở đây nếu cần thiết
+                    e.printStackTrace();
                 }
             }
         });

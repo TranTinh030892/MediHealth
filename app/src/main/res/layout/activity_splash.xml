@@ -35,5 +35,6 @@
             android:indeterminateTint="@color/white"
             android:layout_centerHorizontal="true"
             />
+
     </RelativeLayout>
 </RelativeLayout>
