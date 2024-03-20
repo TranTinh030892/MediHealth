@@ -18,7 +18,7 @@ public class CustomToast {
         text.setText(message);
 
         Toast toast = new Toast(context);
-        toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 120);
+        toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 122);
         toast.setDuration(duration);
         toast.setView(layout);
         toast.show();

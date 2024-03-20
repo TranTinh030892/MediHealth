@@ -42,13 +42,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class UserChat_Activity extends AppCompatActivity {
+public class UserChat_Activity extends AppCompatActivity implements View.OnClickListener {
     Employee employee;
     String chatroomId , employeeTokenId = "";
     ChatRoom chatRoom;
     TextView textViewName;
     EditText editTextChat;
-    ImageButton btnSend;
+    ImageButton btnSend, btnBack;
     ChatRecyclerAdapter adapter;
     RecyclerView recyclerView;
 
@@ -65,25 +65,34 @@ public class UserChat_Activity extends AppCompatActivity {
         employee = AndroidUtil.getEmployeeModelFromIntent(getIntent());
         chatroomId = FirebaseUtil.getChatroomId(FirebaseUtil.currentUserId(), employee.getUserId());
         initView();
+        setOnclick();
         setInforEmployee();
         getOrCreateChatroomModel();
         setupChatRecyclerView();
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String message = editTextChat.getText().toString().trim();
-                if (message.isEmpty())
-                    return;
-                sendMessage(message);
-            }
-        });
     }
     private void initView() {
         textViewName = findViewById(R.id.fullName_Chat);
         editTextChat = findViewById(R.id.chat_message_input);
         editTextChat.requestFocus();
         btnSend = findViewById(R.id.message_send_btn);
+        btnBack = findViewById(R.id.btnBack);
         recyclerView = findViewById(R.id.chat_recycler_view);
+    }
+    private void setOnclick() {
+        btnBack.setOnClickListener(this);
+        btnSend.setOnClickListener(this);
+    }
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btnBack){
+            finish();
+        }
+        if (v.getId() == R.id.message_send_btn){
+            String message = editTextChat.getText().toString().trim();
+            if (message.isEmpty())
+                return;
+            sendMessage(message);
+        }
     }
     private void setInforEmployee() {
         textViewName.setText(employee.getFullName());

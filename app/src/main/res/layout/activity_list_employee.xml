@@ -4,12 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EBEEF8"
     tools:context=".activitys.chat.ListEmployee">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/mainColor"
-        android:padding="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="7dp"
         android:id="@+id/toolbar">
 
         <TextView
@@ -21,10 +25,9 @@
             android:textColor="@color/white"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"/>
-
         <ImageButton
             android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_height="25dp"
             android:src="@drawable/icon_back"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="@color/white"
@@ -35,6 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
+        android:background="#EBEEF8"
         android:id="@+id/recycler_view_listUser"
         />
 

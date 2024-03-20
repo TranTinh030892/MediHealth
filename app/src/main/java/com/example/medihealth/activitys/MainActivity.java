@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private FrameLayout pageLayout;
     private Button btnHome;
+    private boolean isFirstBackPress = true;
+    private final Handler handler = new Handler(Looper.getMainLooper());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +58,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    @Override
+    public void onBackPressed() {
+        if (isFirstBackPress) {
+            CustomToast.showToast(getApplicationContext(),"Bấm Back lần nữa để thoát",Toast.LENGTH_SHORT);
+            isFirstBackPress = false;
+            handler.postDelayed(resetFirstBackPress, 2000);
+        } else {
+            handler.removeCallbacks(resetFirstBackPress);
+            super.onBackPressed();
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+    }
+    private final Runnable resetFirstBackPress = new Runnable() {
+        @Override
+        public void run() {
+            isFirstBackPress = true;
+        }
+    };
     private void setLoadingFormUserSharedPreferences() {
         sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

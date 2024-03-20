@@ -136,8 +136,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                             Log.d("SUCCESSFULL","Save UserInfor Success");
                         }
                         else {
-                            Log.e("ERROR","ERROR");
-                            return;
+                            Log.e("ERROR","Lỗi kết nối mạng");
                         }
                     });
             // Chuyển activity

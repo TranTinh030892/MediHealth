@@ -35,7 +35,9 @@ import com.example.medihealth.R;
 import com.example.medihealth.activitys.MainActivity;
 import com.example.medihealth.adapters.book_appointment.DoctorAdapter;
 import com.example.medihealth.models.Appointment;
+import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Doctor;
+import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
@@ -57,7 +59,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     SharedPreferences sharedPreferences;
     final Calendar c = Calendar.getInstance();
     private int year, month, day;
-    private int indexDoctorSelected = 0;
+    private int indexDoctorSelected = -1;
     private boolean selected = false;
     private int sizeListDoctors = 0;
     @Override
@@ -267,9 +269,41 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
             showInforDoctor(indexDoctorSelected, Gravity.CENTER);
         }
         else if (v.getId() == R.id.enterBook){
+            if (!validation()) return;
             Intent intent = new Intent(Infor_Appoitment_Activity.this, Confirm_Appointment.class);
+            setDataIntent(intent);
             startActivity(intent);
         }
+    }
+
+    private void setDataIntent(Intent intent) {
+        String userId = FirebaseUtil.currentUserId();
+        String dateBook = editTextDate.getText().toString().trim();
+        String specialist = editTextSpecialist.getText().toString().trim();
+        String doctorId = adapterModel.getItem(indexDoctorSelected).getDoctorId();
+        String orderStr = textViewNumberOrder.getText().toString().trim();
+        int order = Integer.parseInt(orderStr);
+        String symptom = editTextSymptom.getText().toString().trim();
+        int stateAppointment = 0;
+        Appointment appointment = new Appointment(userId,dateBook,specialist,doctorId,
+                order,symptom,stateAppointment);
+        AndroidUtil.passAppointmentModelAsIntent(intent,appointment);
+    }
+
+    private boolean validation() {
+        if (editTextSpecialist.getText().toString().trim().equals("")){
+            CustomToast.showToast(getApplicationContext(),"Chọn chuyên khoa",Toast.LENGTH_SHORT);
+            return false;
+        }
+        if (!selected || indexDoctorSelected == -1){
+            CustomToast.showToast(getApplicationContext(),"Chọn bác sĩ",Toast.LENGTH_SHORT);
+            return false;
+        }
+        if (editTextSymptom.getText().toString().trim().equals("")){
+            CustomToast.showToast(getApplicationContext(),"Nhập triệu chứng",Toast.LENGTH_SHORT);
+            return false;
+        }
+        return true;
     }
 
     private void showInforDoctor(int indexDoctorSelected, int center) {

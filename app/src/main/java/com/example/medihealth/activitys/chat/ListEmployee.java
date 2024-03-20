@@ -32,8 +32,7 @@ public class ListEmployee extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ListEmployee.this, MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }

@@ -37,7 +37,9 @@ public class FirebaseUtil {
     public static DocumentReference currentEmployeeDetails(){
         return FirebaseFirestore.getInstance().collection("employee").document(currentUserId());
     }
-
+    public static DocumentReference getDoctorDetailsById(String doctorId){
+        return FirebaseFirestore.getInstance().collection("doctor").document(doctorId);
+    }
 //    public static DocumentReference statusUser(){
 //        return FirebaseFirestore.getInstance().collection("status").document(currentUserId());
 //    }

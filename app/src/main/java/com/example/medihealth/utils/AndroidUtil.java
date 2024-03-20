@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.Employee;
 import com.example.medihealth.models.UserModel;
 
@@ -43,7 +44,26 @@ public class AndroidUtil {
         employee.setTokenId(intent.getStringExtra("tokenId"));
         return employee;
     }
-
+    public static void passAppointmentModelAsIntent(Intent intent, Appointment model){
+        intent.putExtra("userId",model.getUserId());
+        intent.putExtra("date",model.getDate());
+        intent.putExtra("specialist",model.getSpecialist());
+        intent.putExtra("doctorId",model.getDoctorId());
+        intent.putExtra("order",model.getOrder());
+        intent.putExtra("symptom",model.getSymptom());
+        intent.putExtra("stateAppointment",model.getStateAppointment());
+    }
+    public static Appointment getAppointmentModelFromIntent(Intent intent){
+        Appointment appointment = new Appointment();
+        appointment.setUserId(intent.getStringExtra("userId"));
+        appointment.setDate(intent.getStringExtra("date"));
+        appointment.setSpecialist(intent.getStringExtra("specialist"));
+        appointment.setDoctorId(intent.getStringExtra("doctorId"));
+        appointment.setOrder(intent.getIntExtra("order",0));
+        appointment.setSymptom(intent.getStringExtra("symptom"));
+        appointment.setStateAppointment(intent.getIntExtra("stateAppointment",-1));
+        return appointment;
+    }
     public static void setProfilePic(Context context, Uri imageUri, ImageView imageView){
         Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(imageView);
     }

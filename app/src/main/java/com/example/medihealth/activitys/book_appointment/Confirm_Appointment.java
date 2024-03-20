@@ -1,9 +1,11 @@
 package com.example.medihealth.activitys.book_appointment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -15,8 +17,16 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medihealth.R;
+import com.example.medihealth.activitys.MainActivity;
+import com.example.medihealth.models.Appointment;
+import com.example.medihealth.models.Doctor;
+import com.example.medihealth.models.UserModel;
+import com.example.medihealth.utils.AndroidUtil;
+import com.example.medihealth.utils.FirebaseUtil;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Confirm_Appointment extends AppCompatActivity implements View.OnClickListener {
+    Appointment appointment;
     private ImageButton btnBack, btnSupport;
     private Button btnEnter, btnCancel;
     TextView textfullName_Customer, textBirth, textGender, textDate, textSpecialist,
@@ -25,10 +35,11 @@ public class Confirm_Appointment extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_appointment);
+        appointment = AndroidUtil.getAppointmentModelFromIntent(getIntent());
         initView();
+        setDataApointment(appointment);
         setOnclick();
     }
-
     private void setOnclick() {
         btnCancel.setOnClickListener(this);
         btnEnter.setOnClickListener(this);
@@ -47,12 +58,54 @@ public class Confirm_Appointment extends AppCompatActivity implements View.OnCli
         textfullName_Doctor = findViewById(R.id.nameDoctor);
         textNumberOrder = findViewById(R.id.numberOrder);
     }
-
+    private void setDataApointment(Appointment appointment) {
+        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                UserModel userModel = task.getResult().toObject(UserModel.class);
+                textfullName_Customer.setText(userModel.getFullName());
+                textBirth.setText(userModel.getBirth());
+                textGender.setText(userModel.getGender());
+                textDate.setText(appointment.getDate());
+                textSpecialist.setText(appointment.getSpecialist());
+                if (appointment.getOrder() < 9) {
+                    textNumberOrder.setText("0"+appointment.getOrder());
+                }
+                else textNumberOrder.setText(String.valueOf(appointment.getOrder()));
+            }
+            else {
+                Log.e("ERROR","Lỗi kết nối mạng");
+            }
+        });
+        FirebaseUtil.getDoctorDetailsById(appointment.getDoctorId()).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Doctor doctor = task.getResult().toObject(Doctor.class);
+                textfullName_Doctor.setText(doctor.getFullName());
+            }
+        });
+    }
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_enter){
+            saveDataAppoitment(appointment);
             showDialogConfirm(Gravity.BOTTOM);
         }
+        if (v.getId() == R.id.btn_cancel){
+            Intent intent = new Intent(Confirm_Appointment.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+    }
+
+    private void saveDataAppoitment(Appointment appointment) {
+        FirebaseFirestore.getInstance().collection("Appointment").add(appointment)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        Log.d("SUCCESSFULL","Save Appointment successfull");
+                    }
+                    else {
+                        Log.e("ERROR","Lôi kết nối mạng");
+                    }
+                });
     }
 
     private void showDialogConfirm(int bottom) {
@@ -77,6 +130,9 @@ public class Confirm_Appointment extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                Intent intent = new Intent(Confirm_Appointment.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
         dialog.show();

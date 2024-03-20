@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EBEEF8"
     tools:context=".activitys.book_appointment.Confirm_Appointment">
     <RelativeLayout
         android:id="@+id/top_layout"
@@ -27,10 +28,9 @@
                 android:layout_centerVertical="true"/>
 
             <ImageButton
-                android:layout_width="62dp"
-                android:layout_height="34dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:src="@drawable/icon_back"
-                android:paddingEnd="30dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="@color/white"
                 android:layout_centerVertical="true"
@@ -67,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Họ và tên"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_Color"
                     android:textSize="20sp"/>
                 <TextView
                     android:id="@+id/fullName_Customer"
@@ -83,13 +83,14 @@
                 android:layout_marginTop="30dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/title_birth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ngày sinh"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"/>
+                    android:textColor="@color/text_Color"
+                    android:textSize="18sp" />
                 <TextView
                     android:id="@+id/birth"
                     android:layout_width="wrap_content"
@@ -104,13 +105,14 @@
                 android:layout_marginTop="30dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/title_gender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Giới tính"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"/>
+                    android:textColor="@color/text_Color"
+                    android:textSize="18sp" />
                 <TextView
                     android:id="@+id/gender"
                     android:layout_width="wrap_content"
@@ -130,7 +132,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ngày khám"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_Color"
                     android:textSize="18sp"/>
                 <TextView
                     android:id="@+id/date"
@@ -151,7 +153,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Chuyên khoa"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_Color"
                     android:textSize="18sp"/>
                 <TextView
                     android:id="@+id/specialist"
@@ -172,7 +174,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Bác sĩ"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_Color"
                     android:textSize="18sp"/>
                 <TextView
                     android:id="@+id/nameDoctor"
@@ -193,7 +195,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Thứ tự khám"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_Color"
                     android:textSize="18sp"/>
                 <TextView
                     android:id="@+id/numberOrder"
