@@ -7,29 +7,22 @@ import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.example.medihealth.R;
-import com.example.medihealth.fragments.chat.Employee_Appointment_Fragment;
-import com.example.medihealth.fragments.chat.Employee_Chat_Fragment;
-import com.example.medihealth.fragments.chat.Employee_Menu_Fragment;
-import com.example.medihealth.fragments.main.BookAppointment_Fragment;
-import com.example.medihealth.fragments.main.Home_Fragment;
-import com.example.medihealth.fragments.main.Menu_Fragment;
-import com.example.medihealth.fragments.main.Notification_Fragment;
-import com.example.medihealth.fragments.main.Profile_Fragment;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.example.medihealth.fragments.EmployeeFragment.Employee_Appointment_Fragment;
+import com.example.medihealth.fragments.EmployeeFragment.Employee_Chat_Fragment;
+import com.example.medihealth.fragments.EmployeeFragment.Employee_Menu_Fragment;
+import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Employee_MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
-    GoogleSignInClient googleSignInClient;
-    private BottomNavigationView bottomNavigationView;
-    private FrameLayout pageLayout;
-
+    private BottomNavigationView bottomNavigationView, noticeBg;
+    TextView noticeNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +30,7 @@ public class Employee_MainActivity extends AppCompatActivity {
         initView();
         setLoadingFormUserSharedPreferences();
         setBotomNavigation();
+        showNoticeBg();
     }
     private void setLoadingFormUserSharedPreferences() {
         sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
@@ -47,7 +41,8 @@ public class Employee_MainActivity extends AppCompatActivity {
 
     private void initView() {
         bottomNavigationView = findViewById(R.id.menuBottom);
-        pageLayout = findViewById(R.id.page_home);
+        noticeBg = findViewById(R.id.notice);
+        noticeNumber = findViewById(R.id.notice_Number);
     }
     private void setBotomNavigation() {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -70,7 +65,30 @@ public class Employee_MainActivity extends AppCompatActivity {
             }
         });
 
-        // Chọn Fragment mặc định khi mở ứng dụng
         bottomNavigationView.setSelectedItemId(R.id.item_chat);
+    }
+    private void showNoticeBg() {
+        FirebaseUtil.getAppointmentCollectionReference()
+                .whereEqualTo("stateAppointment", 0)
+                .addSnapshotListener((querySnapshot, error) -> {
+                    if (error != null) {
+                        Log.e("TotalCount", "Error listening for changes: ", error);
+                        return;
+                    }
+
+                    if (querySnapshot != null) {
+                        int totalCount = querySnapshot.size();
+                        if (totalCount > 0) {
+                            noticeBg.setVisibility(View.VISIBLE);
+                            noticeNumber.setText(String.valueOf(totalCount));
+                        }
+                        else {
+                            noticeBg.setVisibility(View.GONE);
+                        }
+                    }
+                    else {
+                        Log.e("TotalCount", "QuerySnapshot is null");
+                    }
+                });
     }
 }

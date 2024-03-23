@@ -1,4 +1,4 @@
-package com.example.medihealth.adapters.book_appointment;
+package com.example.medihealth.adapters.appointment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

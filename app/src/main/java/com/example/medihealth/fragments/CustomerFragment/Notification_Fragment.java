@@ -1,4 +1,4 @@
-package com.example.medihealth.fragments.main;
+package com.example.medihealth.fragments.CustomerFragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.medihealth.R;
 
-public class slide5 extends Fragment {
+public class Notification_Fragment extends Fragment {
 
-    public slide5() {
+    public Notification_Fragment() {
         // Required empty public constructor
     }
 
@@ -24,6 +24,6 @@ public class slide5 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_slide5, container, false);
+        return inflater.inflate(R.layout.fragment_notification, container, false);
     }
 }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.main.Home_Fragment">
+    tools:context=".fragments.CustomerFragment.Home_Fragment">
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EBEEF8"
-    tools:context=".fragments.main.Menu_Fragment">
+    tools:context=".fragments.CustomerFragment.Menu_Fragment">
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
@@ -75,7 +75,7 @@
                         android:id="@+id/fullName_user"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Vũ Mạnh Hùng"
+                        android:text=""
                         android:textSize="18sp"
                         android:textColor="@color/white" />
                     <TextView
@@ -85,7 +85,7 @@
                         android:layout_below="@id/fullName_user"
                         android:textSize="15sp"
                         android:textColor="@color/white"
-                        android:text="Nam - 04/10/2002"/>
+                        android:text=""/>
                 </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>

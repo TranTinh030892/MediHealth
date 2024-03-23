@@ -92,7 +92,6 @@ public class EmployeeChat_Activity extends AppCompatActivity implements View.OnC
             if(task.isSuccessful()){
                 chatRoom = task.getResult().toObject(ChatRoom.class);
                 if(chatRoom==null){
-                    //first time chat
                     chatRoom = new ChatRoom(
                             chatroomId,
                             Arrays.asList(FirebaseUtil.currentUserId(),userModel.getUserId()),

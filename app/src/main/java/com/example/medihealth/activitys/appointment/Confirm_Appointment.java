@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys.book_appointment;
+package com.example.medihealth.activitys.appointment;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -19,26 +19,45 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.MainActivity;
 import com.example.medihealth.models.Appointment;
+import com.example.medihealth.models.AppointmentDTO;
 import com.example.medihealth.models.Doctor;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.Calendar;
 
 public class Confirm_Appointment extends AppCompatActivity implements View.OnClickListener {
-    Appointment appointment;
+    AppointmentDTO appointmentDTO;
     private ImageButton btnBack, btnSupport;
     private Button btnEnter, btnCancel;
     TextView textfullName_Customer, textBirth, textGender, textDate, textSpecialist,
     textfullName_Doctor, textNumberOrder;
+    UserModel userModel;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                userModel = task.getResult().toObject(UserModel.class);
+            }
+            else {
+                Log.e("ERROR","Lỗi kết nối mạng");
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_appointment);
-        appointment = AndroidUtil.getAppointmentModelFromIntent(getIntent());
         initView();
-        setDataApointment(appointment);
         setOnclick();
+        appointmentDTO = AndroidUtil.getAppointmentDTOFromIntent(getIntent());
+        setDataApointment(appointmentDTO);
     }
     private void setOnclick() {
         btnCancel.setOnClickListener(this);
@@ -58,35 +77,30 @@ public class Confirm_Appointment extends AppCompatActivity implements View.OnCli
         textfullName_Doctor = findViewById(R.id.nameDoctor);
         textNumberOrder = findViewById(R.id.numberOrder);
     }
-    private void setDataApointment(Appointment appointment) {
+    private void setDataApointment(AppointmentDTO appointmentDTO) {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
                 UserModel userModel = task.getResult().toObject(UserModel.class);
                 textfullName_Customer.setText(userModel.getFullName());
                 textBirth.setText(userModel.getBirth());
                 textGender.setText(userModel.getGender());
-                textDate.setText(appointment.getDate());
-                textSpecialist.setText(appointment.getSpecialist());
-                if (appointment.getOrder() < 9) {
-                    textNumberOrder.setText("0"+appointment.getOrder());
+                textDate.setText(appointmentDTO.getAppointmentDate());
+                textSpecialist.setText(appointmentDTO.getSpecialist());
+                if (appointmentDTO.getOrder() < 9) {
+                    textNumberOrder.setText("0"+appointmentDTO.getOrder());
                 }
-                else textNumberOrder.setText(String.valueOf(appointment.getOrder()));
+                else textNumberOrder.setText(String.valueOf(appointmentDTO.getOrder()));
+                textfullName_Doctor.setText(appointmentDTO.getDoctorName());
             }
             else {
                 Log.e("ERROR","Lỗi kết nối mạng");
-            }
-        });
-        FirebaseUtil.getDoctorDetailsById(appointment.getDoctorId()).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                Doctor doctor = task.getResult().toObject(Doctor.class);
-                textfullName_Doctor.setText(doctor.getFullName());
             }
         });
     }
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_enter){
-            saveDataAppoitment(appointment);
+            saveDataAppoitment(appointmentDTO);
             showDialogConfirm(Gravity.BOTTOM);
         }
         if (v.getId() == R.id.btn_cancel){
@@ -96,16 +110,26 @@ public class Confirm_Appointment extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void saveDataAppoitment(Appointment appointment) {
-        FirebaseFirestore.getInstance().collection("Appointment").add(appointment)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        Log.d("SUCCESSFULL","Save Appointment successfull");
-                    }
-                    else {
-                        Log.e("ERROR","Lôi kết nối mạng");
-                    }
-                });
+    private void saveDataAppoitment(AppointmentDTO appointmentDTO) {
+        String doctorId = appointmentDTO.getDoctorId();
+        FirebaseUtil.getDoctorDetailsById(doctorId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Doctor doctor = task.getResult().toObject(Doctor.class);
+
+                Appointment appointment = new Appointment(userModel,appointmentDTO.getBookDate(),
+                        appointmentDTO.getAppointmentDate(), appointmentDTO.getSpecialist(),doctor,appointmentDTO.getOrder(),
+                        appointmentDTO.getSymptom(),appointmentDTO.getStateAppointment());
+                FirebaseFirestore.getInstance().collection("appointment")
+                        .add(appointment).addOnCompleteListener(task1 -> {
+                            if (task.isSuccessful()){
+                                Log.e("Successfull","Lưu cuộc hẹn thành công");
+                            }
+                            else {
+                                Log.e("ERROR","Lỗi kết nối mạng");
+                            }
+                        });
+            }
+        });
     }
 
     private void showDialogConfirm(int bottom) {
@@ -131,6 +155,17 @@ public class Confirm_Appointment extends AppCompatActivity implements View.OnCli
             public void onClick(View v) {
                 dialog.dismiss();
                 Intent intent = new Intent(Confirm_Appointment.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        btnDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent intent = new Intent(Confirm_Appointment.this, MainActivity.class);
+                intent.putExtra("requestCode",113);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }

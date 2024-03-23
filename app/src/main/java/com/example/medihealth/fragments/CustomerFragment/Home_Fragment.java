@@ -1,4 +1,4 @@
-package com.example.medihealth.fragments.main;
+package com.example.medihealth.fragments.CustomerFragment;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -7,8 +7,6 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -26,20 +24,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.Login;
-import com.example.medihealth.activitys.book_appointment.Infor_Appoitment_Activity;
+import com.example.medihealth.activitys.appointment.Infor_Appoitment_Activity;
 import com.example.medihealth.activitys.chat.ListEmployee;
 import com.example.medihealth.adapters.main.SlidePagerAdapter;
-import com.example.medihealth.models.CustomToast;
-import com.example.medihealth.models.UserModel;
-import com.example.medihealth.utils.AndroidUtil;
-import com.example.medihealth.utils.FirebaseUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -119,6 +112,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     }
     @Override
     public void onClick(View v) {
+        if (v.getId() != R.id.btn_login && mAuth.getCurrentUser() == null){
+            showDialogLogin(Gravity.CENTER);
+            return;
+        }
         if (v.getId() == R.id.btn_login){
             Intent intent = new Intent(getActivity(), Login.class);
             startActivity(intent);
@@ -128,21 +125,14 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             startActivity(intent);
         }
         if (v.getId() == R.id.form_inside_one_above){
-            Toast.makeText(getActivity(), "Son", Toast.LENGTH_SHORT).show();
             // menu nhắc lịch
         }
         if (v.getId() == R.id.form_inside_two_above){
-            Toast.makeText(getActivity(), "Thu", Toast.LENGTH_SHORT).show();
             // menu quản lý đơn thuốc
         }
         if (v.getId() == R.id.btn_chat){
-            if (mAuth.getCurrentUser() == null){
-                showDialogLogin(Gravity.CENTER);
-            }
-            else {
-                Intent intent = new Intent(getActivity(), ListEmployee.class);
-                startActivity(intent);
-            }
+            Intent intent = new Intent(getActivity(), ListEmployee.class);
+            startActivity(intent);
         }
     }
 
@@ -283,7 +273,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                         String responseData = response.body().string();
                         JSONObject jsonObject = new JSONObject(responseData);
 
-                        // Lấy ra giá trị của temp_min và temp_max
                         double tempMin = jsonObject.getJSONObject("main").getDouble("temp_min");
                         double tempMax = jsonObject.getJSONObject("main").getDouble("temp_max");
 
@@ -314,13 +303,13 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         final TranslateAnimation moveUp = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0,
                 Animation.RELATIVE_TO_SELF, 0,
                 Animation.RELATIVE_TO_SELF, 0,
-                Animation.RELATIVE_TO_SELF, -0.12f); // Di chuyển lên 50% chiều cao của Button
+                Animation.RELATIVE_TO_SELF, -0.12f);
         moveUp.setDuration(500);
 
         final TranslateAnimation moveDown = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0,
                 Animation.RELATIVE_TO_SELF, 0,
                 Animation.RELATIVE_TO_SELF, -0.12f,
-                Animation.RELATIVE_TO_SELF, 0); // Di chuyển về vị trí ban đầu
+                Animation.RELATIVE_TO_SELF, 0);
         moveDown.setDuration(500);
 
         moveUp.setAnimationListener(new Animation.AnimationListener() {
@@ -348,7 +337,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                // Khi animation kết thúc, áp dụng animation di chuyển lên
                 btnCalendar.startAnimation(moveUp);
             }
 

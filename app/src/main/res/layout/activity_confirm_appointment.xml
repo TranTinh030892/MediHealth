@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EBEEF8"
-    tools:context=".activitys.book_appointment.Confirm_Appointment">
+    tools:context=".activitys.appointment.Confirm_Appointment">
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"

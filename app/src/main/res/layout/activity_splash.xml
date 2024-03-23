@@ -30,8 +30,8 @@
         <ProgressBar
             android:layout_below="@id/app_name"
             android:layout_marginTop="20dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:indeterminateTint="@color/white"
             android:layout_centerHorizontal="true"
             />

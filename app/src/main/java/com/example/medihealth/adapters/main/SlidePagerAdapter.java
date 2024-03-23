@@ -6,12 +6,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.medihealth.fragments.main.slide1;
-import com.example.medihealth.fragments.main.slide2;
-import com.example.medihealth.fragments.main.slide3;
-import com.example.medihealth.fragments.main.slide4;
-import com.example.medihealth.fragments.main.slide5;
-import com.example.medihealth.fragments.main.slide6;
+import com.example.medihealth.fragments.CustomerFragment.slide1;
+import com.example.medihealth.fragments.CustomerFragment.slide2;
+import com.example.medihealth.fragments.CustomerFragment.slide3;
+import com.example.medihealth.fragments.CustomerFragment.slide4;
+import com.example.medihealth.fragments.CustomerFragment.slide5;
+import com.example.medihealth.fragments.CustomerFragment.slide6;
 
 public class SlidePagerAdapter extends FragmentStateAdapter {
     public SlidePagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {

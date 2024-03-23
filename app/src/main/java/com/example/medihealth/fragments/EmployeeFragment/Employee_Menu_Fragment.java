@@ -1,4 +1,4 @@
-package com.example.medihealth.fragments.chat;
+package com.example.medihealth.fragments.EmployeeFragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.MainActivity;

@@ -158,7 +158,7 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
                         if (!state){
                             if (!employeeTokenId.equals("")){
                                 Log.e("CHECKTOKEN",employeeTokenId);
-                                sendNotification(message,"cbMWBzodQoO-7B8Pc5dEqM:APA91bFDdI26h7v211ZIDgwAe-BSBhyqcWnkQ7Li1vM854w_ilpoPFm_bTLW0cKA3_HqCQdzhU3SlFZTyIXJ8au_jfBxEev0lWi0RuDr4fnETwkfsP7Si3OIKgBhcV6Qi8qz-j8y1qWm");
+                                FirebaseUtil.sendMessageNotification(message,employeeTokenId);
                             }
                         }
                     }
@@ -181,51 +181,6 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
                 }
             } else {
                 Log.e("ERROR", "Lỗi kết nối Firebase");
-            }
-        });
-    }
-    private void sendNotification(String message,String tokenId) {
-        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                UserModel currentUser = task.getResult().toObject(UserModel.class);
-                try {
-                    JSONObject jsonObject = new JSONObject();
-
-                    JSONObject dataObj = new JSONObject();
-                    dataObj.put("title", currentUser.getFullName());
-                    dataObj.put("body", message);
-
-                    dataObj.put("userId", currentUser.getUserId());
-                    jsonObject.put("data", dataObj);
-                    jsonObject.put("to", tokenId);
-
-                    callApi(jsonObject);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private void callApi(JSONObject jsonObject) {
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String url = "https://fcm.googleapis.com/fcm/send";
-        RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .header("Authorization", "Bearer AAAA2YcskTU:APA91bFbJHA1gMDoHTkHauaDOJZfuzxcYqq6TjBqUoyAp-0I8YHhjIxh3VvtJUS39Od1biRCgomTSO_C5AOMsAHf_ovnSCR6IwO_MglmxIUgWZuL-ADA0MRXqA-leMYLGODLnHx_v7AN")
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-
             }
         });
     }

@@ -1,31 +1,28 @@
-package com.example.medihealth.fragments.chat;
+package com.example.medihealth.fragments.CustomerFragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.medihealth.R;
 
-public class Employee_Appointment_Fragment extends Fragment {
+public class slide1 extends Fragment {
 
-    public Employee_Appointment_Fragment() {
-        // Required empty public constructor
+    public slide1() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_employee__appointment_, container, false);
+        return inflater.inflate(R.layout.fragment_slide1, container, false);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.medihealth.fragments.main;
+package com.example.medihealth.fragments.CustomerFragment;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,16 +17,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.Login;
 import com.example.medihealth.activitys.MainActivity;
-import com.example.medihealth.models.CustomToast;
-import com.example.medihealth.utils.AndroidUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -36,6 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class Menu_Fragment extends Fragment implements View.OnClickListener {
     Dialog dialog;
+    TextView userName, userGenderBirth;
     SharedPreferences sharedPreferences;
     GoogleSignInClient googleSignInClient;
     RelativeLayout btnLogout;
@@ -63,10 +61,10 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
         // Khởi tạo GoogleSignInClient
         googleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
         initView(itemView);
+        setInforUser();
         setOnclick();
         return itemView;
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -86,6 +84,8 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
 
     private void initView(View itemView) {
         btnLogout = itemView.findViewById(R.id.btn_logout);
+        userName = itemView.findViewById(R.id.fullName_user);
+        userGenderBirth = itemView.findViewById(R.id.gender_birth);
         setbtnLogout();
     }
 
@@ -95,7 +95,18 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
             btnLogout.setVisibility(View.GONE);
         }
     }
-
+    private void setInforUser() {
+        String inforFormUser = sharedPreferences.getString("inforFormUser", "empty");
+        if (!inforFormUser.equals("empty")){
+            String[] array = inforFormUser.split(";");
+            if (array.length > 0) {
+                userName.setText(array[0]);
+                userGenderBirth.setText(array[1]);
+            } else {
+                Log.e("ERROR", "profileString rỗng");
+            }
+        }
+    }
     private void setOnclick() {
         btnLogout.setOnClickListener(this);
     }
@@ -140,6 +151,7 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });

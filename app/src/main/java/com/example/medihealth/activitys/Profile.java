@@ -202,10 +202,10 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         int year = datePicker.getYear();
         String dayOfMonthStr = String.valueOf(dayOfMonth),
                 monthOfYearStr = String.valueOf(monthOfYear+1);
-        if (dayOfMonth < 10) dayOfMonthStr = "0" + dayOfMonthStr;
-        if (monthOfYear < 10) monthOfYearStr = "0" + monthOfYearStr;
-        String date = dayOfMonthStr + "/" + monthOfYearStr + "/" + year;
-        birth.setText(date);
+        if (dayOfMonth < 10) dayOfMonthStr = "0" + dayOfMonth;
+        if (monthOfYear + 1 < 10) monthOfYearStr = "0" + (monthOfYear+1);
+        String selectedDate = dayOfMonthStr + "/" + monthOfYearStr + "/" + year;
+        birth.setText(selectedDate);
     }
     private void signOut() {
         mAuth.signOut();

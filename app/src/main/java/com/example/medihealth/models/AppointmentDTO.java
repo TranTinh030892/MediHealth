@@ -1,36 +1,45 @@
 package com.example.medihealth.models;
 
-public class Appointment {
-    private UserModel userModel;
+public class AppointmentDTO {
+    private String userName;
     private String bookDate;
     private String appointmentDate;
     private String specialist;
-    private Doctor doctor;
+    private String doctorId;
+    private String doctorName;
     private int order;
     private String symptom;
     private int stateAppointment;
 
-    public Appointment() {
+    public AppointmentDTO() {
     }
-
-    public Appointment(UserModel userModel,String bookDate, String appointmentDate, String specialist, Doctor doctor, int order,
-                       String symptom, int stateAppointment) {
-        this.userModel = userModel;
+    public AppointmentDTO(String userName,String bookDate, String appointmentDate, String specialist,String doctorId,
+                          String doctorName, int order, String symptom, int stateAppointment) {
+        this.userName = userName;
         this.bookDate = bookDate;
         this.appointmentDate = appointmentDate;
         this.specialist = specialist;
-        this.doctor = doctor;
+        this.doctorId = doctorId;
+        this.doctorName = doctorName;
         this.order = order;
         this.symptom = symptom;
         this.stateAppointment = stateAppointment;
     }
 
-    public UserModel getUserModel() {
-        return userModel;
+    public String getDoctorId() {
+        return doctorId;
     }
 
-    public void setUserModel(UserModel userModel) {
-        this.userModel = userModel;
+    public void setDoctorId(String doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getBookDate() {
@@ -57,12 +66,12 @@ public class Appointment {
         this.specialist = specialist;
     }
 
-    public Doctor getDoctor() {
-        return doctor;
+    public String getDoctorName() {
+        return doctorName;
     }
 
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
     }
 
     public int getOrder() {

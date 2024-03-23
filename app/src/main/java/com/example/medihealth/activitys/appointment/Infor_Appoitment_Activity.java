@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys.book_appointment;
+package com.example.medihealth.activitys.appointment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -33,15 +32,16 @@ import android.widget.Toast;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.MainActivity;
-import com.example.medihealth.adapters.book_appointment.DoctorAdapter;
+import com.example.medihealth.adapters.appointment.DoctorAdapter;
 import com.example.medihealth.models.Appointment;
+import com.example.medihealth.models.AppointmentDTO;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Doctor;
+import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
-import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
@@ -57,11 +57,24 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     RecyclerView recyclerView;
     DoctorAdapter adapterModel;
     SharedPreferences sharedPreferences;
-    final Calendar c = Calendar.getInstance();
-    private int year, month, day;
     private int indexDoctorSelected = -1;
     private boolean selected = false;
     private int sizeListDoctors = 0;
+    UserModel userModel;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                userModel = task.getResult().toObject(UserModel.class);
+            }
+            else {
+                Log.e("ERROR","Lỗi kết nối mạng");
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -226,10 +239,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         birthUser = findViewById(R.id.birth_user);
         imageAccount = findViewById(R.id.image_user);
         editTextDate = findViewById(R.id.date);
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
-        editTextDate.setText(day+"/"+(month+1)+"/"+year);
+        editTextDate.setText(getCurrentDate());
         editTextSpecialist = findViewById(R.id.specialist);
         textViewNumberOrder = findViewById(R.id.numberOrder);
         editTextSymptom = findViewById(R.id.symptom);
@@ -244,6 +254,20 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         progressBarLoadNumberOrder = findViewById(R.id.loadNumberOrder);
         recyclerView = findViewById(R.id.doctorList);
         btnBack = findViewById(R.id.back_btn);
+    }
+
+    private String getCurrentDate() {
+        final Calendar calendar = Calendar.getInstance();
+        int year, month, day;
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        String monthStr = String.valueOf(month),dayStr = String.valueOf(day);
+
+        if (month+1 < 10) monthStr = "0" + (month + 1);
+        if (day < 10) dayStr = "0" + day;
+        String result = dayStr+"/"+monthStr+"/"+year;
+        return result;
     }
 
     @Override
@@ -277,17 +301,18 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     }
 
     private void setDataIntent(Intent intent) {
-        String userId = FirebaseUtil.currentUserId();
-        String dateBook = editTextDate.getText().toString().trim();
+        String bookDate = getCurrentDate();
+        String appoitmentDate = editTextDate.getText().toString().trim();
         String specialist = editTextSpecialist.getText().toString().trim();
         String doctorId = adapterModel.getItem(indexDoctorSelected).getDoctorId();
+        String doctorName = adapterModel.getItem(indexDoctorSelected).getFullName();
         String orderStr = textViewNumberOrder.getText().toString().trim();
         int order = Integer.parseInt(orderStr);
         String symptom = editTextSymptom.getText().toString().trim();
         int stateAppointment = 0;
-        Appointment appointment = new Appointment(userId,dateBook,specialist,doctorId,
-                order,symptom,stateAppointment);
-        AndroidUtil.passAppointmentModelAsIntent(intent,appointment);
+        AppointmentDTO appointmentDTO = new AppointmentDTO(userModel.getFullName(),bookDate,
+                appoitmentDate,specialist,doctorId,doctorName,order,symptom,stateAppointment);
+        AndroidUtil.passAppointmentDTOAsIntent(intent,appointmentDTO);
     }
 
     private boolean validation() {
@@ -399,7 +424,11 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         int dayOfMonth = datePicker.getDayOfMonth();
         int monthOfYear = datePicker.getMonth();
         int year = datePicker.getYear();
-        String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+        String dayOfMonthStr = String.valueOf(dayOfMonth),
+                monthOfYearStr = String.valueOf(monthOfYear+1);
+        if (dayOfMonth < 10) dayOfMonthStr = "0" + dayOfMonth;
+        if (monthOfYear+1 < 10) monthOfYearStr = "0" + (monthOfYear+1);
+        String selectedDate = dayOfMonthStr + "/" + monthOfYearStr + "/" + year;
         editTextDate.setText(selectedDate);
         setStringSharedPreferences("date",selectedDate);
         if (editTextSpecialist.getText().toString().trim().equals("")){

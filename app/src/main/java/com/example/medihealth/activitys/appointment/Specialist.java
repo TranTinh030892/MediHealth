@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys.book_appointment;
+package com.example.medihealth.activitys.appointment;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -397,8 +397,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             String.valueOf(currentUser.getHeight())+";"+String.valueOf(currentUser.getWeight())+";"+
                             getBMI(currentUser.getHeight(), currentUser.getWeight()));
                     editor.apply();
-                } else {
-                    Log.e("ERROR", "currentUser is null");
                 }
             } else {
                 Log.e("ERROR", "task is not successful or result is null");
@@ -414,8 +412,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("inforFormEmployee",currentEmployee.getFullName());
                     editor.apply();
-                } else {
-                    Log.e("ERROR", "currentEmployee is null");
                 }
             } else {
                 Log.e("ERROR", "task is not successful or result is null");
