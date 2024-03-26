@@ -14,16 +14,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.medihealth.R;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.Doctor;
+import com.example.medihealth.models.NotificationModel;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.Timestamp;
 
 public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Employee_AppointmentAdapter.AppointmentViewHolder> {
     Context context;
-    public Employee_AppointmentAdapter(@NonNull FirestoreRecyclerOptions<Appointment> options,Context context) {
+    private OnItemClickListener mListener;
+    public Employee_AppointmentAdapter(@NonNull FirestoreRecyclerOptions<Appointment> options, Context context) {
         super(options);
         this.context = context;
+
     }
 
     @Override
@@ -91,6 +95,7 @@ public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appoin
             String appointmentId = (String) itemView.getTag();
             if (v.getId() == R.id.block_approve_appointment){
                 updateStateAppointment(appointmentId,1);
+                getAppointmentById(appointmentId);
             }
             if (v.getId() == R.id.block_cancel_appointment){
                 updateStateAppointment(appointmentId,-1);
@@ -98,6 +103,37 @@ public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appoin
             if (v.getId() == R.id.block_restore_appointment){
                 updateStateAppointment(appointmentId,1);
             }
+        }
+
+        private void getAppointmentById(String appointmentId) {
+            FirebaseUtil.getAppointmentDetailsById(appointmentId).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    Appointment appointment = task.getResult().toObject(Appointment.class);
+                    if (appointment != null){
+                        pushNotification(appointment);
+                    }
+                }
+                else {
+                    Log.e("ERROR","Lỗi kết nối");
+                }
+            });
+        }
+
+        private void pushNotification(Appointment appointment) {
+            String title = "Đặt lịch khám thành công";
+            String body = "Chúc mừng bạn đã đặt lịch khám thành công tại Medihealth";
+            boolean seen = false;
+            Timestamp timestamp = Timestamp.now();
+            String userId = appointment.getUserModel().getUserId();
+            NotificationModel notificationModel = new NotificationModel(title,body,timestamp,seen,userId);
+            FirebaseUtil.getNotificationsCollectionReference().add(notificationModel).addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    Log.d("SUCCESSFULL", "Lưu thành công Notification");
+                }
+                else {
+                    Log.e("ERROR","Lỗi kết nối");
+                }
+            });
         }
 
         private void updateStateAppointment(String appointmentId,int state) {
@@ -112,7 +148,7 @@ public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appoin
                                             Log.e("SUCCESSFULL","Update lịch hẹn thành công");
                                         }
                                         else {
-                                            Log.e("ERROR","Lô kết nối mạng");
+                                            Log.e("ERROR","Lỗi kết nối mạng");
                                         }
                                     });
                         }
@@ -121,5 +157,10 @@ public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appoin
                         }
                     });
         }
+    }
+    public interface OnItemClickListener {
+        void onApproveClick(String appointmentId);
+        void onCancelClick(String appointmentId);
+        void onRestoreClick(String appointmentId);
     }
 }

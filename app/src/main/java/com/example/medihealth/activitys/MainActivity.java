@@ -13,6 +13,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
@@ -38,8 +40,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Dialog dialog;
     SharedPreferences sharedPreferences;
-    GoogleSignInClient googleSignInClient;
-    private BottomNavigationView bottomNavigationView;
+    private BottomNavigationView bottomNavigationView, notificationBG;
+    TextView notificationNumber;
     private FrameLayout pageLayout;
     private Button btnHome;
     private boolean isFirstBackPress = true;
@@ -50,11 +52,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initView();
         setOnclick();
+        showNotificationBg();
         showResultConnectNetwork();
         setLoadingFormUserSharedPreferences();
         setBotomNavigation();
         getIntentFromConfirmAppointment();
     }
+
     @Override
     public void onBackPressed() {
         if (isFirstBackPress) {
@@ -86,11 +90,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         bottomNavigationView = findViewById(R.id.menuBottom);
+        notificationBG = findViewById(R.id.notification_bg);
+        notificationNumber = findViewById(R.id.notice_Number);
         btnHome = findViewById(R.id.btnHome);
         pageLayout = findViewById(R.id.page_home);
     }
     private void setOnclick() {
         btnHome.setOnClickListener(this);
+    }
+    private void showNotificationBg() {
+        FirebaseUtil.getNotificationsCollectionReference()
+                .whereEqualTo("seen", false)
+                .addSnapshotListener((querySnapshot, error) -> {
+                    if (error != null) {
+                        Log.e("TotalCount", "Error listening for changes: ", error);
+                        return;
+                    }
+
+                    if (querySnapshot != null) {
+                        int totalCount = querySnapshot.size();
+                        if (totalCount > 0) {
+                            notificationBG.setVisibility(View.VISIBLE);
+                            notificationNumber.setText(String.valueOf(totalCount));
+                        }
+                        else {
+                            notificationBG.setVisibility(View.GONE);
+                        }
+                    }
+                    else {
+                        Log.e("TotalCount", "QuerySnapshot is null");
+                    }
+                });
     }
     private void setBotomNavigation() {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

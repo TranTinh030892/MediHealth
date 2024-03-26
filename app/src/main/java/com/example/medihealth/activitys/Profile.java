@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
+import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.UserModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -103,44 +104,49 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
             // kiểm tra điều kiện dữ liệu
             String name = fullName.getText().toString();
             String gender = "";
-            if (male.isChecked()){
+            if (male.isChecked()) {
                 gender = "Nam";
+            } else {
+                gender = "Nữ";
             }
-            else gender = "Nữ";
             String phone = phoneNumber.getText().toString();
             String addressUser = address.getText().toString();
             String birthUser = birth.getText().toString();
-            int userHeight = Integer.parseInt(height.getText().toString());
-            int userWeight = Integer.parseInt(weight.getText().toString());
-            if (name.equals("") || gender.equals("") || phone.equals("")
-            || addressUser.equals("") || birthUser.equals("") || height.getText().toString().equals("")
-            || weight.getText().toString().equals("")){
-                Toast.makeText(this, "Vui lòng điền đầy đủ thông tin hồ sơ", Toast.LENGTH_SHORT).show();
+            String heightStr = height.getText().toString();
+            String weightStr = weight.getText().toString();
+
+            if (name.isEmpty() || gender.isEmpty() || phone.isEmpty() ||
+                    addressUser.isEmpty() || birthUser.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty()) {
+                CustomToast.showToast(getApplicationContext(),"Vui lòng điền đủ thông tin",Toast.LENGTH_SHORT);
                 return;
             }
-            if (userHeight <=0){
-                Toast.makeText(this, "Chiều cao không hợp lệ", Toast.LENGTH_SHORT).show();
+
+            int userHeight = Integer.parseInt(heightStr);
+            int userWeight = Integer.parseInt(weightStr);
+
+            if (userHeight <= 0) {
+                CustomToast.showToast(getApplicationContext(),"Chiều cao không hợp lệ",Toast.LENGTH_SHORT);
                 return;
             }
-            if (userWeight <=0){
-                Toast.makeText(this, "Cân nặng không hợp lệ", Toast.LENGTH_SHORT).show();
+
+            if (userWeight <= 0) {
+                CustomToast.showToast(getApplicationContext(),"Cân nặng không hợp lệ",Toast.LENGTH_SHORT);
                 return;
             }
+
             // Lưu dữ liệu
             FirebaseUser currentUser = mAuth.getCurrentUser();
-            UserModel userModel = new UserModel(name,gender,phone,addressUser,birthUser,userHeight
-            ,userWeight, Timestamp.now(),currentUser.getUid());
-            FirebaseFirestore.getInstance().collection("users").document(currentUser.getUid())
-                    .set(userModel).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
-                            Log.d("SUCCESSFULL","Save UserInfor Success");
-                        }
-                        else {
-                            Log.e("ERROR","Lỗi kết nối mạng");
-                        }
-                    });
+            UserModel userModel = new UserModel(name, gender, phone, addressUser, birthUser, userHeight, userWeight, Timestamp.now(), currentUser.getUid());
+            FirebaseFirestore.getInstance().collection("users").document(currentUser.getUid()).set(userModel).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Log.d("SUCCESSFULL", "Save UserInfor Success");
+                } else {
+                    Log.e("ERROR", "Lỗi kết nối mạng");
+                }
+            });
+
             // Chuyển activity
-            Intent intent = new Intent(Profile.this,MainActivity.class);
+            Intent intent = new Intent(Profile.this, MainActivity.class);
             startActivity(intent);
         }
         else if (v.getId() == R.id.back_btn){

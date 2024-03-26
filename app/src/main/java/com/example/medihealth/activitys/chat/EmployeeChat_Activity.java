@@ -40,8 +40,7 @@ public class EmployeeChat_Activity extends AppCompatActivity implements View.OnC
     String chatroomId;
     ChatRoom chatRoom;
     ImageView image_user;
-    TextView textViewName,status;
-    Button btnFlash ;
+    TextView textViewName;
     EditText editTextChat;
     ImageButton btnSend,btnBack;
     UserModel userModel;
@@ -139,7 +138,7 @@ public class EmployeeChat_Activity extends AppCompatActivity implements View.OnC
                 return;
             sendMessage(message);
         }
-        if (v.getId() == R.id.back_btn){
+        if (v.getId() == R.id.btnBack){
             Intent intent = new Intent(EmployeeChat_Activity.this, Employee_MainActivity.class);
             startActivity(intent);
         }

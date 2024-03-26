@@ -16,6 +16,10 @@
         android:theme="@style/Theme.MediHealth"
         tools:targetApi="31">
         <activity
+            android:name=".activitys.Search.SearchDrugActivity"
+            android:windowSoftInputMode="stateVisible"
+            android:exported="false" />
+        <activity
             android:name=".activitys.appointment.Infor_Appoitment_Activity"
             android:exported="false" />
         <activity
@@ -45,9 +49,6 @@
             android:name=".activitys.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".activitys.appointment.Infor_Appoitment_Activity"
-            android:exported="false" />
-        <activity
             android:name=".activitys.chat.UserChat_Activity"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
@@ -68,7 +69,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <receiver android:name=".models.NotificationDismissReceiver"
+
+        <receiver
+            android:name=".models.NotificationDismissReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

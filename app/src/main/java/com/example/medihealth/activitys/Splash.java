@@ -1,5 +1,6 @@
 package com.example.medihealth.activitys;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -15,7 +16,10 @@ import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -69,6 +73,7 @@ public class Splash extends AppCompatActivity {
     private void checkUserOrEmployee(String currentUserId, List<String> listAllUserId){
         Intent intent;
         if (listAllUserId.contains(currentUserId)) {
+            checkProfile(currentUserId);
             intent = new Intent(Splash.this, MainActivity.class);
         } else {
             intent = new Intent(Splash.this, Employee_MainActivity.class);
@@ -76,6 +81,58 @@ public class Splash extends AppCompatActivity {
         intent.putExtra("requestCodeLoadingFormUser", 1102);
         startActivity(intent);
         finish();
+    }
+    private void checkProfile(String userId) {
+        FirebaseFirestore.getInstance().collection("users")
+                .document(userId)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.e("ERROR", "Listen failed.", e);
+                        }
+                        if (documentSnapshot.exists() && !documentSnapshot.getData().isEmpty()) {
+                            checkRole(userId);
+                        } else {
+                            Intent intent = new Intent(Splash.this, Profile.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
+    }
+    private void checkRole(String currentUserid) {
+        FirebaseFirestore.getInstance().collection("role")
+                .document(currentUserid)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.e("ERROR", "Listen failed.", e);
+                        }
+                        if (documentSnapshot != null && documentSnapshot.contains("isRole")) {
+                            Number isRoleNumber = documentSnapshot.getLong("isRole");
+                            if(isRoleNumber != null){
+                                int isRole = isRoleNumber.intValue();
+                                Intent intent = null;
+                                if (isRole == 3) {
+                                    intent = new Intent(Splash.this, MainActivity.class);
+                                    setSharedPreferencesDataUser();
+                                } else if (isRole == 2){
+                                    intent = new Intent(Splash.this, Employee_MainActivity.class);
+                                    intent.putExtra("requestCodeEmployee", 1103);
+                                }
+                                if (intent != null) {
+                                    intent.putExtra("requestCodeLoadingFormUser", 1102);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                        } else {
+                            Log.e("ERROR", "failed");
+                        }
+                    }
+                });
     }
     private void setSharedPreferencesDataUser() {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {

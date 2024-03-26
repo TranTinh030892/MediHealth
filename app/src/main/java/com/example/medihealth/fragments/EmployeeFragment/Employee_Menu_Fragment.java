@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -27,20 +28,30 @@ import android.widget.TextView;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.MainActivity;
+import com.example.medihealth.models.Token;
+import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.List;
 
 public class Employee_Menu_Fragment extends Fragment implements View.OnClickListener {
     GoogleSignInClient googleSignInClient;
     Dialog dialog, dialogSwitch;
     SharedPreferences sharedPreferences;
-    RelativeLayout btnSetNotice,btnLogout;
+    RelativeLayout btnSetNotice;
+    CardView btnLogout;
     ImageView iconMenu;
     TextView titleMenu, fullNameEmployee, birthUser;
+    String currentUserId = "";
     public Employee_Menu_Fragment() {
         // Required empty public constructor
     }
@@ -50,6 +61,7 @@ public class Employee_Menu_Fragment extends Fragment implements View.OnClickList
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View iteamView = inflater.inflate(R.layout.fragment_menu, container, false);
+        currentUserId = FirebaseUtil.currentUserId();
         dialog = new Dialog(getContext());
         sharedPreferences = getContext().getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         initView(iteamView);
@@ -102,6 +114,7 @@ public class Employee_Menu_Fragment extends Fragment implements View.OnClickList
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    dialog.dismiss();
                     sigout();
                 }
             }, 2000);
@@ -112,14 +125,67 @@ public class Employee_Menu_Fragment extends Fragment implements View.OnClickList
     }
 
     private void sigout() {
-        removeAllSharedPreferences();
-        FirebaseAuth.getInstance().signOut();
-        googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+        getCurrentUserTokenId(new TokenFetchCallback() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
+            public void onTokenFetchComplete() {
+                removeAllSharedPreferences();
+                FirebaseAuth.getInstance().signOut();
+                googleSignInClient.signOut().addOnCompleteListener(task -> {
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                });
             }
+        });
+    }
+
+
+    private void getCurrentUserTokenId(TokenFetchCallback callback) {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        String tokenId = task.getResult();
+                        removeTokenId(FirebaseUtil.currentUserId(), tokenId);
+                        callback.onTokenFetchComplete(); // Gọi callback khi quá trình hoàn thành
+                    } else {
+                        Log.e("EROR", "Khong lay duoc Token");
+                    }
+                });
+    }
+
+
+    private void removeTokenId(String curentUserId, String tokenId) {
+        Query query = FirebaseUtil.getTokenId().whereEqualTo("userId",curentUserId);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                    Token token = documentSnapshot.toObject(Token.class);
+                    if (token != null) {
+                        List<String> tokenList = token.getTokenList();
+                        for (int i = 0 ; i < tokenList.size() ; i++){
+                            if (tokenList.get(i).equals(tokenId)){
+                                tokenList.remove(i);break;
+                            }
+                        }
+                        updateTonken(documentSnapshot.getId(),tokenList);
+                    }
+                }
+            }
+            else {
+                Log.e("ERROR","Lỗi kết nối");
+            }
+        });
+    }
+
+    private void updateTonken(String documentSnapshot, List<String> tokenList) {
+        Token token = new Token(tokenList,currentUserId);
+        FirebaseUtil.getTokenByDocument(documentSnapshot).set(token).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Log.d("SUCCESSFULL","Update tokenList thành công");
+            }
+            else Log.e("ERROR","Lỗi kết nối");
         });
     }
 
@@ -187,5 +253,8 @@ public class Employee_Menu_Fragment extends Fragment implements View.OnClickList
             }
         });
         dialogSwitch.show();
+    }
+    public interface TokenFetchCallback {
+        void onTokenFetchComplete();
     }
 }

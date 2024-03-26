@@ -51,7 +51,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         });
             }
             else{
-                // Hien thi thong bao tu he thong
+                Log.e("ERROR","Lỗi không tìm thấy usId");
             }
         }
     }
@@ -68,12 +68,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, EmployeeChat_Activity.class);
         AndroidUtil.passUserModelAsIntent(intent, user);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
 
         Intent dismissIntent = new Intent(this, NotificationDismissReceiver.class);
-        int notificationId = generateNotificationId(); // Tạo notificationId mới
-        dismissIntent.putExtra("notificationId", notificationId); // Truyền ID của thông báo
-        PendingIntent dismissPendingIntent = PendingIntent.getBroadcast(this, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        int notificationId = generateNotificationId();
+        dismissIntent.putExtra("notificationId", notificationId);
+        PendingIntent dismissPendingIntent = PendingIntent.getBroadcast(this, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT| PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, MyApplicationFCM.CHANNEL_ID)
                 .setContentTitle(title)
@@ -83,18 +84,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true); // Đảm bảo thông báo sẽ tự động biến mất sau khi click
 
-        // Thêm action tắt thông báo
+//         Thêm action tắt thông báo
         NotificationCompat.Action dismissAction = new NotificationCompat.Action(
                 R.drawable.icon_cloud, "Tắt thông báo", dismissPendingIntent);
         notificationBuilder.addAction(dismissAction);
 
-        // Sử dụng notificationId mới
+//         Sử dụng notificationId mới
         notificationManager.notify(notificationId, notificationBuilder.build());
     }
 
 
-    private int generateNotificationId() {
-        return (int) System.currentTimeMillis(); // Sử dụng thời gian hiện tại làm notificationId
+    private synchronized int generateNotificationId() {
+        return notificationId++; // Tăng giá trị của notificationId mỗi khi được gọi
     }
 
 }

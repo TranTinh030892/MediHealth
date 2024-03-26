@@ -25,11 +25,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.Login;
+import com.example.medihealth.activitys.Search.SearchDrugActivity;
 import com.example.medihealth.activitys.appointment.Infor_Appoitment_Activity;
 import com.example.medihealth.activitys.chat.ListEmployee;
 import com.example.medihealth.adapters.main.SlidePagerAdapter;
@@ -53,8 +55,9 @@ import okhttp3.Response;
 public class Home_Fragment extends Fragment implements View.OnClickListener {
     FirebaseAuth mAuth;
     SharedPreferences sharedPreferences;
+    CardView formLogin,formUser;
     RelativeLayout menuBook, menuReminder, menuPrescription, menuService, menuPayment,
-    menuSearch, menuProfile, formUser, formLogin, loadingForm, menuChat;
+    menuSearch, menuProfile, loadingForm, menuChat;
     private SlidePagerAdapter slidePagerAdapter;
     private Timer timer;
     ViewPager2 formSlide;
@@ -132,6 +135,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         }
         if (v.getId() == R.id.btn_chat){
             Intent intent = new Intent(getActivity(), ListEmployee.class);
+            startActivity(intent);
+        }
+        if (v.getId() == R.id.form_inside_two_below){
+            Intent intent = new Intent(getActivity(), SearchDrugActivity.class);
             startActivity(intent);
         }
     }

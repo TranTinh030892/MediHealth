@@ -17,6 +17,7 @@ import com.example.medihealth.adapters.chat.ChatRecyclerAdapter;
 import com.example.medihealth.models.ChatMessage;
 import com.example.medihealth.models.ChatRoom;
 import com.example.medihealth.models.Employee;
+import com.example.medihealth.models.Token;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
@@ -28,11 +29,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -51,12 +54,6 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
     ImageButton btnSend, btnBack;
     ChatRecyclerAdapter adapter;
     RecyclerView recyclerView;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        getTokenId();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,10 +153,7 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
                     if(task.isSuccessful()){
                         boolean state = task.getResult().getBoolean("isState");
                         if (!state){
-                            if (!employeeTokenId.equals("")){
-                                Log.e("CHECKTOKEN",employeeTokenId);
-                                FirebaseUtil.sendMessageNotification(message,employeeTokenId);
-                            }
+                            sendMessagetoAllTokenId(message);
                         }
                     }
                     else {
@@ -167,20 +161,26 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
                     }
                 });
     }
-    private void getTokenId(){
-        FirebaseUtil.getTokenId(employee.getUserId()).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot documentSnapshot = task.getResult();
-                String tokenStr = "";
-                tokenStr = documentSnapshot.getString("tokenId");
-                if (!tokenStr.equals("")){
-                    employeeTokenId = tokenStr;
+
+    private void sendMessagetoAllTokenId(String message) {
+        Query query = FirebaseUtil.getTokenId().whereEqualTo("userId",employee.getUserId());
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                    Token token = documentSnapshot.toObject(Token.class);
+                    if (token != null) {
+                        List<String> tokenList = token.getTokenList();
+                        for (String tokenString : tokenList){
+                            FirebaseUtil.sendMessageNotificationtoTokenId(message,tokenString);
+                            Log.e("CHECKSEND",tokenString);
+                        }
+                    }
                 }
-                else {
-                    Log.e("ERROR", "Không có dữ liệu");
-                }
-            } else {
-                Log.e("ERROR", "Lỗi kết nối Firebase");
+            }
+            else {
+                Log.e("ERROR","Lỗi kết nối");
             }
         });
     }

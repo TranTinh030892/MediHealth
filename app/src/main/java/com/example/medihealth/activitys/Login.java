@@ -20,7 +20,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -30,6 +29,7 @@ import com.example.medihealth.R;
 import com.example.medihealth.activitys.chat.Employee_MainActivity;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Employee;
+import com.example.medihealth.models.Token;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -48,6 +48,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -223,7 +224,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 });
     }
     private void checkRole(String currentUserid) {
-        setTokenId();
+        addTokenId();
         FirebaseFirestore.getInstance().collection("role")
                 .document(currentUserid)
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -259,17 +260,54 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 });
     }
 
-    private void setTokenId() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null){
-            Map<String, String> token = new HashMap<>();
-            token.put("tokenId", tokenId);
-            FirebaseUtil.setTokenId().set(token).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    Log.e("SetTokenId_RESULT","SUCESSFULL");
+    private void addTokenId() {
+        String currentUserId = FirebaseUtil.currentUserId();
+        if (currentUserId != null){
+            Query query = FirebaseUtil.getTokenId().whereEqualTo("userId",currentUserId);
+            query.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                        DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                        Token token = documentSnapshot.toObject(Token.class);
+                        if (token != null) {
+                            List<String> tokenList = token.getTokenList();
+                            if (!tokenList.contains(tokenId)) {
+                                tokenList.add(tokenId);
+                                token.setTokenList(tokenList);
+                                updateToken(documentSnapshot.getId(), token);
+                            }
+                        }
+                    } else {
+                        List<String> tokenList = new ArrayList<>();
+                        tokenList.add(tokenId);
+                        Token token = new Token(tokenList,currentUserId);
+                        addNewToken(token);
+                    }
+                }
+                else {
+                    Log.e("ERROR","Lỗi kết nối");
                 }
             });
         }
+    }
+
+    private void addNewToken(Token token) {
+        FirebaseUtil.getTokenId().add(token).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Log.d("SUCCESSFULL","Thêm mới Token thành công");
+            }
+            else Log.e("ERROR","Lỗi kết nối");
+        });
+    }
+
+    private void updateToken(String documentId, Token token) {
+        FirebaseUtil.getTokenByDocument(documentId).set(token).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Log.d("SUCCESSFULL","Thêm tokenId thành công");
+            }
+            else Log.e("ERROR","Lỗi kết nối");
+        });
     }
 
     @Override

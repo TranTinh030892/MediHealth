@@ -10,6 +10,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import org.json.JSONObject;
 
@@ -83,10 +85,11 @@ public class FirebaseUtil {
     public static DocumentReference roleUser(){
         return FirebaseFirestore.getInstance().collection("role").document(currentUserId());
     }
-    public static DocumentReference setTokenId(){
-        return FirebaseFirestore.getInstance().collection("token").document(currentUserId());
+
+    public static CollectionReference getTokenId(){
+        return FirebaseFirestore.getInstance().collection("token");
     }
-    public static DocumentReference getTokenId(String documentId){
+    public static DocumentReference getTokenByDocument(String documentId){
         return FirebaseFirestore.getInstance().collection("token").document(documentId);
     }
     public static CollectionReference allUserCollectionReference(){
@@ -140,8 +143,14 @@ public class FirebaseUtil {
     public static void logout(){
         FirebaseAuth.getInstance().signOut();
     }
+    public static CollectionReference getNotificationsCollectionReference(){
+        return FirebaseFirestore.getInstance().collection("notification");
+    }
+    public static DocumentReference getNotificationDetailsById(String notificationId){
+        return FirebaseFirestore.getInstance().collection("notification").document(notificationId);
+    }
 
-    public static void sendMessageNotification(String message,String tokenId) {
+    public static void sendMessageNotificationtoTokenId(String message,String tokenId) {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
                 UserModel currentUser = task.getResult().toObject(UserModel.class);

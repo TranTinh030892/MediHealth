@@ -15,28 +15,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.MainActivity;
+import com.example.medihealth.models.Token;
+import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.List;
 
 public class Menu_Fragment extends Fragment implements View.OnClickListener {
     Dialog dialog;
     TextView userName, userGenderBirth;
     SharedPreferences sharedPreferences;
     GoogleSignInClient googleSignInClient;
-    RelativeLayout btnLogout;
+    CardView btnLogout;
+    String currentUserId = "";
     public Menu_Fragment() {
         // Required empty public constructor
     }
@@ -51,6 +57,7 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View itemView =  inflater.inflate(R.layout.fragment_menu, container, false);
+        currentUserId = FirebaseUtil.currentUserId();
         dialog = new Dialog(getContext());
         sharedPreferences = getContext().getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -118,6 +125,7 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    dialog.dismiss();
                     sigout();
                 }
             }, 2000);
@@ -145,21 +153,74 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
     }
 
     private void sigout() {
-        removeAllSharedPreferences();
-        FirebaseAuth.getInstance().signOut();
-        googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+        getCurrentUserTokenId(new TokenUserFetchCallback() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+            public void onTokenUserFetchComplete() {
+                removeAllSharedPreferences();
+                FirebaseAuth.getInstance().signOut();
+                googleSignInClient.signOut().addOnCompleteListener(task -> {
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                });
             }
         });
     }
+
+    private void getCurrentUserTokenId(TokenUserFetchCallback callback) {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        String tokenId = task.getResult();
+                        removeTokenId(FirebaseUtil.currentUserId(), tokenId);
+                        callback.onTokenUserFetchComplete();
+                    } else {
+                        Log.e("EROR", "Khong lay duoc Token");
+                    }
+                });
+    }
+
     private void removeAllSharedPreferences(){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("profile","empty");
         editor.putString("inforFormUser","empty");
         editor.apply();
+    }
+    private void removeTokenId(String curentUserId, String tokenId) {
+        Query query = FirebaseUtil.getTokenId().whereEqualTo("userId",curentUserId);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                    Token token = documentSnapshot.toObject(Token.class);
+                    if (token != null) {
+                        List<String> tokenList = token.getTokenList();
+                        for (int i = 0 ; i < tokenList.size() ; i++){
+                            if (tokenList.get(i).equals(tokenId)){
+                                tokenList.remove(i);break;
+                            }
+                        }
+                        updateTonken(documentSnapshot.getId(),tokenList);
+                    }
+                }
+            }
+            else {
+                Log.e("ERROR","Lỗi kết nối");
+            }
+        });
+    }
+
+    private void updateTonken(String documentSnapshot, List<String> tokenList) {
+        Token token = new Token(tokenList,currentUserId);
+        FirebaseUtil.getTokenByDocument(documentSnapshot).set(token).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Log.d("SUCCESSFULL","Update tokenList thành công");
+            }
+            else Log.e("ERROR","Lỗi kết nối");
+        });
+    }
+    public interface TokenUserFetchCallback {
+        void onTokenUserFetchComplete();
     }
 }

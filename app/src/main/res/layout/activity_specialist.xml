@@ -59,14 +59,13 @@
             />
         <ImageButton
             android:id="@+id/search_specialist_btn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:elevation="5dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="3dp"
+            android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/icon_search"
-            android:background="?attr/selectableItemBackground"
+            android:background="@drawable/search_drug"
             android:padding="12dp"/>
     </RelativeLayout>
     <ScrollView

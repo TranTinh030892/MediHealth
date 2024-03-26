@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.CustomerFragment.Home_Fragment">
     <RelativeLayout
         android:id="@+id/top_layout"
@@ -83,248 +84,259 @@
                         android:layout_width="match_parent"
                         android:background="@drawable/custom_top_layout_home"
                         android:layout_height="70dp"/>
-                    <RelativeLayout
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/infor_user"
+                        app:cardCornerRadius="15dp"
                         android:layout_width="365dp"
                         android:padding="10dp"
-                        android:background="@drawable/custom_toplayout_home_2"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
                         android:layout_height="148dp"
-                        android:elevation="2dp">
-                        <RelativeLayout
-                            android:id="@+id/top_infor"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <RelativeLayout
-                                android:id="@+id/image_user"
-                                android:layout_width="57dp"
-                                android:layout_height="57dp">
-                                <de.hdodenhof.circleimageview.CircleImageView
-                                    android:id="@+id/image_account_google"
-                                    android:layout_width="55dp"
-                                    android:layout_height="55dp"
-                                    android:padding="2dp"
-                                    android:src="@drawable/profile"/>
-                                <ImageButton
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_alignParentEnd="true"
-                                    android:background="@drawable/tick"/>
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/top_infor_rigth"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_centerVertical="true"
-                                android:layout_toEndOf="@id/image_user">
-                                <TextView
-                                    android:id="@+id/fullName_user"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="18sp"
-                                    android:fontFamily="sans-serif-medium"
-                                    android:textColor="#012537" />
-                                <TextView
-                                    android:id="@+id/gender_birth"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@id/fullName_user"
-                                    android:layout_marginTop="3dp"
-                                    android:textSize="15sp"
-                                    android:text="Nam - 03/08/1992"/>
-                            </RelativeLayout>
-                        </RelativeLayout>
-                        //
+                        android:elevation="3dp">
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="57dp"
-                            android:layout_marginTop="11dp"
-                            android:background="@drawable/custom_button"
-                            android:backgroundTint="#F1F3FA"
-                            android:layout_below="@id/top_infor">
-                            <!--                khoi 1-->
+                            android:padding="10dp"
+                            android:layout_height="match_parent">
                             <RelativeLayout
-                                android:layout_width="113dp"
-                                android:layout_height="match_parent"
-                                android:layout_alignParentStart="true"
-                                android:layout_marginStart="4dp"
-                                android:layout_toStartOf="@id/div_center">
+                                android:id="@+id/top_infor"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <RelativeLayout
+                                    android:id="@+id/image_user"
+                                    android:layout_width="57dp"
+                                    android:layout_height="57dp">
+                                    <de.hdodenhof.circleimageview.CircleImageView
+                                        android:id="@+id/image_account_google"
+                                        android:layout_width="55dp"
+                                        android:layout_height="55dp"
+                                        android:padding="2dp"
+                                        android:src="@drawable/profile"/>
+                                    <ImageButton
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_alignParentBottom="true"
+                                        android:layout_alignParentEnd="true"
+                                        android:background="@drawable/tick"/>
+                                </RelativeLayout>
 
                                 <RelativeLayout
+                                    android:id="@+id/top_infor_rigth"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
                                     android:layout_centerVertical="true"
-                                    android:layout_centerHorizontal="true">
+                                    android:layout_toEndOf="@id/image_user">
                                     <TextView
-                                        android:id="@+id/text_heigth"
-                                        android:layout_width="wrap_content"
+                                        android:id="@+id/fullName_user"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Chiều cao"
-                                        android:textSize="15dp" />
-
+                                        android:textSize="18sp"
+                                        android:fontFamily="sans-serif-medium"
+                                        android:textColor="#012537" />
                                     <TextView
-                                        android:id="@+id/number_height"
-                                        android:layout_width="wrap_content"
+                                        android:id="@+id/gender_birth"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_below="@id/text_heigth"
-                                        android:layout_centerHorizontal="true"
-                                        android:textColor="@color/mainColor"
-                                        android:textSize="17dp"
-                                        android:textStyle="bold" />
+                                        android:layout_below="@id/fullName_user"
+                                        android:layout_marginTop="3dp"
+                                        android:textSize="15sp"
+                                        android:text="Nam - 03/08/1992"/>
                                 </RelativeLayout>
                             </RelativeLayout>
-                            <!--                khoi 2-->
-                            <RelativeLayout
-                                android:id="@+id/div_center"
-                                android:layout_width="110dp"
-                                android:layout_centerHorizontal="true"
-                                android:layout_height="match_parent">
-                                <View
-                                    android:id="@+id/divider1"
-                                    android:layout_width="1dp"
-                                    android:layout_height="40dp"
-                                    android:layout_centerVertical="true"
-                                    android:layout_alignParentStart="true"
-                                    android:background="#E8E8E8" />
-                                <RelativeLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_height="wrap_content">
-                                    <TextView
-                                        android:id="@+id/text_weigth"
-                                        android:text="Cân nặng"
-                                        android:textSize="15dp"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"/>
-                                    <TextView
-                                        android:id="@+id/number_weight"
-                                        android:layout_centerHorizontal="true"
-                                        android:layout_below="@id/text_weigth"
-                                        android:layout_width="wrap_content"
-                                        android:textColor="@color/mainColor"
-                                        android:textSize="17dp"
-                                        android:textStyle="bold"
-                                        android:layout_height="wrap_content"/>
-                                </RelativeLayout>
-                                <!-- Gạch dọc thứ hai -->
-                                <View
-                                    android:id="@+id/divider2"
-                                    android:layout_width="1dp"
-                                    android:layout_centerVertical="true"
-                                    android:layout_height="40dp"
-                                    android:layout_alignParentEnd="true"
-                                    android:background="#E8E8E8" />
-                            </RelativeLayout>
-                            <!--                khoi 3-->
+                            //
                             <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_alignParentEnd="true"
-                                android:layout_toEndOf="@id/div_center">
+                                android:layout_height="57dp"
+                                android:layout_marginTop="11dp"
+                                android:background="@drawable/custom_button"
+                                android:backgroundTint="#F1F3FA"
+                                android:layout_below="@id/top_infor">
+                                <!--                khoi 1-->
                                 <RelativeLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_centerVertical="true"
+                                    android:layout_width="113dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_toStartOf="@id/div_center">
+
+                                    <RelativeLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_centerHorizontal="true">
+                                        <TextView
+                                            android:id="@+id/text_heigth"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Chiều cao"
+                                            android:textSize="15dp" />
+
+                                        <TextView
+                                            android:id="@+id/number_height"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/text_heigth"
+                                            android:layout_centerHorizontal="true"
+                                            android:textColor="@color/mainColor"
+                                            android:textSize="17dp"
+                                            android:textStyle="bold" />
+                                    </RelativeLayout>
+                                </RelativeLayout>
+                                <!--                khoi 2-->
+                                <RelativeLayout
+                                    android:id="@+id/div_center"
+                                    android:layout_width="110dp"
                                     android:layout_centerHorizontal="true"
-                                    android:layout_height="wrap_content">
-                                    <TextView
-                                        android:id="@+id/text_BMI"
-                                        android:text="BMI"
-                                        android:textSize="15dp"
-                                        android:layout_centerHorizontal="true"
+                                    android:layout_height="match_parent">
+                                    <View
+                                        android:id="@+id/divider1"
+                                        android:layout_width="1dp"
+                                        android:layout_height="40dp"
+                                        android:layout_centerVertical="true"
+                                        android:layout_alignParentStart="true"
+                                        android:background="#E8E8E8" />
+                                    <RelativeLayout
                                         android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"/>
-                                    <TextView
-                                        android:id="@+id/number_BMI"
+                                        android:layout_centerVertical="true"
                                         android:layout_centerHorizontal="true"
-                                        android:layout_below="@id/text_BMI"
+                                        android:layout_height="wrap_content">
+                                        <TextView
+                                            android:id="@+id/text_weigth"
+                                            android:text="Cân nặng"
+                                            android:textSize="15dp"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"/>
+                                        <TextView
+                                            android:id="@+id/number_weight"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_below="@id/text_weigth"
+                                            android:layout_width="wrap_content"
+                                            android:textColor="@color/mainColor"
+                                            android:textSize="17dp"
+                                            android:textStyle="bold"
+                                            android:layout_height="wrap_content"/>
+                                    </RelativeLayout>
+                                    <!-- Gạch dọc thứ hai -->
+                                    <View
+                                        android:id="@+id/divider2"
+                                        android:layout_width="1dp"
+                                        android:layout_centerVertical="true"
+                                        android:layout_height="40dp"
+                                        android:layout_alignParentEnd="true"
+                                        android:background="#E8E8E8" />
+                                </RelativeLayout>
+                                <!--                khoi 3-->
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_toEndOf="@id/div_center">
+                                    <RelativeLayout
                                         android:layout_width="wrap_content"
-                                        android:textColor="@color/mainColor"
-                                        android:textSize="17dp"
-                                        android:textStyle="bold"
-                                        android:layout_height="wrap_content" />
+                                        android:layout_centerVertical="true"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_height="wrap_content">
+                                        <TextView
+                                            android:id="@+id/text_BMI"
+                                            android:text="BMI"
+                                            android:textSize="15dp"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"/>
+                                        <TextView
+                                            android:id="@+id/number_BMI"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_below="@id/text_BMI"
+                                            android:layout_width="wrap_content"
+                                            android:textColor="@color/mainColor"
+                                            android:textSize="17dp"
+                                            android:textStyle="bold"
+                                            android:layout_height="wrap_content" />
+                                    </RelativeLayout>
                                 </RelativeLayout>
                             </RelativeLayout>
                         </RelativeLayout>
-                    </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
 
-                    <RelativeLayout
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/not_logged"
+                        app:cardCornerRadius="15dp"
                         android:layout_width="365dp"
-                        android:background="@drawable/custom_toplayout_home_2"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="20dp"
                         android:layout_height="132dp"
-                        android:paddingEnd="5dp"
-                        android:elevation="2dp">
-                        <RelativeLayout
-                            android:id="@+id/block_left"
-                            android:layout_width="120dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_height="match_parent">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:src="@drawable/advice"/>
-                        </RelativeLayout>
+                        android:layout_marginBottom="7dp"
+                        app:cardElevation="4dp">
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:padding="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_toEndOf="@id/block_left">
-                            <TextView
-                                android:id="@+id/text1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:textColor="@color/text_Color"
-                                android:text="Hãy"/>
-                            <TextView
-                                android:id="@+id/text2"
-                                android:layout_marginLeft="4dp"
-                                android:layout_toEndOf="@id/text1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="Đăng nhập"
-                                android:textSize="15sp"
-                                android:textColor="@color/text_Color"
-                                android:textStyle="bold"/>
-                            <TextView
-                                android:id="@+id/text3"
-                                android:layout_marginLeft="4dp"
-                                android:layout_toEndOf="@id/text2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:textColor="@color/text_Color"
-                                android:text="để có trải"/>
-                            <TextView
-                                android:id="@+id/tex4"
-                                android:layout_below="@id/text1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="nghiệm tốt hơn"
-                                android:textColor="@color/text_Color"
-                                android:layout_marginTop="3dp"/>
-                            <Button
-                                android:id="@+id/btn_login"
-                                android:text="Đăng nhập"
-                                android:textColor="@color/white"
-                                android:textAllCaps="false"
-                                android:layout_below="@id/tex4"
-                                android:layout_marginTop="25dp"
-                                android:background="@drawable/custom_button_google"
-                                android:backgroundTint="@color/colorCircleSelected"
+                            android:paddingEnd="5dp">
+                            <RelativeLayout
+                                android:id="@+id/block_left"
+                                android:layout_width="120dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_height="match_parent">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/advice"/>
+                            </RelativeLayout>
+                            <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="27dp"/>
+                                android:layout_height="match_parent"
+                                android:padding="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_toEndOf="@id/block_left">
+                                <TextView
+                                    android:id="@+id/text1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:textColor="@color/text_Color"
+                                    android:text="Hãy"/>
+                                <TextView
+                                    android:id="@+id/text2"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_toEndOf="@id/text1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:text="Đăng nhập"
+                                    android:textSize="15sp"
+                                    android:textColor="@color/text_Color"
+                                    android:textStyle="bold"/>
+                                <TextView
+                                    android:id="@+id/text3"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_toEndOf="@id/text2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:textColor="@color/text_Color"
+                                    android:text="để có trải"/>
+                                <TextView
+                                    android:id="@+id/tex4"
+                                    android:layout_below="@id/text1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="nghiệm tốt hơn"
+                                    android:textColor="@color/text_Color"
+                                    android:layout_marginTop="3dp"/>
+                                <Button
+                                    android:id="@+id/btn_login"
+                                    android:text="Đăng nhập"
+                                    android:textColor="@color/white"
+                                    android:textAllCaps="false"
+                                    android:layout_below="@id/tex4"
+                                    android:layout_marginTop="25dp"
+                                    android:background="@drawable/custom_button_google"
+                                    android:backgroundTint="@color/colorCircleSelected"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="27dp"/>
+                            </RelativeLayout>
                         </RelativeLayout>
-                    </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
 
                     <RelativeLayout
                         android:id="@+id/block_loading_form"
@@ -349,8 +361,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    android:layout_marginTop="6dp">
+                    android:paddingEnd="15dp">
                     <Button
                         android:id="@+id/btn_book"
                         android:text="Đặt lịch khám"
@@ -385,7 +396,7 @@
                     android:layout_below="@id/infor_layout"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:layout_marginTop="32dp"/>
+                    android:layout_marginTop="25dp"/>
                 //
                 <RelativeLayout
                     android:id="@+id/form_menu_outside"
@@ -657,20 +668,25 @@
                     </RelativeLayout>
                 </RelativeLayout>
                 <!--    slide-->
-                <RelativeLayout
+                <androidx.cardview.widget.CardView
                     android:id="@+id/block_slide"
+                    app:cardCornerRadius="15dp"
                     android:layout_below="@id/form_menu_outside"
                     android:layout_width="match_parent"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
                     android:layout_marginTop="17dp"
-                    android:layout_height="135dp">
-                    <androidx.viewpager2.widget.ViewPager2
-                        android:id="@+id/slide"
-                        android:background="@drawable/custom_form_slide_home"
+                    android:layout_height="140dp">
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-                </RelativeLayout>
+                        android:layout_height="match_parent">
+                        <androidx.viewpager2.widget.ViewPager2
+                            android:id="@+id/slide"
+                            android:background="@drawable/custom_form_slide_home"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
                 <RelativeLayout
                     android:id="@+id/circles"
                     android:layout_below="@id/block_slide"
@@ -716,21 +732,6 @@
                         android:layout_height="wrap_content"/>
                 </RelativeLayout>
                 <!--news-->
-                <RelativeLayout
-                    android:id="@+id/block_news"
-                    android:layout_below="@id/circles"
-                    android:layout_width="match_parent"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    android:layout_marginTop="17dp"
-                    android:layout_height="235dp">
-                    <androidx.viewpager2.widget.ViewPager2
-                        android:backgroundTint="@color/mainColor"
-                        android:id="@+id/news"
-                        android:background="@drawable/custom_form_slide_home"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-                </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
