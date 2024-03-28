@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/i_edit_title"
+        android:title="Sửa tên" />
+    <item
+        android:id="@+id/i_edit_prescription_item"
+        android:title="Sửa đơn thuốc" />
+    <item
+        android:id="@+id/i_edit_schedule"
+        android:title="Sửa lịch thông báo" />
+    <item
+        android:id="@+id/i_delete"
+        android:title="Xóa" />
+</menu>
