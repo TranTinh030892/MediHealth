@@ -57,6 +57,9 @@ public class DrugUserManagement extends AppCompatActivity {
 
         fabAddDrugUser = findViewById(R.id.fab_add_drug_user);
 
+        ScheduleManager.scheduleWork(this);
+        AlarmScheduler.scheduleAlarm(this, System.currentTimeMillis() + 60 * 1000);
+
         fabAddDrugUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

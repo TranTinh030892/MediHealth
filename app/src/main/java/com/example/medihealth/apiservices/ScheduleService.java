@@ -9,6 +9,6 @@ import retrofit2.http.Query;
 public interface ScheduleService {
 
     @GET("schedule/today")
-    Call<ResponseObject> getScheduleToday(@Query("uid") String uid);
+    Call<ResponseObject> getScheduleToday(@Query("user_id") String uid);
 
 }

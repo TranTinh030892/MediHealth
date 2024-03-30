@@ -1,14 +1,11 @@
 package com.example.medihealth.activitys.prescription_schedule;
 
-import android.annotation.SuppressLint;
-import android.app.Service;
-import android.app.job.JobParameters;
-import android.app.job.JobService;
-import android.content.Intent;
-import android.os.IBinder;
+import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 
 import com.example.medihealth.apiservices.ScheduleService;
 import com.example.medihealth.models.ResponseObject;
@@ -24,39 +21,25 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-@SuppressLint("SpecifyJobSchedulerIdRange")
-public class SyncService extends JobService {
+public class AlarmWorker extends Worker {
 
-    private final static String TAG = SyncService.class.getName();
+    private static final String TAG = "113";
 
-    @Override
-    public boolean onStartJob(JobParameters params) {
-        Log.d(TAG, "Started");
-        doBackgroundWork(params);
-        return false;
+    public AlarmWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
     }
 
-    private void doBackgroundWork(JobParameters params) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                sync();
-                jobFinished(params, false);
-            }
-        }).start();
-    }
-
+    @NonNull
     @Override
-    public boolean onStopJob(JobParameters params) {
-        Log.d(TAG, "Stopped");
-        return true;
+    public Result doWork() {
+        Log.e("Worker", "Start");
+        sync();
+        return Result.success();
     }
 
     private void sync() {

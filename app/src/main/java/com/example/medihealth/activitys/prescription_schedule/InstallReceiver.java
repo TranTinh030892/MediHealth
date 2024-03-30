@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import java.util.Objects;
 
@@ -14,6 +15,7 @@ public class InstallReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.e(String.valueOf(JOB_ID), "check");
         if (Objects.equals(intent.getAction(), Intent.ACTION_MY_PACKAGE_REPLACED)) {
             ComponentName componentName = new ComponentName(context, SyncService.class);
             JobInfo jobInfo = new JobInfo.Builder(JOB_ID, componentName)
