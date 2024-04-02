@@ -1,16 +1,14 @@
 package com.example.medihealth.activitys;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.example.medihealth.R;
 import com.example.medihealth.fragments.main.BookAppointment_Fragment;
@@ -18,13 +16,8 @@ import com.example.medihealth.fragments.main.Home_Fragment;
 import com.example.medihealth.fragments.main.Menu_Fragment;
 import com.example.medihealth.fragments.main.Notification_Fragment;
 import com.example.medihealth.fragments.main.Profile_Fragment;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
     GoogleSignInClient googleSignInClient;

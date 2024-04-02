@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import retrofit2.Call;
@@ -172,7 +170,6 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
     }
 
     private void backToViewDetail() {
-        setResult(RESULT_OK);
         finish();
     }
 
@@ -188,6 +185,7 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
                             Toast.LENGTH_SHORT
                     ).show();
                     Log.i("EDIT_SCHEDULES", response.body().getMessage());
+                    SyncService.sync(EditSchedulesActivity.this);
                     backToViewDetail();
                 } else {
                     Toast.makeText(

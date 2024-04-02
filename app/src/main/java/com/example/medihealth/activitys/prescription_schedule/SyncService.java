@@ -1,14 +1,7 @@
 package com.example.medihealth.activitys.prescription_schedule;
 
-import android.annotation.SuppressLint;
-import android.app.Service;
-import android.app.job.JobParameters;
-import android.app.job.JobService;
-import android.content.Intent;
-import android.os.IBinder;
+import android.content.Context;
 import android.util.Log;
-
-import androidx.annotation.Nullable;
 
 import com.example.medihealth.apiservices.ScheduleService;
 import com.example.medihealth.models.ResponseObject;
@@ -24,44 +17,18 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-@SuppressLint("SpecifyJobSchedulerIdRange")
-public class SyncService extends JobService {
+public class SyncService {
 
-    private final static String TAG = SyncService.class.getName();
+    private static final String TAG = SyncService.class.getSimpleName();
 
-    @Override
-    public boolean onStartJob(JobParameters params) {
-        Log.d(TAG, "Started");
-        doBackgroundWork(params);
-        return false;
-    }
-
-    private void doBackgroundWork(JobParameters params) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                sync();
-                jobFinished(params, false);
-            }
-        }).start();
-    }
-
-    @Override
-    public boolean onStopJob(JobParameters params) {
-        Log.d(TAG, "Stopped");
-        return true;
-    }
-
-    private void sync() {
+    public static void sync(Context context) {
         ScheduleService service = RetrofitClient.createService(ScheduleService.class);
-        service.getScheduleToday("12345").enqueue(new Callback<ResponseObject>() {
+        service.getAllByUser("12345").enqueue(new Callback<ResponseObject>() {
             @Override
             public void onResponse(Call<ResponseObject> call, Response<ResponseObject> response) {
                 if (response.isSuccessful()) {
@@ -69,14 +36,13 @@ public class SyncService extends JobService {
                             .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
                             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                             .create();
-                    List<Schedule> schedules = (List<Schedule>) gson.fromJson(
+                    List<Schedule> schedules = gson.fromJson(
                             new Gson().toJson(response.body().getData()),
-                            new TypeToken<List<Schedule>>() {
-                            }.getRawType()
+                            new TypeToken<List<Schedule>>() {}.getType()
                     );
-                    update(schedules);
-                    Log.i(TAG, response.body().getMessage());
+                    update(context, schedules);
                 }
+                Log.i(TAG, response.body().getMessage());
             }
 
             @Override
@@ -86,7 +52,15 @@ public class SyncService extends JobService {
         });
     }
 
-    private void update(List<Schedule> schedules) {
-
+    private static void update(Context context, List<Schedule> schedules) {
+        schedules.forEach((schedule) -> {
+            Log.e("SCHEDULE",  String.format("{id: %d, active: %b}", schedule.getId(),schedule.isActive()));
+            if (schedule.isActive() && schedule.getPrescription().isActive()) {
+                RemindScheduler.scheduleRemind(context, schedule);
+            }
+            else {
+                RemindScheduler.cancelRemind(context, schedule);
+            }
+        });
     }
 }

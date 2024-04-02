@@ -103,7 +103,6 @@ public class EditPrescriptionItemsActivity extends AppCompatActivity implements 
     }
 
     private void backToViewDetail() {
-        setResult(RESULT_OK);
         finish();
     }
 

@@ -117,7 +117,6 @@ public class PrescriptionManagement extends AppCompatActivity {
         });
 
         rcvListPrescription.setAdapter(prescriptionAdapter);
-        getData();
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -141,6 +140,7 @@ public class PrescriptionManagement extends AppCompatActivity {
                     prescription.setActive(!prescription.isActive());
                     prescriptionAdapter.notifyDataSetChanged();
                 }
+                SyncService.sync(PrescriptionManagement.this);
                 Log.i("ACTIVE_PRESCRIPTION", response.body().getMessage());
             }
 
@@ -149,6 +149,12 @@ public class PrescriptionManagement extends AppCompatActivity {
                 Log.e("ACTIVE_PRESCRIPTION", Objects.requireNonNull(t.getMessage()));
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
     }
 
     private void loadData() {

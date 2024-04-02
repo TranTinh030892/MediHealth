@@ -2,7 +2,6 @@ package com.example.medihealth.activitys.prescription_schedule;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +22,6 @@ import com.example.medihealth.models.Prescription;
 import com.example.medihealth.models.PrescriptionItem;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,8 +1,12 @@
 package com.example.medihealth.activitys.prescription_schedule;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +26,7 @@ import com.example.medihealth.apiservices.DrugUserService;
 import com.example.medihealth.models.DrugUser;
 import com.example.medihealth.models.ResponseObject;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
+import com.example.medihealth.services.RemindService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -55,10 +60,17 @@ public class DrugUserManagement extends AppCompatActivity {
         tvToolbar = findViewById(R.id.tv_toolbar);
         tvToolbar.setText("Người dùng thuốc");
 
-        fabAddDrugUser = findViewById(R.id.fab_add_drug_user);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED &&
+                    checkSelfPermission(Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS) == PackageManager.PERMISSION_DENIED) {
+                String[] permissions = {android.Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS};
+                requestPermissions(permissions, 1);
+            }
+        }
 
-        ScheduleManager.scheduleWork(this);
-        AlarmScheduler.scheduleAlarm(this, System.currentTimeMillis() + 60 * 1000);
+        doService();
+
+        fabAddDrugUser = findViewById(R.id.fab_add_drug_user);
 
         fabAddDrugUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +128,17 @@ public class DrugUserManagement extends AppCompatActivity {
         drugUserAdapter.setData(drugUsers);
         rcvListDrugUser.setAdapter(drugUserAdapter);
         getData();
+    }
+
+    public void requestAutoStartPermission() {
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
+        startActivity(intent);
+    }
+
+    private void doService() {
+        Intent intent = new Intent(this, RemindService.class);
+        startService(intent);
     }
 
     private void openDialogEnterDrugUser(DrugUser drugUser, String action) {

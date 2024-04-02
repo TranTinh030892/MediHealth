@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.List;
 
+
 public class Schedule implements Serializable {
     private Long id;
     private LocalTime time;
@@ -65,6 +66,6 @@ public class Schedule implements Serializable {
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.isActive = active;
     }
 }

@@ -34,6 +34,9 @@ import com.google.gson.GsonBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -82,21 +85,41 @@ public class PrescriptionDetailManagement extends AppCompatActivity {
 
         RecyclerView rcvListPrescriptionSchedule = findViewById(R.id.rcv_list_prescription_schedule);
         rcvListPrescriptionSchedule.setLayoutManager(new LinearLayoutManager(this));
-        scheduleAdapter = new ScheduleAdapter(
-                prescription.getSchedules()
-                        .stream()
-                        .filter(Schedule::isActive)
-                        .collect(Collectors.toList())
-        );
+        scheduleAdapter = new ScheduleAdapter(prescription.getSchedules()
+                .stream()
+                .filter(Schedule::isActive)
+                .collect(Collectors.toList()));
         rcvListPrescriptionSchedule.setAdapter(scheduleAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void refresh() {
-        getData();
-        tvTitle.setText(prescription.getTitle());
-        prescriptionItemAdapter.notifyDataSetChanged();
+        List<Schedule> schedules = new ArrayList<>(
+                prescription.getSchedules()
+                        .stream().filter(Schedule::isActive)
+                        .collect(Collectors.toList())
+        );
         scheduleAdapter.notifyDataSetChanged();
+        schedules.sort(new Comparator<Schedule>() {
+            @Override
+            public int compare(Schedule o1, Schedule o2) {
+                LocalTime t1 = o1.getTime();
+                LocalTime t2 = o2.getTime();
+                if (t1.getHour() != t2.getHour())
+                    return Integer.compare(t1.getHour(), t2.getHour());
+                return Integer.compare(t1.getMinute(), t2.getMinute());
+            }
+        });
+
+        tvTitle.setText(prescription.getTitle());
+        prescriptionItemAdapter.setPrescriptionItems(prescription.getPrescriptionItems());
+        scheduleAdapter.setSchedules(schedules);
     }
 
     private void getData() {
@@ -110,10 +133,11 @@ public class PrescriptionDetailManagement extends AppCompatActivity {
                             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                             .create();
                     prescription = gson.fromJson(
-                            new Gson().toJson(response.body()),
+                            new Gson().toJson(response.body().getData()),
                             new TypeToken<Prescription>() {
                             }.getType()
                     );
+                    refresh();
                 } else {
                     Toast.makeText(
                             PrescriptionDetailManagement.this,

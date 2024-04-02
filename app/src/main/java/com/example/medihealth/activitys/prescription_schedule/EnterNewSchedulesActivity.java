@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,8 +27,6 @@ import com.example.medihealth.models.Schedule;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-
-import org.checkerframework.checker.units.qual.C;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -164,6 +161,7 @@ public class EnterNewSchedulesActivity extends AppCompatActivity implements Item
             public void onClick(String data) {
                 createPrescription(data);
                 savePrescription();
+                SyncService.sync(EnterNewSchedulesActivity.this);
                 dialog.dismiss();
             }
         });
