@@ -3,6 +3,7 @@ package com.example.medihealth.services;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Application;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -42,9 +43,12 @@ public class RemindService extends Service {
 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Dịch vụ nhắc lịch uống thuốc đang hoạt động")
+                .setContentTitle("MediHealth")
+                .setContentText("Dịch vụ nhắc lịch uống thuốc đang hoạt động")
+                .setSmallIcon(R.drawable.icon_alarm_2)
                 .setPriority(NotificationCompat.PRIORITY_MIN)
-                .setAutoCancel(false);
+                .setAutoCancel(true);
+
         startForeground(ID, builder.build());
 
         doSync();
@@ -59,18 +63,13 @@ public class RemindService extends Service {
     }
 
     private void createNotificationChannel() {
-        Log.e(CHANNEL_ID, "Created Remind Notification chanel");
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is not in the Support Library.
-        CharSequence name = getString(R.string.channel_name);
-        String description = getString(R.string.channel_description);
-        int importance = NotificationManager.IMPORTANCE_HIGH;
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-        channel.setDescription(description);
-        // Register the channel with the system. You can't change the importance
-        // or other notification behaviors after this.
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                "RemindService",
+                NotificationManager.IMPORTANCE_UNSPECIFIED);
+        channel.setDescription("Chanel for remind service");
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
+        Log.e(CHANNEL_ID, "Created Remind Notification chanel");
     }
 
     private void doSync() {
@@ -79,8 +78,6 @@ public class RemindService extends Service {
             @Override
             public void run() {
                 SyncService.sync(RemindService.this);
-                Log.d(TAG, "Calling API...");
-                // ApiCaller.callApi();
             }
         }, 0, INTERVAL);
     }

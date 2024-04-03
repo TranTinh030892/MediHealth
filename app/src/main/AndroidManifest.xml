@@ -86,6 +86,7 @@
             android:foregroundServiceType="specialUse" />
 
         <receiver android:name=".receiver.RemindReceiver" />
+        <receiver android:name="com.example.medihealth.receiver.SnoozeRemindReceiver" />
     </application>
 
 </manifest>

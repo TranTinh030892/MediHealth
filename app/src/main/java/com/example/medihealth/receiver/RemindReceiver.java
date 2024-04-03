@@ -12,12 +12,15 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.prescription_schedule.PrescriptionDetailManagement;
+import com.example.medihealth.activitys.prescription_schedule.RemindScheduler;
 import com.example.medihealth.models.Schedule;
 import com.example.medihealth.services.RemindService;
 
 public class RemindReceiver extends BroadcastReceiver {
 
     private final static String TAG = "REMIND_RECEIVER";
+    private static final int CLICK_CODE = 0;
+    private static final int SNOOZE_CODE = 1;
 
     @SuppressLint("MissingPermission")
     @Override
@@ -28,10 +31,25 @@ public class RemindReceiver extends BroadcastReceiver {
         notificationIntent.putExtra("prescription", schedule.getPrescription());
         PendingIntent contentIntent = PendingIntent.getActivity(
                 context,
-                Math.toIntExact(schedule.getId()),
+                CLICK_CODE,
                 notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE
         );
+
+        Intent snoozeIntent = new Intent(context, SnoozeRemindReceiver.class);
+        snoozeIntent.putExtra("schedule", schedule);
+        PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(
+                context,
+                SNOOZE_CODE,
+                snoozeIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE
+        );
+
+        NotificationCompat.Action snoozeAction = new NotificationCompat.Action.Builder(
+                R.drawable.icon_alarm_2,
+                String.format("Báo lại sau %d phút", RemindScheduler.SNOOZE_TIME),
+                snoozePendingIntent
+        ).build();
 
         // Tạo và cấu hình thông báo
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, RemindService.CHANNEL_ID)
@@ -42,8 +60,10 @@ public class RemindReceiver extends BroadcastReceiver {
                         schedule.getPrescription().getDrugUser().getName(),
                         schedule.getPrescription().getTitle())
                 )
+                .addAction(snoozeAction)
                 .setContentIntent(contentIntent)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setWhen(0)
                 .setAutoCancel(true);
 
         // Hiển thị thông báo
