@@ -63,7 +63,6 @@ public class RemindReceiver extends BroadcastReceiver {
                 .addAction(snoozeAction)
                 .setContentIntent(contentIntent)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setWhen(0)
                 .setAutoCancel(true);
 
         // Hiển thị thông báo
