@@ -1,9 +1,12 @@
 package com.example.medihealth.services;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;

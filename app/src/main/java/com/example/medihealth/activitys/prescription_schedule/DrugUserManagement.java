@@ -68,8 +68,6 @@ public class DrugUserManagement extends AppCompatActivity {
             }
         }
 
-        doService();
-
         fabAddDrugUser = findViewById(R.id.fab_add_drug_user);
 
         fabAddDrugUser.setOnClickListener(new View.OnClickListener() {
@@ -134,11 +132,6 @@ public class DrugUserManagement extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
         startActivity(intent);
-    }
-
-    private void doService() {
-        Intent intent = new Intent(this, RemindService.class);
-        startService(intent);
     }
 
     private void openDialogEnterDrugUser(DrugUser drugUser, String action) {
