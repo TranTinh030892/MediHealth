@@ -41,7 +41,6 @@ public class RemindService extends Service {
 
         createNotificationChannel();
 
-
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("MediHealth")
                 .setContentText("Dịch vụ nhắc lịch uống thuốc đang hoạt động")
@@ -50,6 +49,7 @@ public class RemindService extends Service {
                 .setAutoCancel(true);
 
         startForeground(ID, builder.build());
+        Log.v(TAG, "Remind Service started...");
 
         doSync();
 
@@ -65,11 +65,11 @@ public class RemindService extends Service {
     private void createNotificationChannel() {
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                 "RemindService",
-                NotificationManager.IMPORTANCE_UNSPECIFIED);
+                NotificationManager.IMPORTANCE_NONE);
         channel.setDescription("Chanel for remind service");
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
-        Log.e(CHANNEL_ID, "Created Remind Notification chanel");
+        Log.e(TAG, "Created Remind Notification chanel");
     }
 
     private void doSync() {

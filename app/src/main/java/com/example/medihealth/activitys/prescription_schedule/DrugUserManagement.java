@@ -158,6 +158,7 @@ public class DrugUserManagement extends AppCompatActivity {
             public void onClick(String data) {
                 drugUser.setName(data);
                 if (action.equalsIgnoreCase(ADD_DRUG_USER)) {
+                    drugUser.setActive(true);
                     addDrugUser(drugUser);
                 } else {
                     editDrugUser(drugUser);
@@ -269,6 +270,7 @@ public class DrugUserManagement extends AppCompatActivity {
                                     Toast.LENGTH_SHORT
                             ).show();
                             getData();
+                            SyncService.sync(DrugUserManagement.this);
                         } else {
                             Toast.makeText(
                                     DrugUserManagement.this,

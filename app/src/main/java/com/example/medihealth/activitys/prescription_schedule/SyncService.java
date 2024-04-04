@@ -55,7 +55,9 @@ public class SyncService {
     private static void update(Context context, List<Schedule> schedules) {
         schedules.forEach((schedule) -> {
             Log.e("SCHEDULE",  String.format("{id: %d, active: %b}", schedule.getId(),schedule.isActive()));
-            if (schedule.isActive() && schedule.getPrescription().isActive()) {
+            if (schedule.isActive()
+                    && schedule.getPrescription().isActive()
+                    && schedule.getPrescription().getDrugUser().isActive()) {
                 RemindScheduler.scheduleRemind(context, schedule);
             }
             else {

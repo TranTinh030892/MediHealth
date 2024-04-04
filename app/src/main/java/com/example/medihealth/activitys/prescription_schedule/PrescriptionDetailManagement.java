@@ -106,15 +106,12 @@ public class PrescriptionDetailManagement extends AppCompatActivity {
                         .collect(Collectors.toList())
         );
         scheduleAdapter.notifyDataSetChanged();
-        schedules.sort(new Comparator<Schedule>() {
-            @Override
-            public int compare(Schedule o1, Schedule o2) {
-                LocalTime t1 = o1.getTime();
-                LocalTime t2 = o2.getTime();
-                if (t1.getHour() != t2.getHour())
-                    return Integer.compare(t1.getHour(), t2.getHour());
-                return Integer.compare(t1.getMinute(), t2.getMinute());
-            }
+        schedules.sort((o1, o2) -> {
+            LocalTime t1 = o1.getTime();
+            LocalTime t2 = o2.getTime();
+            if (t1.getHour() != t2.getHour())
+                return Integer.compare(t1.getHour(), t2.getHour());
+            return Integer.compare(t1.getMinute(), t2.getMinute());
         });
 
         tvTitle.setText(prescription.getTitle());
@@ -305,7 +302,7 @@ public class PrescriptionDetailManagement extends AppCompatActivity {
                             "Xóa đơn thuốc thành công",
                             Toast.LENGTH_SHORT
                     ).show();
-
+                    SyncService.sync(PrescriptionDetailManagement.this);
                     // Back to prescription management
                     finish();
                 } else {
