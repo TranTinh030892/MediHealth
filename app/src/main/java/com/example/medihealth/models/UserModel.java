@@ -8,19 +8,24 @@ public class UserModel {
     private String phoneNumber;
     private String address;
     private String birth;
+    private int height;
+    private int weight;
     private Timestamp createdTimestamp;
     private String userId;
+    String tokenId;
 
     public UserModel() {
     }
 
-    public UserModel(String fullName, String gender, String phoneNumber, String address,
-                     String birth, Timestamp createdTimestamp, String userId) {
+    public UserModel(String fullName, String gender, String phoneNumber, String address, String birth, int height, int weight,
+                     Timestamp createdTimestamp, String userId) {
         this.fullName = fullName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.birth = birth;
+        this.height = height;
+        this.weight = weight;
         this.createdTimestamp = createdTimestamp;
         this.userId = userId;
     }
@@ -29,6 +34,22 @@ public class UserModel {
         this.fullName = fullName;
         this.createdTimestamp = createdTimestamp;
         this.userId = userId;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
     }
 
     public String getGender() {

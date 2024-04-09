@@ -1,0 +1,25 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <color android:color="@color/white" />
+    </item>
+    <item android:gravity="center_vertical|right" android:right="8dp">
+        <layer-list>
+            <item
+                android:width="24dp"
+                android:height="24dp"
+                android:gravity="center"
+                android:drawable="@drawable/calender_icon" />
+
+
+            <item
+                android:width="30dp"
+                android:height="2dp"
+                android:bottom="21dp"
+                android:gravity="center">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/white"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</layer-list>

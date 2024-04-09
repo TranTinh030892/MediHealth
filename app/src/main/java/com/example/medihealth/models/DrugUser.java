@@ -52,4 +52,8 @@ public class DrugUser implements Serializable {
     public void setActive(boolean active) {
         isActive = active;
     }
+
+    public String toString() {
+        return name;
+    }
 }

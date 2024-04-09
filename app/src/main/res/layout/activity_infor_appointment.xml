@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:background="@color/mainColor"
+android:layout_height="wrap_content"
+tools:context=".activities.appointment.Infor_Appoitment_Activity">
+<RelativeLayout
+    android:id="@+id/top_Layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="@color/mainColor"
+        android:id="@+id/toolbar">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đặt lịch"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icon_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/white"
+            android:layout_centerVertical="true"
+            android:id="@+id/back_btn"/>
+
+        <ImageButton
+            android:id="@+id/support"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="6.3dp"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/icon_support" />
+    </RelativeLayout>
+</RelativeLayout>
+<ScrollView
+    android:id="@+id/scoll"
+    android:layout_below="@id/top_Layout"
+    android:layout_above="@id/bottom_Layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/body_Layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/inforUser"
+            android:layout_width="match_parent"
+            android:paddingLeft="7dp"
+            android:layout_height="wrap_content">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_user"
+                android:layout_width="57dp"
+                android:src="@drawable/profile"
+                android:layout_height="57dp"/>
+            <RelativeLayout
+                android:id="@+id/form"
+                android:layout_toEndOf="@id/image_user"
+                android:layout_marginLeft="8dp"
+                android:layout_width="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/fullName_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Vũ Mạnh Hùng"
+                    android:textSize="16sp"
+                    android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/birth_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fullName_user"
+                    android:layout_marginTop="3dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:text="Nam - 04/10/2002"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true">
+                <ImageButton
+                    android:layout_width="35dp"
+                    android:layout_height="33dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="15dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/custom_right_2" />
+            </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/inforForm"
+            android:layout_below="@id/inforUser"
+            android:background="@drawable/custom_inforbook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp">
+
+                <RelativeLayout
+                    android:id="@+id/dateForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/textDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Chọn ngày khám"
+                        android:textColor="@color/text_Color"
+                        android:textSize="19sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/textDate"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/edit_text_book"
+                        android:gravity="center_vertical"
+                        android:inputType="date"
+                        android:paddingStart="8dp"
+                        android:textSize="17sp" />
+
+                    <ImageButton
+                        android:id="@+id/btnDateDialog"
+                        android:layout_width="35dp"
+                        android:layout_height="33dp"
+                        android:layout_below="@id/textDate"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="2dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/custom_calendar" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/specialistForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/dateForm"
+                    android:layout_marginTop="18dp">
+
+                    <TextView
+                        android:id="@+id/textSpecialist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Chuyên khoa"
+                        android:textColor="@color/text_Color"
+                        android:textSize="19sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/specialist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/textSpecialist"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/edit_text_book"
+                        android:gravity="center_vertical"
+                        android:hint="Lựa chọn"
+                        android:paddingStart="8dp"
+                        android:textSize="17sp" />
+
+                    <ImageButton
+                        android:id="@+id/btnSpecialist"
+                        android:layout_width="35dp"
+                        android:layout_height="33dp"
+                        android:layout_below="@id/textSpecialist"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="2dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/custom_right" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/doctorForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/specialistForm"
+                    android:layout_marginTop="25dp">
+
+                    <TextView
+                        android:id="@+id/textDoctor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Bác sĩ"
+                        android:textColor="@color/text_Color"
+                        android:textSize="19sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/nameDoctor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="#FFA000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <RelativeLayout
+                        android:id="@+id/blockListDoctors"
+                        android:layout_below="@id/textDoctor"
+                        android:layout_width="match_parent"
+                        android:layout_height="125dp">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/doctorList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp" />
+                        <ProgressBar
+                            android:id="@+id/loadListDoctors"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"/>
+                        <TextView
+                            android:id="@+id/notify"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textColor="#FFA000"
+                            android:gravity="center"
+                            android:visibility="gone"
+                            android:text="Không có bác sĩ nào, bạn vui lòng chọn chuyên khoa khác"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/infor_detail_doctor"
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_below="@id/doctorForm"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/custom_button_google"
+                    android:backgroundTint="#DBDDEC">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:text="Thông tin bác sĩ"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="#016395"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/countForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/infor_detail_doctor"
+                    android:layout_marginTop="19dp">
+
+                    <TextView
+                        android:id="@+id/textCount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Thứ tự khám"
+                        android:textColor="@color/text_Color"
+                        android:textSize="19sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/numberOrder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/textCount"
+                        android:layout_marginTop="13dp"
+                        android:textColor="#FFA000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/notify_numberOrder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/textCount"
+                        android:layout_marginTop="15dp"
+                        android:textColor="#FFA000"
+                        android:visibility="gone"
+                        android:text="Số lượng đã đủ, vui lòng chọn bác sĩ khác hoặc ngày khác"
+                        android:textSize="14.5sp" />
+                    <ProgressBar
+                        android:id="@+id/loadNumberOrder"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_below="@id/textCount"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/symptomForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/countForm"
+                    android:layout_marginTop="18dp">
+                    <TextView
+                        android:id="@+id/textSymptom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Triệu chứng"
+                        android:textColor="@color/text_Color"
+                        android:textSize="19sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/symptom"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_below="@id/textSymptom"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/edit_text_book"
+                        android:gravity="top"
+                        android:paddingStart="8dp"
+                        android:paddingTop="5dp"
+                        android:hint="Nhập triệu chứng..." />
+                </RelativeLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
+<androidx.cardview.widget.CardView
+    android:id="@+id/bottom_Layout"
+    android:background="@color/white"
+    app:cardElevation="20dp"
+    android:layout_alignParentBottom="true"
+    android:layout_width="match_parent"
+    android:layout_height="77dp">
+    <RelativeLayout
+        android:id="@+id/enterBook"
+        android:background="@drawable/custom_button"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đặt lịch"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
+</RelativeLayout>

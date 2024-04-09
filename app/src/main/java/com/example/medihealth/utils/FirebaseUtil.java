@@ -2,6 +2,7 @@ package com.example.medihealth.utils;
 
 import androidx.annotation.NonNull;
 
+import com.example.medihealth.models.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
@@ -9,11 +10,24 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class FirebaseUtil {
     public interface StateCallback {
@@ -34,7 +48,12 @@ public class FirebaseUtil {
     public static DocumentReference currentUserDetails(){
         return FirebaseFirestore.getInstance().collection("users").document(currentUserId());
     }
-
+    public static DocumentReference currentEmployeeDetails(){
+        return FirebaseFirestore.getInstance().collection("employee").document(currentUserId());
+    }
+    public static DocumentReference getDoctorDetailsById(String doctorId){
+        return FirebaseFirestore.getInstance().collection("doctor").document(doctorId);
+    }
 //    public static DocumentReference statusUser(){
 //        return FirebaseFirestore.getInstance().collection("status").document(currentUserId());
 //    }
@@ -67,8 +86,17 @@ public class FirebaseUtil {
         return FirebaseFirestore.getInstance().collection("role").document(currentUserId());
     }
 
+    public static CollectionReference getTokenId(){
+        return FirebaseFirestore.getInstance().collection("token");
+    }
+    public static DocumentReference getTokenByDocument(String documentId){
+        return FirebaseFirestore.getInstance().collection("token").document(documentId);
+    }
     public static CollectionReference allUserCollectionReference(){
         return FirebaseFirestore.getInstance().collection("users");
+    }
+    public static CollectionReference allEmployeeCollectionReference(){
+        return FirebaseFirestore.getInstance().collection("employee");
     }
     public static CollectionReference allDoctorCollectionReference(){
         return FirebaseFirestore.getInstance().collection("doctor");
@@ -76,6 +104,9 @@ public class FirebaseUtil {
     // thêm một đối tượng appointment vào document của collection appointment với id được lấy tự động
     public static CollectionReference getAppointmentCollectionReference(){
         return FirebaseFirestore.getInstance().collection("appointment");
+    }
+    public static DocumentReference getAppointmentDetailsById(String appointmentId){
+        return FirebaseFirestore.getInstance().collection("appointment").document(appointmentId);
     }
     public static DocumentReference getChatroomReference(String chatroomId){
         return FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId);
@@ -112,7 +143,57 @@ public class FirebaseUtil {
     public static void logout(){
         FirebaseAuth.getInstance().signOut();
     }
+    public static CollectionReference getNotificationsCollectionReference(){
+        return FirebaseFirestore.getInstance().collection("notification");
+    }
+    public static DocumentReference getNotificationDetailsById(String notificationId){
+        return FirebaseFirestore.getInstance().collection("notification").document(notificationId);
+    }
 
+    public static void sendMessageNotificationtoTokenId(String message,String tokenId) {
+        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                UserModel currentUser = task.getResult().toObject(UserModel.class);
+                try {
+                    JSONObject jsonObject = new JSONObject();
+
+                    JSONObject dataObj = new JSONObject();
+                    dataObj.put("title", currentUser.getFullName());
+                    dataObj.put("body", message);
+
+                    dataObj.put("userId", currentUser.getUserId());
+                    jsonObject.put("data", dataObj);
+                    jsonObject.put("to", tokenId);
+
+                    callApi(jsonObject);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+    public static void callApi(JSONObject jsonObject) {
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String url = "https://fcm.googleapis.com/fcm/send";
+        RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .header("Authorization", "Bearer AAAA2YcskTU:APA91bFbJHA1gMDoHTkHauaDOJZfuzxcYqq6TjBqUoyAp-0I8YHhjIxh3VvtJUS39Od1biRCgomTSO_C5AOMsAHf_ovnSCR6IwO_MglmxIUgWZuL-ADA0MRXqA-leMYLGODLnHx_v7AN")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+
+            }
+        });
+    }
 //    public static StorageReference  getCurrentProfilePicStorageRef(){
 //        return FirebaseStorage.getInstance().getReference().child("profile_pic")
 //                .child(FirebaseUtil.currentUserId());

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.chat.Employee_MainActivity">
+    <FrameLayout
+        android:id="@+id/page_home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/menu">
+    </FrameLayout>
+    <!--    menu-->
+    <RelativeLayout
+        android:id="@+id/menu"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/custom_form_bottomnavigation_home"
+        android:layout_width="match_parent"
+        android:layout_height="57dp">
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/menuBottom"
+            android:layout_width="match_parent"
+            android:background="@drawable/custom_form_bottomnavigation_home"
+            android:layout_height="match_parent"
+            app:itemIconTint="@color/itemcolor"
+            app:labelVisibilityMode="labeled"
+            app:itemTextColor="@color/itemcolor"
+            app:menu="@menu/menu_employee" />
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/notice"
+            android:visibility="gone"
+            android:layout_width="19dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="170dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/custom_notice"
+            android:layout_height="19dp">
+            <TextView
+                android:id="@+id/notice_Number"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textColor="@color/white"
+                android:gravity="center"/>
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+    </RelativeLayout>
+</RelativeLayout>

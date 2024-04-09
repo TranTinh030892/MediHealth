@@ -1,5 +1,7 @@
 package com.example.medihealth.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -72,5 +74,11 @@ public class Prescription implements Serializable {
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.title;
     }
 }

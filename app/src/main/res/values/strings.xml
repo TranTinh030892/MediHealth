@@ -3,5 +3,5 @@
     <string name="default_web_client_id">934275748149-mctepgl4a53204h11lctp0i10k2s4ord.apps.googleusercontent.com</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_prescription_manager">PrescriptionManager</string>
+    <string name="back_button_description">Back button</string>
 </resources>

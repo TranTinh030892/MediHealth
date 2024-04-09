@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String BASE_URL = "http://192.168.143.186:8080/api/medihealth/";
+    private static final String BASE_URL = "http://192.168.1.115:8080/api/medihealth/";
 
     public static <T> T createService(Class<T> serviceClass) {
         Gson gson = new GsonBuilder()

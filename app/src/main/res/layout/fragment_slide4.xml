@@ -5,18 +5,17 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/custom_form_slide_home"
-    tools:context=".fragments.main.slide4">
+    tools:context=".fragments.CustomerFragment.slide4">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardCornerRadius="20dp">
+        app:cardCornerRadius="15dp">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/slide4"
-            android:scaleType="centerCrop"/> <!-- ScaleType để đảm bảo ảnh kín hết khu vực của ImageView -->
-
+            android:scaleType="centerCrop"/>
     </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

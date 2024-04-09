@@ -6,27 +6,23 @@ import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.List;
 
-
 public class Schedule implements Serializable {
     private Long id;
     private LocalTime time;
-    private Prescription prescription;
-    private List<ConfirmNotification> listCN;
     @SerializedName("active")
     private boolean isActive;
+    private Prescription prescription;
+    private List<ConfirmNotification> confirmNotifications;
 
     public Schedule() {
     }
 
-    public Schedule(Long id, LocalTime time, Prescription prescription, List<ConfirmNotification> listCN) {
+    public Schedule(Long id, LocalTime time, boolean isActive, Prescription prescription, List<ConfirmNotification> confirmNotifications) {
         this.id = id;
         this.time = time;
-        this.listCN = listCN;
+        this.isActive = isActive;
         this.prescription = prescription;
-    }
-
-    public Schedule(LocalTime time) {
-        this.time = time;
+        this.confirmNotifications = confirmNotifications;
     }
 
     public Long getId() {
@@ -45,12 +41,12 @@ public class Schedule implements Serializable {
         this.time = time;
     }
 
-    public List<ConfirmNotification> getListCN() {
-        return listCN;
+    public List<ConfirmNotification> getConfirmNotifications() {
+        return confirmNotifications;
     }
 
-    public void setListCN(List<ConfirmNotification> listCN) {
-        this.listCN = listCN;
+    public void setConfirmNotifications(List<ConfirmNotification> confirmNotifications) {
+        this.confirmNotifications = confirmNotifications;
     }
 
     public Prescription getPrescription() {

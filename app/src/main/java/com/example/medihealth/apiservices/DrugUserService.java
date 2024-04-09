@@ -24,4 +24,7 @@ public interface DrugUserService {
 
     @DELETE("drug-user/{id}")
     Call<ResponseObject> deleteDrugUser(@Path("id") Long id);
+
+    @GET("drug-user/all")
+    Call<List<DrugUser>> getDrugUserofUser(@Query("uid") String user_id);
 }
