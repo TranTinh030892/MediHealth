@@ -7,6 +7,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ScheduleService {
@@ -16,5 +17,8 @@ public interface ScheduleService {
 
     @GET("schedule")
     Call<ResponseObject> getAllByUser(@Query("uid") String uid);
+
+    @GET("schedule/{id}/status")
+    Call<ResponseObject> checkStatus(@Path("id") Long id);
 
 }

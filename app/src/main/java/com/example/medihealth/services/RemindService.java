@@ -27,7 +27,7 @@ public class RemindService extends Service {
     private static final int ID = 114;
     public static final String CHANNEL_ID = "4953";
     Timer timer;
-    private final long INTERVAL = 60000;
+    private final long INTERVAL = 30 * 60 * 1000; // update sau mỗi 30p
 
     @Nullable
     @Override
