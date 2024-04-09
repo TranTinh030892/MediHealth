@@ -241,10 +241,7 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
             return;
         }
         prescription = (Prescription) bundle.getSerializable("prescription");
-        schedules = prescription.getSchedules()
-                .stream()
-                .filter(Schedule::isActive)
-                .collect(Collectors.toList());
+        schedules = prescription.getSchedules();
     }
 
     @Override

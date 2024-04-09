@@ -22,6 +22,7 @@ import com.example.medihealth.models.DrugUser;
 import com.example.medihealth.models.Prescription;
 import com.example.medihealth.models.ResponseObject;
 import com.example.medihealth.retrofitcustom.LocalDateAdapter;
+import com.example.medihealth.retrofitcustom.LocalDateTimeAdapter;
 import com.example.medihealth.retrofitcustom.LocalTimeAdapter;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,6 +31,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -179,6 +181,7 @@ public class PrescriptionManagement extends AppCompatActivity {
                     Gson gson = new GsonBuilder()
                             .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
                             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                             .create();
                     prescriptions.addAll(gson.fromJson(
                             new Gson().toJson(responseObject.getData()),

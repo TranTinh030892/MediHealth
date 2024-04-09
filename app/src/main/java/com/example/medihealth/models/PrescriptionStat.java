@@ -1,5 +1,6 @@
 package com.example.medihealth.models;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PrescriptionStat extends Prescription{
@@ -9,8 +10,8 @@ public class PrescriptionStat extends Prescription{
         this.process = process;
     }
 
-    public PrescriptionStat(Long id, String title, boolean isActive, DrugUser drugUser, List<PrescriptionItem> prescriptionItems, List<Schedule> schedules, float process) {
-        super(id, title, isActive, drugUser, prescriptionItems, schedules);
+    public PrescriptionStat(Long id, String title, boolean isActive, DrugUser drugUser, LocalDateTime createdAt, List<PrescriptionItem> prescriptionItems, List<Schedule> schedules, float process) {
+        super(id, title, isActive, drugUser, createdAt, prescriptionItems, schedules);
         this.process = process;
     }
 

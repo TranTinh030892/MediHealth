@@ -7,6 +7,7 @@ import com.example.medihealth.apiservices.ScheduleService;
 import com.example.medihealth.models.ResponseObject;
 import com.example.medihealth.models.Schedule;
 import com.example.medihealth.retrofitcustom.LocalDateAdapter;
+import com.example.medihealth.retrofitcustom.LocalDateTimeAdapter;
 import com.example.medihealth.retrofitcustom.LocalTimeAdapter;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
 import com.google.gson.Gson;
@@ -14,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
@@ -27,15 +29,15 @@ public class SyncService {
     private static final String TAG = SyncService.class.getSimpleName();
 
     public interface ScheduleCallback {
-        void onSchedulesReceived(List<Schedule> schedules);
+        void onResponse(List<Schedule> schedules);
 
-        void onScheduleError(String message);
+        void onFailure(String message);
     }
 
     public static void sync(Context context) {
         getSchedules(new ScheduleCallback() {
             @Override
-            public void onSchedulesReceived(List<Schedule> schedules) {
+            public void onResponse(List<Schedule> schedules) {
                 schedules.forEach((schedule) -> {
                     Log.e("SCHEDULE", String.format("{id: %d, active: %b}", schedule.getId(), schedule.isActive()));
                     if (schedule.isActive()
@@ -49,7 +51,7 @@ public class SyncService {
             }
 
             @Override
-            public void onScheduleError(String message) {
+            public void onFailure(String message) {
 
             }
         });
@@ -64,20 +66,21 @@ public class SyncService {
                     Gson gson = new GsonBuilder()
                             .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
                             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                             .create();
                     List<Schedule> data = gson.fromJson(
                             new Gson().toJson(response.body().getData()),
                             new TypeToken<List<Schedule>>() {
                             }.getType()
                     );
-                    scheduleCallback.onSchedulesReceived(data);
+                    scheduleCallback.onResponse(data);
                 }
                 Log.i(TAG, response.body().getMessage());
             }
 
             @Override
             public void onFailure(Call<ResponseObject> call, Throwable t) {
-                scheduleCallback.onScheduleError(t.getMessage());
+                scheduleCallback.onFailure(t.getMessage());
                 Log.e(TAG, Objects.requireNonNull(t.getMessage()));
                 getSchedules(scheduleCallback);
             }
@@ -88,14 +91,14 @@ public class SyncService {
         Log.v("LOGOUT", "Cancel reminders");
         getSchedules(new ScheduleCallback() {
             @Override
-            public void onSchedulesReceived(List<Schedule> schedules) {
+            public void onResponse(List<Schedule> schedules) {
                 schedules.forEach((schedule) -> {
                     RemindScheduler.cancelRemind(context, schedule);
                 });
             }
 
             @Override
-            public void onScheduleError(String message) {
+            public void onFailure(String message) {
 
             }
         });

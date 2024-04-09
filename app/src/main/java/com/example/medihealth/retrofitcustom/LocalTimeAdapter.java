@@ -17,7 +17,7 @@ public class LocalTimeAdapter extends TypeAdapter<LocalTime> {
     @Override
     public LocalTime read(JsonReader in) throws IOException {
         String timeString = in.nextString();
-        return LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        return LocalTime.parse(timeString, DateTimeFormatter.ISO_LOCAL_TIME);
     }
 }
 

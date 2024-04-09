@@ -26,6 +26,7 @@ import com.example.medihealth.models.Prescription;
 import com.example.medihealth.models.ResponseObject;
 import com.example.medihealth.models.Schedule;
 import com.example.medihealth.retrofitcustom.LocalDateAdapter;
+import com.example.medihealth.retrofitcustom.LocalDateTimeAdapter;
 import com.example.medihealth.retrofitcustom.LocalTimeAdapter;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
 import com.google.common.reflect.TypeToken;
@@ -33,6 +34,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,10 +86,7 @@ public class PrescriptionDetailManagement extends AppCompatActivity {
 
         RecyclerView rcvListPrescriptionSchedule = findViewById(R.id.rcv_list_prescription_schedule);
         rcvListPrescriptionSchedule.setLayoutManager(new LinearLayoutManager(this));
-        scheduleAdapter = new ScheduleAdapter(prescription.getSchedules()
-                .stream()
-                .filter(Schedule::isActive)
-                .collect(Collectors.toList()));
+        scheduleAdapter = new ScheduleAdapter(prescription.getSchedules());
         rcvListPrescriptionSchedule.setAdapter(scheduleAdapter);
     }
 
@@ -127,6 +126,7 @@ public class PrescriptionDetailManagement extends AppCompatActivity {
                     Gson gson = new GsonBuilder()
                             .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
                             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                             .create();
                     prescription = gson.fromJson(
                             new Gson().toJson(response.body().getData()),

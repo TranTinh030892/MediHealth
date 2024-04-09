@@ -92,11 +92,11 @@
         <activity
             android:name=".activities.prescription_schedule.DrugUserManagement"
             android:exported="true">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
+                        <intent-filter>
+                            <action android:name="android.intent.action.MAIN" />
 
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
+                            <category android:name="android.intent.category.LAUNCHER" />
+                        </intent-filter>
         </activity>
         <activity android:name="com.example.medihealth.activities.prescription_schedule.PrescriptionManagement" />
         <activity android:name="com.example.medihealth.activities.show_schedule_totay.ScheduleTodayDetailActivity" />
@@ -104,14 +104,7 @@
         <activity android:name="com.example.medihealth.activities.show_schedule_totay.ConfirmScheduleActivity" />
         <activity android:name="com.example.medihealth.activities.show_schedule_totay.SkipScheduleActivity" />
         <activity android:name="com.example.medihealth.activities.stat.StatDayActivity" />
-        <activity android:name="com.example.medihealth.activities.stat.StatHomeActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name="com.example.medihealth.activities.stat.StatHomeActivity" />
         <activity android:name="com.example.medihealth.activities.stat.StatMonthActivity" />
         <activity android:name="com.example.medihealth.activities.stat.StatWeeksActivity" />
 

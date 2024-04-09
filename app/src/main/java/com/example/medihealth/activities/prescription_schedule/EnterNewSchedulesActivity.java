@@ -28,6 +28,7 @@ import com.example.medihealth.retrofitcustom.RetrofitClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -180,6 +181,7 @@ public class EnterNewSchedulesActivity extends AppCompatActivity implements Item
         prescription.setTitle(title);
         prescription.setSchedules(schedules);
         prescription.setActive(true);
+        prescription.setCreatedAt(LocalDateTime.now());
     }
 
 
@@ -194,6 +196,7 @@ public class EnterNewSchedulesActivity extends AppCompatActivity implements Item
                             "Tạo đơn thuốc thành công",
                             Toast.LENGTH_SHORT
                     ).show();
+                    SyncService.sync(EnterNewSchedulesActivity.this);
                 } else {
                     Toast.makeText(
                             EnterNewSchedulesActivity.this,
