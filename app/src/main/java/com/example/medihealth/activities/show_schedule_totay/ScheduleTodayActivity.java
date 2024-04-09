@@ -49,7 +49,7 @@ public class ScheduleTodayActivity extends AppCompatActivity{
         scheRecyclerView.setAdapter(adapter);
 
         ScheduleService scheduleService = RetrofitClient.createService(ScheduleService.class);
-        scheduleService.getScheduleToday("ncs1202").enqueue(new Callback<List<Schedule>>() {
+        scheduleService.getScheduleToday("12345").enqueue(new Callback<List<Schedule>>() {
             @Override
             public void onResponse(Call<List<Schedule>> call, Response<List<Schedule>> response) {
                 if(response.isSuccessful() && response.body() != null && !response.body().isEmpty()){

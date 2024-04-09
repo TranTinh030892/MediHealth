@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.prescription_schedule.SwipeItemViewHolder;
+import com.example.medihealth.activities.prescription_schedule.SwipeItemViewHolder;
 import com.example.medihealth.models.PrescriptionItem;
 
 import java.util.List;

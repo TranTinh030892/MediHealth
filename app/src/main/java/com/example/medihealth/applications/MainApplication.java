@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.medihealth.notifications.FCM_Notification.MyApplicationFCM;
+import com.example.medihealth.services.RemindService;
 import com.example.medihealth.utils.FirebaseUtil;
 
 public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks {

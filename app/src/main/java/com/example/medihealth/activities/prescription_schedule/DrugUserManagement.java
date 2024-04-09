@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys.prescription_schedule;
+package com.example.medihealth.activities.prescription_schedule;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -26,7 +26,6 @@ import com.example.medihealth.apiservices.DrugUserService;
 import com.example.medihealth.models.DrugUser;
 import com.example.medihealth.models.ResponseObject;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
-import com.example.medihealth.services.RemindService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

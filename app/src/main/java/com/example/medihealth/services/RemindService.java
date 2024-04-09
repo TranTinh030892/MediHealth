@@ -1,13 +1,9 @@
 package com.example.medihealth.services;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
-import android.app.Application;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -16,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.prescription_schedule.SyncService;
+import com.example.medihealth.activities.prescription_schedule.SyncService;
 
 import java.util.Timer;
 import java.util.TimerTask;

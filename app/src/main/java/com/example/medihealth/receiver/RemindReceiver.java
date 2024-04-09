@@ -1,28 +1,25 @@
 package com.example.medihealth.receiver;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.prescription_schedule.PrescriptionDetailManagement;
-import com.example.medihealth.activitys.prescription_schedule.RemindScheduler;
+import com.example.medihealth.activities.prescription_schedule.PrescriptionDetailManagement;
+import com.example.medihealth.activities.prescription_schedule.RemindScheduler;
+import com.example.medihealth.activities.show_schedule_totay.ScheduleTodayDetailActivity;
 import com.example.medihealth.apiservices.ScheduleService;
 import com.example.medihealth.models.ResponseObject;
 import com.example.medihealth.models.Schedule;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
 import com.example.medihealth.services.RemindService;
 
-import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -56,8 +53,8 @@ public class RemindReceiver extends BroadcastReceiver {
 
     @SuppressLint("MissingPermission")
     private void createNotification(Context context, Schedule schedule) {
-        Intent notificationIntent = new Intent(context, PrescriptionDetailManagement.class);
-        notificationIntent.putExtra("prescription", schedule.getPrescription());
+        Intent notificationIntent = new Intent(context, ScheduleTodayDetailActivity.class);
+        notificationIntent.putExtra("schedule", schedule);
         PendingIntent contentIntent = PendingIntent.getActivity(
                 context,
                 CLICK_CODE,

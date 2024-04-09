@@ -1,8 +1,7 @@
-package com.example.medihealth.activitys.prescription_schedule;
+package com.example.medihealth.activities.prescription_schedule;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,35 +18,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
 import com.example.medihealth.adapters.prescription_schedule.PrescriptionItemAdapter;
-import com.example.medihealth.apiservices.PrescriptionService;
 import com.example.medihealth.models.Prescription;
 import com.example.medihealth.models.PrescriptionItem;
-import com.example.medihealth.models.ResponseObject;
-import com.example.medihealth.retrofitcustom.RetrofitClient;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+public class EnterNewPrescriptionItemsActivity extends AppCompatActivity implements ItemTouchHelperListener {
 
-public class EditPrescriptionItemsActivity extends AppCompatActivity implements ItemTouchHelperListener {
-
-    Prescription prescription;
-    ImageView btnBack;
-    TextView tvToolbarTitle;
     RelativeLayout rootView;
-    Button btnAddToList;
-    Button btnComplete;
-    EditText etName;
-    EditText etNote;
+    Prescription prescription;
+    TextView tvToolbar;
+    ImageView btnBackToolbar;
     List<PrescriptionItem> prescriptionItems = new ArrayList<>();
-    RecyclerView rcvListPrescriptionItem;
     PrescriptionItemAdapter prescriptionItemAdapter;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,20 +43,19 @@ public class EditPrescriptionItemsActivity extends AppCompatActivity implements 
 
         rootView = findViewById(R.id.root_view);
 
-        btnBack = findViewById(R.id.btn_back_toolbar);
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        // Custom toolbar
+        tvToolbar = findViewById(R.id.tv_toolbar);
+        tvToolbar.setText("Thêm đơn thuốc");
+        btnBackToolbar = findViewById(R.id.btn_back_toolbar);
+        btnBackToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
-        tvToolbarTitle = findViewById(R.id.tv_toolbar);
-        tvToolbarTitle.setText("Chỉnh sửa đơn thuốc");
-
-        etName = findViewById(R.id.et_name);
-        etNote = findViewById(R.id.et_note);
-
+        // Handle button add new prescription item to list below
+        Button btnAddToList;
         btnAddToList = findViewById(R.id.btn_add_to_list);
         btnAddToList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +64,7 @@ public class EditPrescriptionItemsActivity extends AppCompatActivity implements 
             }
         });
 
+        RecyclerView rcvListPrescriptionItem;
         rcvListPrescriptionItem = findViewById(R.id.rcv_list_prescription_item);
         rcvListPrescriptionItem.setLayoutManager(new LinearLayoutManager(this));
         prescriptionItemAdapter = new PrescriptionItemAdapter(prescriptionItems);
@@ -92,68 +77,38 @@ public class EditPrescriptionItemsActivity extends AppCompatActivity implements 
         );
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(rcvListPrescriptionItem);
 
-        btnComplete = findViewById(R.id.btn_complete);
-        btnComplete.setText("Lưu");
+        Button btnComplete = findViewById(R.id.btn_complete);
         btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                savePrescription();
+                Intent intent = new Intent(
+                        EnterNewPrescriptionItemsActivity.this,
+                        EnterNewSchedulesActivity.class
+                );
+                Bundle bundle = new Bundle();
+                prescription.setPrescriptionItems(prescriptionItems);
+                bundle.putSerializable("prescription", prescription);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
-    }
 
-    private void backToViewDetail() {
-        finish();
-    }
-
-    private void savePrescription() {
-        prescription.setPrescriptionItems(prescriptionItems);
-        PrescriptionService service = RetrofitClient.createService(PrescriptionService.class);
-        service.editPrescription(prescription).enqueue(new Callback<ResponseObject>() {
-            @Override
-            public void onResponse(Call<ResponseObject> call, Response<ResponseObject> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(
-                            EditPrescriptionItemsActivity.this,
-                            "Cập nhật thành công",
-                            Toast.LENGTH_SHORT
-                    ).show();
-                    Log.i("EDIT_PRESCRIPTION_ITEMS", response.body().getMessage());
-                    backToViewDetail();
-                } else {
-                    Toast.makeText(
-                            EditPrescriptionItemsActivity.this,
-                            response.body().getMessage(),
-                            Toast.LENGTH_SHORT
-                    ).show();
-                    Log.i("EDIT_PRESCRIPTION_ITEMS", response.body().getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseObject> call, Throwable t) {
-                Toast.makeText(
-                        EditPrescriptionItemsActivity.this,
-                        "Đã có lỗi xảy ra, vui lòng thử lại sau",
-                        Toast.LENGTH_SHORT
-                ).show();
-                Log.e("EDIT_PRESCRIPTION_ITEMS", Objects.requireNonNull(t.getMessage()));
-            }
-        });
     }
 
     private void loadData() {
         Bundle bundle = getIntent().getExtras();
-        if (bundle == null) return;
+        if (bundle == null) {
+            return;
+        }
         prescription = (Prescription) bundle.getSerializable("prescription");
-        prescriptionItems.addAll(prescription.getPrescriptionItems());
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private void addPrescriptionItemToList() {
+        EditText etName = findViewById(R.id.et_name);
+        EditText etNote = findViewById(R.id.et_note);
         String name = etName.getText().toString().trim();
         String note = etNote.getText().toString().trim();
-        if (name.isEmpty() || note.isEmpty()) {
+        if (name.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT)
                     .show();
             return;
@@ -201,5 +156,4 @@ public class EditPrescriptionItemsActivity extends AppCompatActivity implements 
         prescriptionItems.remove(index);
         prescriptionItemAdapter.notifyItemRemoved(index);
     }
-
 }

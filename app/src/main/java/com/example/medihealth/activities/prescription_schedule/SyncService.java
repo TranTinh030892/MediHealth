@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys.prescription_schedule;
+package com.example.medihealth.activities.prescription_schedule;
 
 import android.content.Context;
 import android.util.Log;
@@ -15,7 +15,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 

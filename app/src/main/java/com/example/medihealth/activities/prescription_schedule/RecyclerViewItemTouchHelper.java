@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys.prescription_schedule;
+package com.example.medihealth.activities.prescription_schedule;
 
 import android.graphics.Canvas;
 import android.view.View;

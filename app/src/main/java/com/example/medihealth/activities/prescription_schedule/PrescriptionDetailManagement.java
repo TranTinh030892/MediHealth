@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys.prescription_schedule;
+package com.example.medihealth.activities.prescription_schedule;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -35,7 +35,6 @@ import com.google.gson.GsonBuilder;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

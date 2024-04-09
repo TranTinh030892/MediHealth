@@ -1,6 +1,7 @@
-package com.example.medihealth.activitys.prescription_schedule;
+package com.example.medihealth.activities.prescription_schedule;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,17 +39,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditSchedulesActivity extends AppCompatActivity implements ItemTouchHelperListener {
+public class EnterNewSchedulesActivity extends AppCompatActivity implements ItemTouchHelperListener {
 
+    RelativeLayout rootView;
     Prescription prescription;
-    TextView tvToolbarTitle;
-    ImageView btnBackToolbar;
     List<Schedule> schedules = new ArrayList<>();
+    ImageView btnBackToolbar;
+    TextView tvToolbar;
+    Button btnComplete;
+    FloatingActionButton fabAddNew;
     RecyclerView rcvListSchedule;
     ScheduleAdapter scheduleAdapter;
-    FloatingActionButton fabAddNew;
-    Button btnComplete;
-    RelativeLayout rootView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,8 +61,8 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
         rootView = findViewById(R.id.root_view);
 
         // Custom toolbar
-        tvToolbarTitle = findViewById(R.id.tv_toolbar);
-        tvToolbarTitle.setText("Chỉnh sửa thời gian thông báo");
+        tvToolbar = findViewById(R.id.tv_toolbar);
+        tvToolbar.setText("Tạo thông báo");
         btnBackToolbar = findViewById(R.id.btn_back_toolbar);
         btnBackToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,12 +74,6 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
         rcvListSchedule = findViewById(R.id.rcv_list_schedule);
         rcvListSchedule.setLayoutManager(new LinearLayoutManager(this));
         scheduleAdapter = new ScheduleAdapter(schedules);
-        scheduleAdapter.setOnClickListener(new CustomOnClickListener<Schedule>() {
-            @Override
-            public void onClick(Schedule data) {
-                showTimePickerDialogUpdate(data);
-            }
-        });
         rcvListSchedule.setAdapter(scheduleAdapter);
         rcvListSchedule.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -86,8 +81,7 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
                     fabAddNew.hide();
-                }
-                else {
+                } else {
                     fabAddNew.show();
                 }
             }
@@ -104,48 +98,21 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
         fabAddNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showTimePickerDialog();
+                showTimepickerDialog();
             }
         });
 
         btnComplete = findViewById(R.id.btn_complete);
-        btnComplete.setText("Lưu");
         btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prescription.setSchedules(schedules);
-                updatePrescription();
+                showDialogEnterPrescriptionTitle();
             }
         });
+
     }
 
-    private void showTimePickerDialogUpdate(Schedule schedule) {
-        CustomTimePickerDialog timePickerDialog = new CustomTimePickerDialog(this);
-        timePickerDialog.setIs24HourView(true);
-        timePickerDialog.setTitle("Chỉnh sửa");
-        timePickerDialog.setTime(schedule.getTime().getHour(), schedule.getTime().getMinute());
-        timePickerDialog.setNegativeButton("Hủy", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timePickerDialog.dismiss();
-            }
-        });
-
-        timePickerDialog.setPositiveButton("Lưu", new CustomTimePickerDialog.onClickPositiveButtonListener() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onClick(int hour, int minute) {
-                LocalTime time = LocalTime.of(hour, minute);
-                timePickerDialog.dismiss();
-                schedule.setTime(time);
-                scheduleAdapter.notifyDataSetChanged();
-            }
-        });
-
-        timePickerDialog.show();
-    }
-
-    private void showTimePickerDialog() {
+    private void showTimepickerDialog() {
         CustomTimePickerDialog timePickerDialog = new CustomTimePickerDialog(this);
         timePickerDialog.setIs24HourView(true);
         timePickerDialog.setTitle("Thêm mới");
@@ -169,44 +136,87 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
         timePickerDialog.show();
     }
 
-    private void backToViewDetail() {
-        finish();
+    private void loadData() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle == null) {
+            return;
+        }
+        prescription = (Prescription) bundle.getSerializable("prescription");
     }
 
-    private void updatePrescription() {
-        PrescriptionService service = RetrofitClient.createService(PrescriptionService.class);
-        service.editPrescription(prescription).enqueue(new Callback<ResponseObject>() {
+    private void showDialogEnterPrescriptionTitle() {
+        CustomDialog dialog = new CustomDialog(this);
+        dialog.setTitle("Xác nhận lưu đơn thuốc");
+        dialog.setHint("Tên đơn thuốc");
+
+        dialog.setNegativeButton("Hủy", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setPositiveButton("Lưu", new CustomOnClickListener<String>() {
+            @Override
+            public void onClick(String data) {
+                createPrescription(data);
+                savePrescription();
+                SyncService.sync(EnterNewSchedulesActivity.this);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void createPrescription(String title) {
+        if (title.isEmpty()) {
+            Toast.makeText(
+                    EnterNewSchedulesActivity.this,
+                    "Vui lòng nhập tên đơn thuốc",
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
+        prescription.setTitle(title);
+        prescription.setSchedules(schedules);
+        prescription.setActive(true);
+    }
+
+
+    private void savePrescription() {
+        PrescriptionService prescriptionService = RetrofitClient.createService(PrescriptionService.class);
+        prescriptionService.addPrescription(prescription).enqueue(new Callback<ResponseObject>() {
             @Override
             public void onResponse(Call<ResponseObject> call, Response<ResponseObject> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(
-                            EditSchedulesActivity.this,
-                            "Cập nhật thành công",
+                            EnterNewSchedulesActivity.this,
+                            "Tạo đơn thuốc thành công",
                             Toast.LENGTH_SHORT
                     ).show();
-                    Log.i("EDIT_SCHEDULES", response.body().getMessage());
-                    SyncService.sync(EditSchedulesActivity.this);
-                    backToViewDetail();
                 } else {
                     Toast.makeText(
-                            EditSchedulesActivity.this,
+                            EnterNewSchedulesActivity.this,
                             response.body().getMessage(),
                             Toast.LENGTH_SHORT
                     ).show();
-                    Log.i("EDIT_SCHEDULES", response.body().getMessage());
                 }
+                Log.i("ADD_PRESCRIPTION", response.body().getMessage());
+                backToPrescriptionManagement();
             }
 
             @Override
             public void onFailure(Call<ResponseObject> call, Throwable t) {
-                Toast.makeText(
-                        EditSchedulesActivity.this,
-                        "Đã có lỗi xảy ra, vui lòng thử lại sau",
-                        Toast.LENGTH_SHORT
-                ).show();
-                Log.e("EDIT_SCHEDULES", Objects.requireNonNull(t.getMessage()));
+                Log.e("ADD_PRESCRIPTION", Objects.requireNonNull(t.getMessage()));
             }
         });
+    }
+
+    private void backToPrescriptionManagement() {
+        Intent intent = new Intent(this, PrescriptionManagement.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        finish();
+        startActivity(intent);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -233,18 +243,6 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
             });
             scheduleAdapter.notifyDataSetChanged();
         }
-    }
-
-    private void loadData() {
-        Bundle bundle = getIntent().getExtras();
-        if (bundle == null) {
-            return;
-        }
-        prescription = (Prescription) bundle.getSerializable("prescription");
-        schedules = prescription.getSchedules()
-                .stream()
-                .filter(Schedule::isActive)
-                .collect(Collectors.toList());
     }
 
     @Override

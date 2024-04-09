@@ -65,7 +65,7 @@ public class StatWeeksActivity extends AppCompatActivity {
 
         //Get ListDrugUser
         DrugUserService drugUserService = RetrofitClient.createService(DrugUserService.class);
-        drugUserService.getDrugUserofUser("ncs1202").enqueue(new Callback<List<DrugUser>>() {
+        drugUserService.getDrugUserofUser("12345").enqueue(new Callback<List<DrugUser>>() {
             @Override
             public void onResponse(Call<List<DrugUser>> call, Response<List<DrugUser>> response) {
                 if(response.isSuccessful() && response.body() != null && !response.body().isEmpty()){
