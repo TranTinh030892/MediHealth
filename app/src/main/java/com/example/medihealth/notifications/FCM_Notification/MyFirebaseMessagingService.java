@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.chat.EmployeeChat_Activity;
+import com.example.medihealth.activities.chat.EmployeeChat_Activity;
 import com.example.medihealth.models.NotificationDismissReceiver;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;

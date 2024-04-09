@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.chat.EmployeeChat_Activity;
+import com.example.medihealth.activities.chat.EmployeeChat_Activity;
 import com.example.medihealth.models.ChatRoom;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
