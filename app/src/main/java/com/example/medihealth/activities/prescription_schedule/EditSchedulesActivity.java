@@ -86,8 +86,7 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
                     fabAddNew.hide();
-                }
-                else {
+                } else {
                     fabAddNew.show();
                 }
             }
@@ -149,7 +148,7 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
         CustomTimePickerDialog timePickerDialog = new CustomTimePickerDialog(this);
         timePickerDialog.setIs24HourView(true);
         timePickerDialog.setTitle("Thêm mới");
-        timePickerDialog.setTime(LocalTime.NOON.getHour(), 0);
+        timePickerDialog.setTime(LocalTime.now().getHour(), LocalTime.now().getMinute());
         timePickerDialog.setNegativeButton("Hủy", new View.OnClickListener() {
             @Override
             public void onClick(View v) {

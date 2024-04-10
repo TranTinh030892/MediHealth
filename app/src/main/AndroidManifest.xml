@@ -10,17 +10,15 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
-    <uses-permission
-        android:name="android.permission.POST_NOTIFICATIONS"
-        tools:ignore="ReservedSystemPermission" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
-    <uses-permission
-        android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"
-        tools:ignore="ReservedSystemPermission" />
-
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
         android:name=".applications.MainApplication"
@@ -92,11 +90,11 @@
         <activity
             android:name=".activities.prescription_schedule.DrugUserManagement"
             android:exported="true">
-                        <intent-filter>
-                            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                            <category android:name="android.intent.category.LAUNCHER" />
-                        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name="com.example.medihealth.activities.prescription_schedule.PrescriptionManagement" />
         <activity android:name="com.example.medihealth.activities.show_schedule_totay.ScheduleTodayDetailActivity" />
@@ -131,6 +129,13 @@
 
         <receiver android:name=".receiver.RemindReceiver" />
         <receiver android:name=".receiver.SnoozeRemindReceiver" />
+        <receiver
+            android:name="com.example.medihealth.receiver.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

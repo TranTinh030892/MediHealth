@@ -59,12 +59,9 @@ public class DrugUserManagement extends AppCompatActivity {
         tvToolbar = findViewById(R.id.tv_toolbar);
         tvToolbar.setText("Người dùng thuốc");
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED &&
-                    checkSelfPermission(Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS) == PackageManager.PERMISSION_DENIED) {
-                String[] permissions = {android.Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS};
-                requestPermissions(permissions, 1);
-            }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            String[] permissions = new String[]{Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS};
+            requestPermissions(permissions, 1);
         }
 
         fabAddDrugUser = findViewById(R.id.fab_add_drug_user);
@@ -125,12 +122,6 @@ public class DrugUserManagement extends AppCompatActivity {
         drugUserAdapter.setData(drugUsers);
         rcvListDrugUser.setAdapter(drugUserAdapter);
         getData();
-    }
-
-    public void requestAutoStartPermission() {
-        Intent intent = new Intent();
-        intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
-        startActivity(intent);
     }
 
     private void openDialogEnterDrugUser(DrugUser drugUser, String action) {

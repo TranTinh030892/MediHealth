@@ -94,7 +94,7 @@ public class RemindReceiver extends BroadcastReceiver {
         // Hiển thị thông báo
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(Math.toIntExact(schedule.getId()), builder.build());
-        Log.e(TAG, String.format("Notification: {schedule_id: %d, time: %TR}", schedule.getId(), schedule.getTime()));
+        Log.v(TAG, String.format("Notification: {schedule_id: %d, time: %TR}", schedule.getId(), schedule.getTime()));
     }
 
     private void checkStatus(Long id, MyCallback myCallback) {
@@ -107,7 +107,7 @@ public class RemindReceiver extends BroadcastReceiver {
                     Log.v(TAG, String.format("Schedule id: %d, active: %b", id, isActive));
                     myCallback.onResponse(isActive);
                 } else {
-                    Log.i(TAG, String.format("Check schedule id: %d, message: %s", id, response.body().getMessage()));
+                    Log.v(TAG, String.format("Check schedule id: %d, message: %s", id, response.body().getMessage()));
                 }
             }
 
