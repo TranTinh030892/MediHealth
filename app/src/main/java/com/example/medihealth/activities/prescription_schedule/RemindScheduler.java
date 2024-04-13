@@ -26,22 +26,24 @@ public class RemindScheduler {
         calendar.set(Calendar.MINUTE, time.getMinute());
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
+
         long timeToPushNotification = calendar.getTimeInMillis() - now.getTimeInMillis();
-        if (timeToPushNotification >= 0) {
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-            Intent intent = new Intent(context, RemindReceiver.class);
-            intent.putExtra("schedule", schedule);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    Math.toIntExact(schedule.getId()),
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
-            );
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            Log.e("REMIND_SCHEDULE", String.format("Created, notification of schedule_id: %d will show in : %dms", schedule.getId(), timeToPushNotification));
-        } else {
-            Log.e("REMIND_SCHEDULE", String.format("schedule_id: %d, timeout: %d", schedule.getId(), timeToPushNotification));
+        if (timeToPushNotification < 0) {
+            calendar.add(Calendar.DATE, 1);
+            timeToPushNotification = calendar.getTimeInMillis() - now.getTimeInMillis();
         }
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(context, RemindReceiver.class);
+        intent.putExtra("schedule", schedule);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                Math.toIntExact(schedule.getId()),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
+        );
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        Log.e("REMIND_SCHEDULE", String.format("Created, notification of schedule_id: %d will show in : %dms", schedule.getId(), timeToPushNotification));
     }
 
     public static void cancelRemind(Context context, Schedule schedule) {
@@ -58,7 +60,6 @@ public class RemindScheduler {
     }
 
     public static void snoozeRemind(Context context, Schedule schedule) {
-        LocalTime time = schedule.getTime();
         Calendar now = Calendar.getInstance();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MINUTE, LocalTime.now().getMinute() + SNOOZE_TIME);

@@ -3,6 +3,7 @@ package com.example.medihealth.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -41,12 +42,12 @@ public class Schedule implements Serializable {
         this.time = time;
     }
 
-    public List<ConfirmNotification> getConfirmNotifications() {
-        return confirmNotifications;
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setConfirmNotifications(List<ConfirmNotification> confirmNotifications) {
-        this.confirmNotifications = confirmNotifications;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public Prescription getPrescription() {
@@ -57,11 +58,11 @@ public class Schedule implements Serializable {
         this.prescription = prescription;
     }
 
-    public boolean isActive() {
-        return isActive;
+    public List<ConfirmNotification> getConfirmNotifications() {
+        return confirmNotifications;
     }
 
-    public void setActive(boolean active) {
-        this.isActive = active;
+    public void setConfirmNotifications(List<ConfirmNotification> confirmNotifications) {
+        this.confirmNotifications = confirmNotifications;
     }
 }

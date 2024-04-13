@@ -41,7 +41,7 @@ public class RemindService extends Service {
                 .setContentTitle("MediHealth")
                 .setContentText("Dịch vụ nhắc lịch uống thuốc đang hoạt động")
                 .setSmallIcon(R.drawable.icon_alarm_2)
-                .setPriority(NotificationCompat.PRIORITY_MIN)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setAutoCancel(true);
 
         startForeground(ID, builder.build());
@@ -61,7 +61,7 @@ public class RemindService extends Service {
     private void createNotificationChannel() {
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                 "RemindService",
-                NotificationManager.IMPORTANCE_NONE);
+                NotificationManager.IMPORTANCE_HIGH);
         channel.setDescription("Chanel for remind service");
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);

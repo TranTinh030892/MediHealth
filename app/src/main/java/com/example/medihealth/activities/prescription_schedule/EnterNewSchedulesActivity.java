@@ -181,7 +181,6 @@ public class EnterNewSchedulesActivity extends AppCompatActivity implements Item
         prescription.setTitle(title);
         prescription.setSchedules(schedules);
         prescription.setActive(true);
-        prescription.setCreatedAt(LocalDateTime.now());
     }
 
 
