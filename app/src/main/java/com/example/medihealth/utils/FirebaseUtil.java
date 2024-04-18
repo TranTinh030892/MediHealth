@@ -150,7 +150,7 @@ public class FirebaseUtil {
         return FirebaseFirestore.getInstance().collection("notification").document(notificationId);
     }
 
-    public static void sendMessageNotificationtoTokenId(String message,String tokenId) {
+    public static void sendMessageNotificationtoEmployeeTokenId(String requestCode,String message,String tokenId) {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
                 UserModel currentUser = task.getResult().toObject(UserModel.class);
@@ -158,9 +158,9 @@ public class FirebaseUtil {
                     JSONObject jsonObject = new JSONObject();
 
                     JSONObject dataObj = new JSONObject();
+                    dataObj.put("requestCode", requestCode);
                     dataObj.put("title", currentUser.getFullName());
                     dataObj.put("body", message);
-
                     dataObj.put("userId", currentUser.getUserId());
                     jsonObject.put("data", dataObj);
                     jsonObject.put("to", tokenId);
@@ -171,6 +171,22 @@ public class FirebaseUtil {
                 }
             }
         });
+    }
+    public static void sendMessageNotificationtoCustomerTokenId(String requestCode,String tokenId) {
+        try {
+            JSONObject jsonObject = new JSONObject();
+
+            JSONObject dataObj = new JSONObject();
+            dataObj.put("requestCode", requestCode);
+            dataObj.put("title", "Đặt lịch khám thành công");
+            dataObj.put("body", "Bạn đã đặt lịch khám thành công tại Medihealth");
+            jsonObject.put("data", dataObj);
+            jsonObject.put("to", tokenId);
+
+            callApi(jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public static void callApi(JSONObject jsonObject) {
         MediaType JSON = MediaType.get("application/json; charset=utf-8");

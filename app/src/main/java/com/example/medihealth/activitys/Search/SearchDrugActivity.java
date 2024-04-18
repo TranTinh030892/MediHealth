@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,9 +37,10 @@ public class SearchDrugActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence searchStr, int start, int before, int count) {
-                if (!searchStr.equals("")){
+                if (!searchStr.toString().equals("")){
                     iconClose.setVisibility(View.VISIBLE);
                 }
+                else iconClose.setVisibility(View.GONE);
             }
 
             @Override

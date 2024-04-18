@@ -6,21 +6,21 @@ public class Appointment {
     private String appointmentDate;
     private String specialist;
     private Doctor doctor;
-    private int order;
+    private String time;
     private String symptom;
     private int stateAppointment;
 
     public Appointment() {
     }
 
-    public Appointment(UserModel userModel,String bookDate, String appointmentDate, String specialist, Doctor doctor, int order,
+    public Appointment(UserModel userModel,String bookDate, String appointmentDate, String specialist, Doctor doctor, String time,
                        String symptom, int stateAppointment) {
         this.userModel = userModel;
         this.bookDate = bookDate;
         this.appointmentDate = appointmentDate;
         this.specialist = specialist;
         this.doctor = doctor;
-        this.order = order;
+        this.time = time;
         this.symptom = symptom;
         this.stateAppointment = stateAppointment;
     }
@@ -65,12 +65,12 @@ public class Appointment {
         this.doctor = doctor;
     }
 
-    public int getOrder() {
-        return order;
+    public String getTime() {
+        return time;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getSymptom() {

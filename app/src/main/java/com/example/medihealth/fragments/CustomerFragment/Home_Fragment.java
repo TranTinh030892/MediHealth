@@ -34,7 +34,11 @@ import com.example.medihealth.activitys.Login;
 import com.example.medihealth.activitys.Search.SearchDrugActivity;
 import com.example.medihealth.activitys.appointment.Infor_Appoitment_Activity;
 import com.example.medihealth.activitys.chat.ListEmployee;
+import com.example.medihealth.activitys.profile.EditProfile;
 import com.example.medihealth.adapters.main.SlidePagerAdapter;
+import com.example.medihealth.models.UserModel;
+import com.example.medihealth.utils.AndroidUtil;
+import com.example.medihealth.utils.FirebaseUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -124,6 +128,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             startActivity(intent);
         }
         if (v.getId() == R.id.block_book_outside){
+            refreshSharedPreferences();
             Intent intent = new Intent(getActivity(), Infor_Appoitment_Activity.class);
             startActivity(intent);
         }
@@ -132,6 +137,11 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         }
         if (v.getId() == R.id.form_inside_two_above){
             // menu quản lý đơn thuốc
+        }
+        if (v.getId() == R.id.form_inside_three_below){
+            Intent intent = new Intent(getActivity(), EditProfile.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
         if (v.getId() == R.id.btn_chat){
             Intent intent = new Intent(getActivity(), ListEmployee.class);
@@ -425,18 +435,26 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     }
 
     private void setDataUser() {
-        String inforFormUser = sharedPreferences.getString("inforFormUser", "empty");
-        if (!inforFormUser.equals("empty")){
-            String[] array = inforFormUser.split(";");
-            if (array.length > 0) {
-                textName.setText(array[0]);
-                textGender_Birth.setText(array[1]);
-                textHeight.setText(array[2]);
-                textWeight.setText(array[3]); ;
-                textBMI.setText(array[4]);
+        FirebaseUtil.currentUserDetails().get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                UserModel userModel = documentSnapshot.toObject(UserModel.class);
+                textName.setText(userModel.getFullName());
+                textGender_Birth.setText(userModel.getGender()+" - "+userModel.getBirth());
+                textHeight.setText(String.valueOf(userModel.getHeight()));
+                textWeight.setText(String.valueOf(userModel.getWeight())); ;
+                textBMI.setText(AndroidUtil.getBMI(userModel.getHeight(),userModel.getWeight()));
             } else {
-                Log.e("ERROR", "profileString rỗng");
+                Log.e("ERROR", "User not found");
             }
-        }
+        });
+    }
+    private void refreshSharedPreferences() {
+        setIndexSelectedSharedPreferences("indexDoctorSelected",0);
+        setIndexSelectedSharedPreferences("indexTimeSelected",-1);
+    }
+    private void setIndexSelectedSharedPreferences(String key, int value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(key, value);
+        editor.apply();
     }
 }
