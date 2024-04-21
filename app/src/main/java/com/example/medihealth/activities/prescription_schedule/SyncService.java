@@ -10,6 +10,8 @@ import com.example.medihealth.retrofitcustom.LocalDateAdapter;
 import com.example.medihealth.retrofitcustom.LocalDateTimeAdapter;
 import com.example.medihealth.retrofitcustom.LocalTimeAdapter;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -27,6 +29,7 @@ import retrofit2.Response;
 public class SyncService {
 
     private static final String TAG = SyncService.class.getSimpleName();
+    private static FirebaseAuth mAuth;
 
     public interface ScheduleCallback {
         void onResponse(List<Schedule> schedules);
@@ -58,6 +61,10 @@ public class SyncService {
     }
 
     private static void getSchedules(ScheduleCallback scheduleCallback) {
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        String uid = user.getUid();
+
         ScheduleService service = RetrofitClient.createService(ScheduleService.class);
         service.getAllByUser("12345").enqueue(new Callback<ResponseObject>() {
             @Override
