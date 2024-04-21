@@ -32,9 +32,12 @@ import com.example.medihealth.fragments.CustomerFragment.Menu_Fragment;
 import com.example.medihealth.fragments.CustomerFragment.Notification_Fragment;
 import com.example.medihealth.fragments.CustomerFragment.Profile_Fragment;
 import com.example.medihealth.models.CustomToast;
+import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Query;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Dialog dialog;
@@ -49,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
+        setupIndexSelectedDoctor("indexDoctorSelected",0);
+        setupIndexSelectedDoctor("indexTimeSelected",-1);
         initView();
         setOnclick();
         showNotificationBg();
@@ -57,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setBotomNavigation();
         getIntentFromConfirmAppointment();
     }
-
     @Override
     public void onBackPressed() {
         if (isFirstBackPress) {
@@ -69,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onBackPressed();
         }
     }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -81,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
     private void setLoadingFormUserSharedPreferences() {
-        sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("loadingFormUser", 1102);
         editor.apply();
@@ -98,8 +104,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnHome.setOnClickListener(this);
     }
     private void showNotificationBg() {
+        String currentUserId = FirebaseUtil.currentUserId();
         FirebaseUtil.getNotificationsCollectionReference()
                 .whereEqualTo("seen", false)
+                .whereEqualTo("userId",currentUserId)
                 .addSnapshotListener((querySnapshot, error) -> {
                     if (error != null) {
                         Log.e("TotalCount", "Error listening for changes: ", error);
@@ -225,5 +233,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getSupportFragmentManager().beginTransaction().replace(R.id.page_home, fragmentSelected).commit();
             }
         }
+    }
+    private void setupIndexSelectedDoctor(String key, int value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(key,value);
+        editor.apply();
     }
 }

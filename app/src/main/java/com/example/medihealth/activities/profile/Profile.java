@@ -1,4 +1,10 @@
+package com.example.medihealth.activities.profile;
+
+<<<<<<<< HEAD:app/src/main/java/com/example/medihealth/activities/Profile.java
 package com.example.medihealth.activities;
+========
+package com.example.medihealth.activitys.profile;
+>>>>>>>> master:app/src/main/java/com/example/medihealth/activitys/profile/Profile.java
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
+import com.example.medihealth.activitys.Login;
+import com.example.medihealth.activitys.MainActivity;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.UserModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;

@@ -7,21 +7,21 @@ public class AppointmentDTO {
     private String specialist;
     private String doctorId;
     private String doctorName;
-    private int order;
+    private String time;
     private String symptom;
     private int stateAppointment;
 
     public AppointmentDTO() {
     }
     public AppointmentDTO(String userName,String bookDate, String appointmentDate, String specialist,String doctorId,
-                          String doctorName, int order, String symptom, int stateAppointment) {
+                          String doctorName, String time, String symptom, int stateAppointment) {
         this.userName = userName;
         this.bookDate = bookDate;
         this.appointmentDate = appointmentDate;
         this.specialist = specialist;
         this.doctorId = doctorId;
         this.doctorName = doctorName;
-        this.order = order;
+        this.time = time;
         this.symptom = symptom;
         this.stateAppointment = stateAppointment;
     }
@@ -74,12 +74,12 @@ public class AppointmentDTO {
         this.doctorName = doctorName;
     }
 
-    public int getOrder() {
-        return order;
+    public String getTime() {
+        return time;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getSymptom() {

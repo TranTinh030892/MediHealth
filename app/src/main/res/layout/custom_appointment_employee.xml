@@ -124,7 +124,7 @@
                     android:id="@+id/cardView_restore"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginRight="2dp"
+                    android:layout_marginRight="5dp"
                     app:cardCornerRadius="20dp"
                     android:layout_width="72dp"
                     android:layout_height="wrap_content"
@@ -137,8 +137,8 @@
                         android:clickable="true"
                         android:paddingTop="7dp"
                         android:paddingBottom="7dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
+                        android:paddingStart="7dp"
+                        android:paddingEnd="7dp"
                         android:backgroundTint="@color/colorStateApproved"
                         android:background="@drawable/custom_button">
                         <TextView
@@ -148,6 +148,41 @@
                             android:text="Duyệt lại"
                             android:textSize="12sp"
                             android:textColor="@color/chat_color_receiver"
+                            android:layout_centerVertical="true"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="sans-serif-medium"/>
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView_delete"
+                    android:layout_toEndOf="@id/cardView_restore"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="2dp"
+                    app:cardCornerRadius="20dp"
+                    android:layout_width="52dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:backgroundTint="@color/colorStateApproved">
+                    <RelativeLayout
+                        android:id="@+id/block_delete_appointment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:paddingTop="7dp"
+                        android:paddingBottom="7dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:backgroundTint="#FAD9D6"
+                        android:background="@drawable/custom_button">
+                        <TextView
+                            android:id="@+id/text_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Xóa"
+                            android:textSize="12sp"
+                            android:textColor="@color/Red"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"
                             android:fontFamily="sans-serif-medium"/>

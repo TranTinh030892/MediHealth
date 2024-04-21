@@ -1,4 +1,8 @@
-package com.example.medihealth.activities;
+package com.example.medihealth.activitys;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -21,12 +25,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.medihealth.R;
-import com.example.medihealth.activities.chat.Employee_MainActivity;
+import com.example.medihealth.activitys.chat.Employee_MainActivity;
+import com.example.medihealth.activitys.profile.Profile;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Employee;
 import com.example.medihealth.models.Token;
@@ -240,7 +241,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                 Intent intent = null;
                                 if (isRole == 3) {
                                     intent = new Intent(Login.this, MainActivity.class);
-                                    setSharedPreferencesDataUser();
                                 } else if (isRole == 2){
                                     intent = new Intent(Login.this, Employee_MainActivity.class);
                                     intent.putExtra("requestCodeEmployee", 1103);
@@ -424,23 +424,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }
         else checkRole(currentUserId);
     }
-    private void setSharedPreferencesDataUser() {
-        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                UserModel currentUser = task.getResult().toObject(UserModel.class);
-                if (currentUser != null) {
-                    sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("inforFormUser",currentUser.getFullName()+";"+currentUser.getGender()+" - "+currentUser.getBirth()+";"+
-                            String.valueOf(currentUser.getHeight())+";"+String.valueOf(currentUser.getWeight())+";"+
-                            getBMI(currentUser.getHeight(), currentUser.getWeight()));
-                    editor.apply();
-                }
-            } else {
-                Log.e("ERROR", "task is not successful or result is null");
-            }
-        });
-    }
     private void setSharedPreferencesDataEmployee() {
         FirebaseUtil.currentEmployeeDetails().get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
@@ -455,12 +438,5 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 Log.e("ERROR", "task is not successful or result is null");
             }
         });
-    }
-
-    private String getBMI(int height, int weight){
-        double heightDouble = (double) height/100;
-        double BMI = (double) weight/(heightDouble * heightDouble);
-        double roundedNumber = Math.round(BMI * 10) / 10.0;
-        return String.valueOf(roundedNumber);
     }
 }

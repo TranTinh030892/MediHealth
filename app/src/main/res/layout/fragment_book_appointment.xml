@@ -62,7 +62,7 @@
                 android:id="@+id/text_history"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lịch đã khám"
+                android:text="Lịch tái khám"
                 android:textSize="15dp"
                 android:textAllCaps="false"
                 android:textColor="@color/text_Color"

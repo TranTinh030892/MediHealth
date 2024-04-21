@@ -1,4 +1,4 @@
-package com.example.medihealth.activities;
+package com.example.medihealth.activitys;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +11,8 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activities.chat.Employee_MainActivity;
+import com.example.medihealth.activitys.chat.Employee_MainActivity;
+import com.example.medihealth.activitys.profile.Profile;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.firebase.auth.FirebaseAuth;

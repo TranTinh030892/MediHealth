@@ -7,7 +7,7 @@ import android.app.NotificationManager;
 import android.os.Build;
 
 public class MyApplicationFCM extends Application {
-    public static final String CHANNEL_ID = "push_notification_09";
+    public static final String CHANNEL_ID = "push_notification_03";
 
     @Override
     public void onCreate() {

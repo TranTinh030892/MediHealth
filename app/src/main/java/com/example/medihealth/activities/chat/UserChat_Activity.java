@@ -161,8 +161,7 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
                     if (token != null) {
                         List<String> tokenList = token.getTokenList();
                         for (String tokenString : tokenList){
-                            FirebaseUtil.sendMessageNotificationtoTokenId(message,tokenString);
-                            Log.e("CHECKSEND",tokenString);
+                            FirebaseUtil.sendMessageNotificationtoEmployeeTokenId("employee",message,tokenString);
                         }
                     }
                 }

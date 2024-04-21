@@ -68,6 +68,7 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                 android:id="@+id/image_user"
                 android:layout_width="57dp"
                 android:src="@drawable/profile"
+                android:padding="3dp"
                 android:layout_height="57dp"/>
             <RelativeLayout
                 android:id="@+id/form"
@@ -82,6 +83,7 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                     android:layout_height="wrap_content"
                     android:text="Vũ Mạnh Hùng"
                     android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
                     android:textColor="@color/white" />
                 <TextView
                     android:id="@+id/birth_user"
@@ -90,6 +92,7 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                     android:layout_below="@id/fullName_user"
                     android:layout_marginTop="3dp"
                     android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
                     android:textColor="@color/white"
                     android:text="Nam - 04/10/2002"/>
             </RelativeLayout>
@@ -114,7 +117,6 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
             android:background="@drawable/custom_inforbook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -147,6 +149,7 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                         android:gravity="center_vertical"
                         android:inputType="date"
                         android:paddingStart="8dp"
+                        android:textColor="@color/text_Color"
                         android:textSize="17sp" />
 
                     <ImageButton
@@ -185,10 +188,10 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                         android:layout_marginTop="15dp"
                         android:background="@drawable/edit_text_book"
                         android:gravity="center_vertical"
-                        android:hint="Lựa chọn"
+                        android:text="Tất cả"
+                        android:textColor="@color/text_Color"
                         android:paddingStart="8dp"
                         android:textSize="17sp" />
-
                     <ImageButton
                         android:id="@+id/btnSpecialist"
                         android:layout_width="35dp"
@@ -238,20 +241,11 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                             android:layout_marginTop="15dp" />
                         <ProgressBar
                             android:id="@+id/loadListDoctors"
+                            android:visibility="gone"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
                             android:layout_width="30dp"
                             android:layout_height="30dp"/>
-                        <TextView
-                            android:id="@+id/notify"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:textAllCaps="false"
-                            android:textSize="15sp"
-                            android:textColor="#FFA000"
-                            android:gravity="center"
-                            android:visibility="gone"
-                            android:text="Không có bác sĩ nào, bạn vui lòng chọn chuyên khoa khác"/>
                     </RelativeLayout>
                 </RelativeLayout>
                 <RelativeLayout
@@ -282,39 +276,57 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                     android:layout_marginTop="19dp">
 
                     <TextView
-                        android:id="@+id/textCount"
+                        android:id="@+id/textTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Thứ tự khám"
+                        android:text="Giờ khám mong muốn"
                         android:textColor="@color/text_Color"
                         android:textSize="19sp"
                         android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/numberOrder"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/listTime"
+                        android:layout_below="@id/textTime"
+                        android:layout_marginTop="5dp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/textCount"
-                        android:layout_marginTop="13dp"
-                        android:textColor="#FFA000"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/notify_numberOrder"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/textCount"
-                        android:layout_marginTop="15dp"
-                        android:textColor="#FFA000"
+                        android:layout_height="140dp"/>
+                    <RelativeLayout
+                        android:id="@+id/notify"
                         android:visibility="gone"
-                        android:text="Số lượng đã đủ, vui lòng chọn bác sĩ khác hoặc ngày khác"
-                        android:textSize="14.5sp" />
-                    <ProgressBar
-                        android:id="@+id/loadNumberOrder"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_below="@id/textCount"/>
+                        android:layout_marginTop="5dp"
+                        android:layout_below="@id/textTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="140dp">
+                        <RelativeLayout
+                            android:background="@drawable/custom_button"
+                            android:backgroundTint="#FFF3DE"
+                            android:layout_centerVertical="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_centerHorizontal="true"
+                                android:textColor="#FFA000"
+                                android:text="Không tìm thấy giờ nào"
+                                android:textSize="15sp" />
+                        </RelativeLayout>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/blockLoadTimeList"
+                        android:visibility="gone"
+                        android:layout_marginTop="5dp"
+                        android:layout_below="@id/textTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="140dp">
+                        <ProgressBar
+                            android:id="@+id/loadTimeList"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_marginTop="20dp" />
+                    </RelativeLayout>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -342,6 +354,8 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                         android:gravity="top"
                         android:paddingStart="8dp"
                         android:paddingTop="5dp"
+                        android:textColor="@color/text_Color"
+                        android:textColorHint="@color/text_Color"
                         android:hint="Nhập triệu chứng..." />
                 </RelativeLayout>
             </RelativeLayout>

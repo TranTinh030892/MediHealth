@@ -18,6 +18,7 @@ import com.example.medihealth.utils.FirebaseUtil;
 public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks {
     private Handler handler;
 
+
     private Runnable runLogout = new Runnable() {
         @Override
         public void run() {

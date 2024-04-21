@@ -15,7 +15,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activities.chat.EmployeeChat_Activity;
+import com.example.medihealth.activitys.MainActivity;
+import com.example.medihealth.activitys.chat.EmployeeChat_Activity;
 import com.example.medihealth.models.NotificationDismissReceiver;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
@@ -32,16 +33,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
         sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         String isCloseNotice = sharedPreferences.getString("isCloseNotice", "No");
-        if (isCloseNotice.equals("Yes")){
-            return;
-        }
-        // Xử lý dữ liệu từ thông báo FCM
 
         if (remoteMessage.getData().size() > 0) {
+            String requestCode = remoteMessage.getData().get("requestCode");
             String title = remoteMessage.getData().get("title");
             String body = remoteMessage.getData().get("body");
             String userId = remoteMessage.getData().get("userId");
-            if(userId != null){
+            if(requestCode.equals("employee")){
+                if (isCloseNotice.equals("Yes")){
+                    return;
+                }
                 FirebaseFirestore.getInstance().collection("users").document(userId).get()
                         .addOnCompleteListener(task -> {
                             if(task.isSuccessful()){
@@ -51,9 +52,33 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         });
             }
             else{
-                Log.e("ERROR","Lỗi không tìm thấy usId");
+                showCustomerNotification(title,body);
             }
         }
+    }
+
+    private void showCustomerNotification(String title, String body) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(MyApplicationFCM.CHANNEL_ID, "Channel_Name", NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("requestCode",113);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        int notificationId = generateNotificationId();
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, MyApplicationFCM.CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setSmallIcon(R.drawable.notification)
+                .setColor(ContextCompat.getColor(this, R.color.mainColor))
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+        notificationManager.notify(notificationId, notificationBuilder.build());
     }
 
     @SuppressLint("ObsoleteSdkInt")
@@ -67,7 +92,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Intent intent = new Intent(this, EmployeeChat_Activity.class);
         AndroidUtil.passUserModelAsIntent(intent, user);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
 
@@ -82,20 +107,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.notification)
                 .setColor(ContextCompat.getColor(this, R.color.Red))
                 .setContentIntent(pendingIntent)
-                .setAutoCancel(true); // Đảm bảo thông báo sẽ tự động biến mất sau khi click
+                .setAutoCancel(true);
 
-//         Thêm action tắt thông báo
         NotificationCompat.Action dismissAction = new NotificationCompat.Action(
                 R.drawable.icon_cloud, "Tắt thông báo", dismissPendingIntent);
         notificationBuilder.addAction(dismissAction);
 
-//         Sử dụng notificationId mới
         notificationManager.notify(notificationId, notificationBuilder.build());
     }
 
 
     private synchronized int generateNotificationId() {
-        return notificationId++; // Tăng giá trị của notificationId mỗi khi được gọi
+        return notificationId++;
     }
-
 }

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -23,6 +24,8 @@ import androidx.fragment.app.Fragment;
 import com.example.medihealth.R;
 import com.example.medihealth.activities.MainActivity;
 import com.example.medihealth.models.Token;
+import com.example.medihealth.models.UserModel;
+import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,12 +36,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class Menu_Fragment extends Fragment implements View.OnClickListener {
     Dialog dialog;
     TextView userName, userGenderBirth;
+    ImageView imageAccount;
     SharedPreferences sharedPreferences;
     GoogleSignInClient googleSignInClient;
     CardView btnLogout;
@@ -93,6 +98,7 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
         btnLogout = itemView.findViewById(R.id.btn_logout);
         userName = itemView.findViewById(R.id.fullName_user);
         userGenderBirth = itemView.findViewById(R.id.gender_birth);
+        imageAccount = itemView.findViewById(R.id.image_account);
         setbtnLogout();
     }
 
@@ -103,16 +109,15 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
         }
     }
     private void setInforUser() {
-        String inforFormUser = sharedPreferences.getString("inforFormUser", "empty");
-        if (!inforFormUser.equals("empty")){
-            String[] array = inforFormUser.split(";");
-            if (array.length > 0) {
-                userName.setText(array[0]);
-                userGenderBirth.setText(array[1]);
+        FirebaseUtil.currentUserDetails().get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                UserModel userModel = documentSnapshot.toObject(UserModel.class);
+                userName.setText(userModel.getFullName());
+                userGenderBirth.setText(userModel.getBirth());
             } else {
-                Log.e("ERROR", "profileString rỗng");
+                Log.e("ERROR", "User not found");
             }
-        }
+        });
     }
     private void setOnclick() {
         btnLogout.setOnClickListener(this);
@@ -183,7 +188,6 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
     private void removeAllSharedPreferences(){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("profile","empty");
-        editor.putString("inforFormUser","empty");
         editor.apply();
     }
     private void removeTokenId(String curentUserId, String tokenId) {
