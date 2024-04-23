@@ -13,7 +13,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">#006ba1</item>
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/off_white</item>
+        <item name="android:windowBackground">@color/background_color</item>
         <item name="android:scrollViewStyle">@style/DefaultScrollView</item>
     </style>
 

@@ -38,6 +38,8 @@ import com.example.medihealth.activities.Login;
 import com.example.medihealth.activities.Search.SearchDrugActivity;
 import com.example.medihealth.activities.appointment.Infor_Appoitment_Activity;
 import com.example.medihealth.activities.chat.ListEmployee;
+import com.example.medihealth.activities.show_schedule_totay.ScheduleTodayActivity;
+import com.example.medihealth.activities.stat.StatHomeActivity;
 import com.example.medihealth.adapters.main.SlidePagerAdapter;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
@@ -141,6 +143,13 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         }
         if (v.getId() == R.id.form_inside_one_above) {
             // menu nhắc lịch
+            Intent intent = new Intent(getActivity(), ScheduleTodayActivity.class);
+            startActivity(intent);
+        }
+        else if (v.getId() == R.id.form_inside_one_below) {
+            // menu thống kê
+            Intent intent = new Intent(getActivity(), StatHomeActivity.class);
+            startActivity(intent);
         }
         if (v.getId() == R.id.form_inside_two_above) {
             // menu quản lý đơn thuốc

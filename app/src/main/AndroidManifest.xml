@@ -80,6 +80,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.example.medihealth.activities.prescription_schedule.PrescriptionManagement" />
         <activity
             android:name=".activities.prescription_schedule.PrescriptionDetailManagement"
             android:exported="false" />
@@ -96,7 +97,6 @@
             android:name=".activities.prescription_schedule.EditSchedulesActivity"
             android:exported="false" />
         <activity android:name="com.example.medihealth.activities.prescription_schedule.DrugUserManagement" />
-        <activity android:name="com.example.medihealth.activities.prescription_schedule.PrescriptionManagement" />
 
         <activity android:name="com.example.medihealth.activities.show_schedule_totay.ScheduleTodayDetailActivity" />
         <activity android:name="com.example.medihealth.activities.show_schedule_totay.ScheduleTodayActivity" />
