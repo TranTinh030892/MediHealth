@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
-    tools:context=".activities.ScheduleTodayActivity">
+    android:background="@color/background_color">
 
     <FrameLayout
         android:id="@+id/frame_layout_1"
@@ -71,17 +70,20 @@
         android:layout_below="@id/frame_layout_1" />
 
 
-    <Spinner
-        android:id="@+id/spinnerStat"
+    <EditText
+        android:id="@+id/editTextStat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:textSize="20dp"
+        android:textSize="16dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
-        android:background="@drawable/spinner_bg"
+        android:paddingLeft="10dp"
+        android:clickable="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:layout_below="@id/textView2"/>
 
 
@@ -93,7 +95,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="51dp"
-        android:background="@color/main_color"
+        android:background="@drawable/button_background_active"
         android:textColor="@color/white"
         android:text="Gửi" />
 

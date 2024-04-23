@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +25,8 @@ import com.example.medihealth.models.Prescription;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
 import com.example.medihealth.apiservices.DrugUserService;
 import com.example.medihealth.apiservices.PrescriptionStatService;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,7 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class StatDayActivity extends AppCompatActivity {
-    private Spinner spinnerDrugUSer;
+    private EditText editTextSelectDU;
     private EditText editTextDate;
     private ImageView imgBack;
     private RecyclerView statDayRecyclerView;
@@ -44,13 +48,18 @@ public class StatDayActivity extends AppCompatActivity {
     private Long duid;
     private LocalDate date;
     private List<Prescription> prescriptions;
+    private int selectedItemPosition;
+    private FirebaseAuth mAuth;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stat_day);
 
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser account = mAuth.getCurrentUser();
         imgBack = findViewById(R.id.image_back);
-        spinnerDrugUSer = findViewById(R.id.spinnerDrugUser);
+        editTextSelectDU = findViewById(R.id.editTextSelectDU);
+        editTextSelectDU.setBackgroundResource(R.drawable.background_ic_chervon_down);
         editTextDate = findViewById(R.id.editTextDate);
         calendar = Calendar.getInstance();
 
@@ -64,7 +73,7 @@ public class StatDayActivity extends AppCompatActivity {
 
         //Get ListDrugUser
         DrugUserService drugUserService = RetrofitClient.createService(DrugUserService.class);
-        drugUserService.getDrugUserofUser("12345").enqueue(new Callback<List<DrugUser>>() {
+        drugUserService.getDrugUserofUser(account.getUid()).enqueue(new Callback<List<DrugUser>>() {
             @Override
             public void onResponse(Call<List<DrugUser>> call, Response<List<DrugUser>> response) {
                 if(response.isSuccessful() && response.body() != null && !response.body().isEmpty()){
@@ -74,11 +83,9 @@ public class StatDayActivity extends AppCompatActivity {
 
                     //Default DrugUser
                     duid = drugUserList.get(0).getId();
-
-                    //Show DrugUser to select
-                    ArrayAdapter<DrugUser> adapter = new ArrayAdapter<>(StatDayActivity.this, android.R.layout.simple_spinner_item, drugUserList);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerDrugUSer.setAdapter(adapter);
+                    editTextSelectDU.setText(drugUserList.get(0).toString());
+                    selectedItemPosition = 0;
+                    callAPItoGetPrescriptionStatDay();
                 }else {
                     Log.e("API_Error", "Response body is empty or null");
                 }
@@ -90,17 +97,45 @@ public class StatDayActivity extends AppCompatActivity {
             }
         });
 
-        //Event select DrugUser
-        spinnerDrugUSer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        editTextSelectDU.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                DrugUser selectedDrugUser = (DrugUser) parent.getItemAtPosition(position);
-                duid = selectedDrugUser.getId();
-                //Call API to PrescriptionStat and show
-                callAPItoGetPrescriptionStatDay();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            public void onClick(View view) {
+                View popupView = getLayoutInflater().inflate(R.layout.menu_custom, null);
+
+                ListView listView = popupView.findViewById(R.id.listView);
+                ArrayAdapter<DrugUser> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, drugUserList);
+                listView.setAdapter(adapter);
+
+                int itemHeight = (int) getResources().getDisplayMetrics().density * 68;
+                int maxHeight = itemHeight * 4 ;
+                ViewGroup.LayoutParams params = listView.getLayoutParams();
+                params.height = maxHeight;
+                listView.setLayoutParams(params);
+
+                final PopupWindow popupWindow = new PopupWindow(popupView, editTextSelectDU.getWidth(), maxHeight, true);
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        DrugUser selectedDrugUser = (DrugUser) parent.getItemAtPosition(position);
+                        duid = selectedDrugUser.getId();
+                        editTextSelectDU.setText(selectedDrugUser.toString());
+                        selectedItemPosition = position;
+                        callAPItoGetPrescriptionStatDay();
+                        popupWindow.dismiss();
+                    }
+                });
+
+                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        editTextSelectDU.setBackgroundResource(R.drawable.background_ic_chervon_down);
+                    }
+                });
+
+                listView.setSelection(selectedItemPosition);
+                popupWindow.showAsDropDown(editTextSelectDU);
+                editTextSelectDU.setBackgroundResource(R.drawable.background_ic_chervon_up);
             }
         });
 
