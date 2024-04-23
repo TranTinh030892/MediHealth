@@ -1,4 +1,4 @@
-package com.example.medihealth.activities;
+package com.example.medihealth.activities.profile;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
+import com.example.medihealth.activities.Login;
+import com.example.medihealth.activities.MainActivity;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.UserModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -46,10 +48,11 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
     ImageView imageAccount;
     ImageButton btnBack;
     TextView title;
-    EditText fullName, phoneNumber, address,  height, weight;
+    EditText fullName, phoneNumber, address, height, weight;
     TextView birth;
     RadioButton male, female;
     Button save;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +62,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         initView();
         initOnclick();
     }
+
     private void initView() {
         imageAccount = findViewById(R.id.image_account);
         title = findViewById(R.id.title);
@@ -78,11 +82,11 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
 
     private void setImageAndTitle() {
         String profileString = sharedPreferences.getString("profile", "empty");
-        if (!profileString.equals("empty")){
+        if (!profileString.equals("empty")) {
             String[] array = profileString.split(";");
             if (array.length > 0) {
                 Picasso.get().load(array[1]).into(imageAccount);
-                title.setText("Xin chào "+array[0]);
+                title.setText("Xin chào " + array[0]);
             } else {
                 Log.e("ERROR", "profileString rỗng");
             }
@@ -94,9 +98,10 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         btnBack.setOnClickListener(this);
         birth.setOnClickListener(this);
     }
+
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_save){
+        if (v.getId() == R.id.btn_save) {
             // kiểm tra điều kiện dữ liệu
             String name = fullName.getText().toString();
             String gender = "";
@@ -113,7 +118,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
 
             if (name.isEmpty() || gender.isEmpty() || phone.isEmpty() ||
                     addressUser.isEmpty() || birthUser.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty()) {
-                CustomToast.showToast(getApplicationContext(),"Vui lòng điền đủ thông tin",Toast.LENGTH_SHORT);
+                CustomToast.showToast(getApplicationContext(), "Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT);
                 return;
             }
 
@@ -121,12 +126,12 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
             int userWeight = Integer.parseInt(weightStr);
 
             if (userHeight <= 0) {
-                CustomToast.showToast(getApplicationContext(),"Chiều cao không hợp lệ",Toast.LENGTH_SHORT);
+                CustomToast.showToast(getApplicationContext(), "Chiều cao không hợp lệ", Toast.LENGTH_SHORT);
                 return;
             }
 
             if (userWeight <= 0) {
-                CustomToast.showToast(getApplicationContext(),"Cân nặng không hợp lệ",Toast.LENGTH_SHORT);
+                CustomToast.showToast(getApplicationContext(), "Cân nặng không hợp lệ", Toast.LENGTH_SHORT);
                 return;
             }
 
@@ -144,14 +149,12 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
             // Chuyển activity
             Intent intent = new Intent(Profile.this, MainActivity.class);
             startActivity(intent);
-        }
-        else if (v.getId() == R.id.back_btn){
+        } else if (v.getId() == R.id.back_btn) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("profile","empty");
+            editor.putString("profile", "empty");
             editor.apply();
             signOut();
-        }
-        else if (v.getId() == R.id.birth_user){
+        } else if (v.getId() == R.id.birth_user) {
             showDialogCalendar(Gravity.CENTER);
         }
     }
@@ -161,18 +164,17 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_datepicker);
         Window window = dialog.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
         window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
+        if (Gravity.BOTTOM == center) {
             dialog.setCancelable(false);
-        }
-        else{
+        } else {
             dialog.setCancelable(true);
         }
         DatePicker datePicker;
@@ -198,17 +200,19 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
 
         dialog.show();
     }
+
     private void getBirthDay(DatePicker datePicker) {
         int dayOfMonth = datePicker.getDayOfMonth();
         int monthOfYear = datePicker.getMonth();
         int year = datePicker.getYear();
         String dayOfMonthStr = String.valueOf(dayOfMonth),
-                monthOfYearStr = String.valueOf(monthOfYear+1);
+                monthOfYearStr = String.valueOf(monthOfYear + 1);
         if (dayOfMonth < 10) dayOfMonthStr = "0" + dayOfMonth;
-        if (monthOfYear + 1 < 10) monthOfYearStr = "0" + (monthOfYear+1);
+        if (monthOfYear + 1 < 10) monthOfYearStr = "0" + (monthOfYear + 1);
         String selectedDate = dayOfMonthStr + "/" + monthOfYearStr + "/" + year;
         birth.setText(selectedDate);
     }
+
     private void signOut() {
         mAuth.signOut();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -217,7 +221,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                 .build();
 
         // Khởi tạo GoogleSignInClient
-        googleSignInClient = GoogleSignIn.getClient(this,gso);
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
         googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

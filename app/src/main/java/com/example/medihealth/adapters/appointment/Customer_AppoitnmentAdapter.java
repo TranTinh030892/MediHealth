@@ -37,11 +37,11 @@ public class Customer_AppoitnmentAdapter extends FirestoreRecyclerAdapter<Appoin
 
         setColorStateAppoiment(model,holder);
 
-        String calendarStr = "STT"+" "+ model.getOrder()+" - "+model.getAppointmentDate();
+        String calendarStr = model.getTime()+" - "+model.getAppointmentDate();
         holder.calendar.setText(calendarStr);
         Doctor doctor = model.getDoctor();
         if (doctor != null) {
-            holder.doctorName.setText(doctor.getFullName());
+            holder.doctorName.setText("BS."+doctor.getFullName());
         } else {
             holder.doctorName.setText("");
         }

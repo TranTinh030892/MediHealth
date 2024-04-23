@@ -1,6 +1,7 @@
 package com.example.medihealth.fragments.EmployeeFragment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -15,26 +16,38 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.medihealth.R;
+import com.example.medihealth.activities.MainActivity;
+import com.example.medihealth.activities.appointment.Infor_Appoitment_Activity;
 import com.example.medihealth.adapters.appointment.Employee_AppointmentAdapter;
 import com.example.medihealth.models.Appointment;
+import com.example.medihealth.models.CustomToast;
+import com.example.medihealth.models.NotificationModel;
+import com.example.medihealth.models.Token;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class Employee_Appointment_Fragment extends Fragment implements View.OnClickListener {
     RelativeLayout btnPending, btnApproved, btnCancelled, btnDate,blockData, blockEmpty;
@@ -234,12 +247,85 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
 
 
     private void setupRecyclerView(FirestoreRecyclerOptions<Appointment> options) {
-        appoitnmentAdapter = new Employee_AppointmentAdapter(options, getContext());
+        appoitnmentAdapter = new Employee_AppointmentAdapter(options, getContext(), new Employee_AppointmentAdapter.OnItemClickListener() {
+            @Override
+            public void onApproveClick(String appointmentId) {
+                updateStateAppointment(appointmentId,1);
+                getAppointmentById(appointmentId);
+            }
+
+            @Override
+            public void onCancelClick(String appointmentId) {
+                updateStateAppointment(appointmentId,-1);
+            }
+
+            @Override
+            public void onRestoreClick(String appointmentId) {
+                updateStateAppointment(appointmentId,1);
+            }
+
+            @Override
+            public void onDeleteClick(String appointmentId) {
+                showDialogConfirm(appointmentId,Gravity.CENTER);
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(appoitnmentAdapter);
         appoitnmentAdapter.startListening();
     }
 
+    private void showDialogConfirm(String appointmentId,int center) {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialog_notice_login_logout);
+        Window window = dialog.getWindow();
+        if (window == null){
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = center;
+        window.setAttributes(windowAttributes);
+        if (Gravity.BOTTOM == center){
+            dialog.setCancelable(false);
+        }
+        else{
+            dialog.setCancelable(true);
+        }
+
+        TextView titleTop, titleBelow;
+        RelativeLayout btnCancel, btnEnter;
+        titleTop = dialog.findViewById(R.id.title_top);
+        titleBelow = dialog.findViewById(R.id.title_below);
+        btnCancel = dialog.findViewById(R.id.cancel);
+        btnEnter = dialog.findViewById(R.id.agree);
+        titleTop.setText("Xác nhận");
+        titleBelow.setText("Bạn có chắc chắn muốn xóa ?");
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        btnEnter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                deleteAppointment(appointmentId);
+            }
+        });
+        dialog.show();
+    }
+    private void deleteAppointment(String appointmentId) {
+        FirebaseUtil.getAppointmentDetailsById(appointmentId).delete().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                CustomToast.showToast(getContext(),"Xóa thành công", Toast.LENGTH_SHORT);
+            }
+            else Log.e("ERROR","Lỗi kê nối mạng");
+        });
+    }
     private void setupDataWithChangeEventOnEdiSearch() {
         textSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -298,5 +384,80 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
     public void onDestroy() {
         super.onDestroy();
         stopRepeatedTask();
+    }
+    private void getAppointmentById(String appointmentId) {
+        FirebaseUtil.getAppointmentDetailsById(appointmentId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Appointment appointment = task.getResult().toObject(Appointment.class);
+                if (appointment != null){
+                    pushNotification(appointment);
+                    String userId = appointment.getUserModel().getUserId();
+                    sendMessagetoCustomerTokenId(userId);
+                }
+            }
+            else {
+                Log.e("ERROR","Lỗi kết nối");
+            }
+        });
+    }
+    private void sendMessagetoCustomerTokenId(String userId) {
+        Query query = FirebaseUtil.getTokenId().whereEqualTo("userId",userId);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                    Token token = documentSnapshot.toObject(Token.class);
+                    if (token != null) {
+                        List<String> tokenList = token.getTokenList();
+                        for (String tokenString : tokenList){
+                            FirebaseUtil.sendMessageNotificationtoCustomerTokenId("customer",tokenString);
+                        }
+                    }
+                }
+            }
+            else {
+                Log.e("ERROR","Lỗi kết nối");
+            }
+        });
+    }
+
+    private void pushNotification(Appointment appointment) {
+        String title = "Đặt lịch khám thành công";
+        String body = "Quý khách đã đặt lịch khám thành công tại Medihealth. Trân thành cảm ơn và hân hạnh được " +
+                "phục vụ quý khách";
+        boolean seen = false;
+        Timestamp timestamp = Timestamp.now();
+        String userId = appointment.getUserModel().getUserId();
+        NotificationModel notificationModel = new NotificationModel(title,body,timestamp,seen,userId);
+        FirebaseUtil.getNotificationsCollectionReference().add(notificationModel).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Log.d("SUCCESSFULL", "Lưu thành công Notification");
+            }
+            else {
+                Log.e("ERROR","Lỗi kết nối");
+            }
+        });
+    }
+    private void updateStateAppointment(String appointmentId,int state) {
+        FirebaseUtil.getAppointmentDetailsById(appointmentId).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        Appointment appointment = task.getResult().toObject(Appointment.class);
+                        appointment.setStateAppointment(state);
+                        FirebaseUtil.getAppointmentDetailsById(appointmentId).set(appointment)
+                                .addOnCompleteListener(task1 -> {
+                                    if(task1.isSuccessful()){
+                                        Log.e("SUCCESSFULL","Update lịch hẹn thành công");
+                                    }
+                                    else {
+                                        Log.e("ERROR","Lỗi kết nối mạng");
+                                    }
+                                });
+                    }
+                    else {
+                        Log.e("ERROR","Lỗi kết nối mạng");
+                    }
+                });
     }
 }

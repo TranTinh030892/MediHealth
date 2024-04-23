@@ -15,19 +15,29 @@ import com.example.medihealth.R;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.Doctor;
 import com.example.medihealth.models.NotificationModel;
+import com.example.medihealth.models.Token;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
 
 public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Employee_AppointmentAdapter.AppointmentViewHolder> {
     Context context;
     private OnItemClickListener mListener;
-    public Employee_AppointmentAdapter(@NonNull FirestoreRecyclerOptions<Appointment> options, Context context) {
+    public Employee_AppointmentAdapter(@NonNull FirestoreRecyclerOptions<Appointment> options, Context context,OnItemClickListener onItemClickListener) {
         super(options);
         this.context = context;
+        this.mListener = onItemClickListener;
+    }
 
+    public void setmListener(OnItemClickListener mListener) {
+        this.mListener = mListener;
     }
 
     @Override
@@ -49,16 +59,40 @@ public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appoin
             holder.userPhonenumber.setText("");
         }
 
-        String calendarStr = "STT"+" "+ model.getOrder()+" - "+model.getAppointmentDate();
+        String calendarStr =  model.getTime()+" - "+model.getAppointmentDate();
         holder.calendar.setText(calendarStr);
         Doctor doctor = model.getDoctor();
         if (doctor != null) {
-            holder.doctorName.setText(doctor.getFullName());
+            holder.doctorName.setText("BS."+doctor.getFullName());
         } else {
             holder.doctorName.setText("");
         }
         String appointmentId = getSnapshots().getSnapshot(position).getId();
         holder.itemView.setTag(appointmentId);
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onDeleteClick(appointmentId);
+            }
+        });
+        holder.btnApprove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onApproveClick(appointmentId);
+            }
+        });
+        holder.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onCancelClick(appointmentId);
+            }
+        });
+        holder.btnRestore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onRestoreClick(appointmentId);
+            }
+        });
     }
     @Override
     public int getItemCount() {
@@ -71,9 +105,9 @@ public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appoin
         return new Employee_AppointmentAdapter.AppointmentViewHolder(itemView);
     }
 
-    public static class AppointmentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class AppointmentViewHolder extends RecyclerView.ViewHolder {
         TextView userName, userPhonenumber, calendar, doctorName;
-        RelativeLayout blockOne, blockTwo, btnApprove, btnCancel, btnRestore;
+        RelativeLayout blockOne, blockTwo, btnApprove, btnCancel, btnRestore,btnDelete;
         public AppointmentViewHolder(@NonNull View itemView) {
             super(itemView);
             blockOne = itemView.findViewById(R.id.block_one);
@@ -85,82 +119,13 @@ public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appoin
             btnApprove = itemView.findViewById(R.id.block_approve_appointment);
             btnCancel = itemView.findViewById(R.id.block_cancel_appointment);
             btnRestore = itemView.findViewById(R.id.block_restore_appointment);
-            btnApprove.setOnClickListener(this);
-            btnCancel.setOnClickListener(this);
-            btnRestore.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            String appointmentId = (String) itemView.getTag();
-            if (v.getId() == R.id.block_approve_appointment){
-                updateStateAppointment(appointmentId,1);
-                getAppointmentById(appointmentId);
-            }
-            if (v.getId() == R.id.block_cancel_appointment){
-                updateStateAppointment(appointmentId,-1);
-            }
-            if (v.getId() == R.id.block_restore_appointment){
-                updateStateAppointment(appointmentId,1);
-            }
-        }
-
-        private void getAppointmentById(String appointmentId) {
-            FirebaseUtil.getAppointmentDetailsById(appointmentId).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
-                    Appointment appointment = task.getResult().toObject(Appointment.class);
-                    if (appointment != null){
-                        pushNotification(appointment);
-                    }
-                }
-                else {
-                    Log.e("ERROR","Lỗi kết nối");
-                }
-            });
-        }
-
-        private void pushNotification(Appointment appointment) {
-            String title = "Đặt lịch khám thành công";
-            String body = "Chúc mừng bạn đã đặt lịch khám thành công tại Medihealth";
-            boolean seen = false;
-            Timestamp timestamp = Timestamp.now();
-            String userId = appointment.getUserModel().getUserId();
-            NotificationModel notificationModel = new NotificationModel(title,body,timestamp,seen,userId);
-            FirebaseUtil.getNotificationsCollectionReference().add(notificationModel).addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
-                    Log.d("SUCCESSFULL", "Lưu thành công Notification");
-                }
-                else {
-                    Log.e("ERROR","Lỗi kết nối");
-                }
-            });
-        }
-
-        private void updateStateAppointment(String appointmentId,int state) {
-            FirebaseUtil.getAppointmentDetailsById(appointmentId).get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
-                            Appointment appointment = task.getResult().toObject(Appointment.class);
-                            appointment.setStateAppointment(state);
-                            FirebaseUtil.getAppointmentDetailsById(appointmentId).set(appointment)
-                                    .addOnCompleteListener(task1 -> {
-                                        if(task1.isSuccessful()){
-                                            Log.e("SUCCESSFULL","Update lịch hẹn thành công");
-                                        }
-                                        else {
-                                            Log.e("ERROR","Lỗi kết nối mạng");
-                                        }
-                                    });
-                        }
-                        else {
-                            Log.e("ERROR","Lỗi kết nối mạng");
-                        }
-                    });
+            btnDelete = itemView.findViewById(R.id.block_delete_appointment);
         }
     }
     public interface OnItemClickListener {
         void onApproveClick(String appointmentId);
         void onCancelClick(String appointmentId);
         void onRestoreClick(String appointmentId);
+        void onDeleteClick(String appointmentId);
     }
 }

@@ -10,6 +10,8 @@ import com.example.medihealth.retrofitcustom.LocalDateAdapter;
 import com.example.medihealth.retrofitcustom.LocalDateTimeAdapter;
 import com.example.medihealth.retrofitcustom.LocalTimeAdapter;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -28,14 +30,14 @@ public class SyncService {
 
     private static final String TAG = SyncService.class.getSimpleName();
 
-    public interface ScheduleCallback {
+    public interface MyCallback {
         void onResponse(List<Schedule> schedules);
 
         void onFailure(String message);
     }
 
     public static void sync(Context context) {
-        getSchedules(new ScheduleCallback() {
+        getSchedules(new MyCallback() {
             @Override
             public void onResponse(List<Schedule> schedules) {
                 schedules.forEach((schedule) -> {
@@ -57,9 +59,18 @@ public class SyncService {
         });
     }
 
-    private static void getSchedules(ScheduleCallback scheduleCallback) {
+    private static void getSchedules(MyCallback MyCallback) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            Log.i(TAG, "Not logged in yet");
+            return;
+        }
+
+        String uid = user.getUid();
+
         ScheduleService service = RetrofitClient.createService(ScheduleService.class);
-        service.getAllByUser("12345").enqueue(new Callback<ResponseObject>() {
+        service.getAllByUser(uid).enqueue(new Callback<ResponseObject>() {
             @Override
             public void onResponse(Call<ResponseObject> call, Response<ResponseObject> response) {
                 if (response.isSuccessful()) {
@@ -73,23 +84,23 @@ public class SyncService {
                             new TypeToken<List<Schedule>>() {
                             }.getType()
                     );
-                    scheduleCallback.onResponse(data);
+                    MyCallback.onResponse(data);
                 }
                 Log.i(TAG, response.body().getMessage());
             }
 
             @Override
             public void onFailure(Call<ResponseObject> call, Throwable t) {
-                scheduleCallback.onFailure(t.getMessage());
+                MyCallback.onFailure(t.getMessage());
                 Log.e(TAG, Objects.requireNonNull(t.getMessage()));
-                getSchedules(scheduleCallback);
+                getSchedules(MyCallback);
             }
         });
     }
 
     public static void logout(Context context) {
         Log.v("LOGOUT", "Cancel reminders");
-        getSchedules(new ScheduleCallback() {
+        getSchedules(new MyCallback() {
             @Override
             public void onResponse(List<Schedule> schedules) {
                 schedules.forEach((schedule) -> {

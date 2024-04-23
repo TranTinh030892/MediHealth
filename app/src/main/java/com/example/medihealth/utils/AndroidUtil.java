@@ -52,7 +52,7 @@ public class AndroidUtil {
         intent.putExtra("specialist",model.getSpecialist());
         intent.putExtra("doctorId",model.getDoctorId());
         intent.putExtra("doctorName",model.getDoctorName());
-        intent.putExtra("order",model.getOrder());
+        intent.putExtra("time",model.getTime());
         intent.putExtra("symptom",model.getSymptom());
         intent.putExtra("stateAppointment",model.getStateAppointment());
     }
@@ -64,7 +64,7 @@ public class AndroidUtil {
         appointmentDTO.setSpecialist(intent.getStringExtra("specialist"));
         appointmentDTO.setDoctorId(intent.getStringExtra("doctorId"));
         appointmentDTO.setDoctorName(intent.getStringExtra("doctorName"));
-        appointmentDTO.setOrder(intent.getIntExtra("order",0));
+        appointmentDTO.setTime(intent.getStringExtra("time"));
         appointmentDTO.setSymptom(intent.getStringExtra("symptom"));
         appointmentDTO.setStateAppointment(intent.getIntExtra("stateAppointment",-1));
         return appointmentDTO;
@@ -79,5 +79,11 @@ public class AndroidUtil {
             return networkInfo != null && networkInfo.isConnected();
         }
         return false;
+    }
+    public static String getBMI(int height, int weight){
+        double heightDouble = (double) height/100;
+        double BMI = (double) weight/(heightDouble * heightDouble);
+        double roundedNumber = Math.round(BMI * 10) / 10.0;
+        return String.valueOf(roundedNumber);
     }
 }

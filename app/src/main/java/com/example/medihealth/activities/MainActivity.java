@@ -1,9 +1,5 @@
 package com.example.medihealth.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +20,10 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.example.medihealth.R;
 import com.example.medihealth.fragments.CustomerFragment.Appointment_Fragment;
@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
+        setupIndexSelectedDoctor("indexDoctorSelected",0);
+        setupIndexSelectedDoctor("indexTimeSelected",-1);
         initView();
         setOnclick();
         showNotificationBg();
@@ -57,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setBotomNavigation();
         getIntentFromConfirmAppointment();
     }
-
     @Override
     public void onBackPressed() {
         if (isFirstBackPress) {
@@ -69,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onBackPressed();
         }
     }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -81,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
     private void setLoadingFormUserSharedPreferences() {
-        sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("loadingFormUser", 1102);
         editor.apply();
@@ -98,8 +101,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnHome.setOnClickListener(this);
     }
     private void showNotificationBg() {
+        String currentUserId = FirebaseUtil.currentUserId();
         FirebaseUtil.getNotificationsCollectionReference()
                 .whereEqualTo("seen", false)
+                .whereEqualTo("userId",currentUserId)
                 .addSnapshotListener((querySnapshot, error) -> {
                     if (error != null) {
                         Log.e("TotalCount", "Error listening for changes: ", error);
@@ -225,5 +230,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getSupportFragmentManager().beginTransaction().replace(R.id.page_home, fragmentSelected).commit();
             }
         }
+    }
+    private void setupIndexSelectedDoctor(String key, int value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(key,value);
+        editor.apply();
     }
 }

@@ -11,6 +11,7 @@
         android:layout_height="wrap_content">
         <RelativeLayout
             android:id="@+id/title"
+            android:layout_marginBottom="20dp"
             android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -24,6 +25,7 @@
                 android:textColor="@color/text_Color"
                 android:textSize="20dp"/>
             <TextView
+                android:id="@+id/title_below"
                 android:layout_below="@id/title_top"
                 android:layout_marginTop="5dp"
                 android:layout_centerHorizontal="true"
@@ -36,7 +38,6 @@
         <RelativeLayout
             android:layout_below="@id/title"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <RelativeLayout
@@ -65,6 +66,7 @@
                 android:layout_width="165dp"
                 android:layout_height="45dp">
                 <TextView
+                    android:id="@+id/textAgree"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Đồng ý"

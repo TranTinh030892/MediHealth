@@ -8,6 +8,10 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -33,17 +37,14 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.profile.EditProfile"
+            android:exported="false" />
+        <activity
             android:name=".activities.Search.SearchDrugActivity"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".activities.appointment.Infor_Appoitment_Activity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.appointment.Confirm_Appointment"
-            android:exported="false" />
-        <activity
-            android:name=".activities.appointment.Specialist"
             android:exported="false" />
         <activity
             android:name=".activities.chat.EmployeeChat_Activity"
@@ -59,7 +60,7 @@
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activities.Profile"
+            android:name=".activities.profile.Profile"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
@@ -71,7 +72,14 @@
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".activities.Splash"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".activities.prescription_schedule.PrescriptionDetailManagement"
             android:exported="false" />
@@ -87,16 +95,9 @@
         <activity
             android:name=".activities.prescription_schedule.EditSchedulesActivity"
             android:exported="false" />
-        <activity
-            android:name=".activities.prescription_schedule.DrugUserManagement"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name="com.example.medihealth.activities.prescription_schedule.DrugUserManagement" />
         <activity android:name="com.example.medihealth.activities.prescription_schedule.PrescriptionManagement" />
+
         <activity android:name="com.example.medihealth.activities.show_schedule_totay.ScheduleTodayDetailActivity" />
         <activity android:name="com.example.medihealth.activities.show_schedule_totay.ScheduleTodayActivity" />
         <activity android:name="com.example.medihealth.activities.show_schedule_totay.ConfirmScheduleActivity" />

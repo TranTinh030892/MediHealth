@@ -2,11 +2,8 @@ package com.example.medihealth.activities.prescription_schedule;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +24,8 @@ import com.example.medihealth.models.DrugUser;
 import com.example.medihealth.models.ResponseObject;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -161,8 +160,14 @@ public class DrugUserManagement extends AppCompatActivity {
     }
 
     private void getData() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            return;
+        }
+        String uid = user.getUid();
         DrugUserService drugUserService = RetrofitClient.createService(DrugUserService.class);
-        drugUserService.getAllByUser("12345").enqueue(new Callback<ResponseObject>() {
+        drugUserService.getAllByUser(uid).enqueue(new Callback<ResponseObject>() {
             @Override
             public void onResponse(Call<ResponseObject> call, Response<ResponseObject> response) {
                 if (response.isSuccessful()) {
@@ -184,7 +189,13 @@ public class DrugUserManagement extends AppCompatActivity {
     }
 
     private void addDrugUser(DrugUser newDrugUser) {
-        newDrugUser.setUserId("12345");
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            return;
+        }
+        String uid = user.getUid();
+        newDrugUser.setUserId(uid);
         DrugUserService drugUserService = RetrofitClient.createService(DrugUserService.class);
         drugUserService.addDrugUser(newDrugUser).enqueue(new Callback<ResponseObject>() {
             @Override
