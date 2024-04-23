@@ -1,9 +1,5 @@
 package com.example.medihealth.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +21,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import com.example.medihealth.R;
 import com.example.medihealth.fragments.CustomerFragment.Appointment_Fragment;
 import com.example.medihealth.fragments.CustomerFragment.Home_Fragment;
@@ -32,12 +32,9 @@ import com.example.medihealth.fragments.CustomerFragment.Menu_Fragment;
 import com.example.medihealth.fragments.CustomerFragment.Notification_Fragment;
 import com.example.medihealth.fragments.CustomerFragment.Profile_Fragment;
 import com.example.medihealth.models.CustomToast;
-import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.Query;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Dialog dialog;

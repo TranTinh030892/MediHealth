@@ -8,12 +8,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.example.medihealth.notifications.FCM_Notification.MyApplicationFCM;
 import com.example.medihealth.services.RemindService;
 import com.example.medihealth.utils.FirebaseUtil;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks {
     private Handler handler;
@@ -32,9 +31,15 @@ public class MainApplication extends Application implements Application.Activity
         MyApplicationFCM.init(this);
         registerActivityLifecycleCallbacks(this);
         handler = new Handler(getMainLooper());
-        if (!isServiceRunning(RemindService.class)) {
+        if (!isServiceRunning(RemindService.class) && isLogged()) {
             doService();
         }
+    }
+
+    private boolean isLogged() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        return user != null;
     }
 
     private void doService() {

@@ -1,8 +1,4 @@
-package com.example.medihealth.activitys;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.medihealth.activities;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -25,13 +21,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.chat.Employee_MainActivity;
-import com.example.medihealth.activitys.profile.Profile;
+import com.example.medihealth.activities.chat.Employee_MainActivity;
+import com.example.medihealth.activities.profile.Profile;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Employee;
 import com.example.medihealth.models.Token;
-import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;

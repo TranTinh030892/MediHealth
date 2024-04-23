@@ -22,6 +22,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,12 +30,14 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
+
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.Login;
-import com.example.medihealth.activitys.Search.SearchDrugActivity;
-import com.example.medihealth.activitys.appointment.Infor_Appoitment_Activity;
-import com.example.medihealth.activitys.chat.ListEmployee;
+import com.example.medihealth.activities.prescription_schedule.DrugUserManagement;
 import com.example.medihealth.activities.profile.EditProfile;
+import com.example.medihealth.activities.Login;
+import com.example.medihealth.activities.Search.SearchDrugActivity;
+import com.example.medihealth.activities.appointment.Infor_Appoitment_Activity;
+import com.example.medihealth.activities.chat.ListEmployee;
 import com.example.medihealth.adapters.main.SlidePagerAdapter;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
@@ -59,18 +62,19 @@ import okhttp3.Response;
 public class Home_Fragment extends Fragment implements View.OnClickListener {
     FirebaseAuth mAuth;
     SharedPreferences sharedPreferences;
-    CardView formLogin,formUser;
+    CardView formLogin, formUser;
     RelativeLayout menuBook, menuReminder, menuPrescription, menuService, menuPayment,
-    menuSearch, menuProfile, loadingForm, menuChat;
+            menuSearch, menuProfile, loadingForm, menuChat;
     private SlidePagerAdapter slidePagerAdapter;
     private Timer timer;
     ViewPager2 formSlide;
-    private Button btnCalendar,btnLogin;
+    private Button btnCalendar, btnLogin;
     private TextView textTemp, textName, textGender_Birth, textHeight, textWeight, textBMI;
     private ImageButton circleOne, circleTwo, circleThree, circleFour, circleFive, circleSix;
     ImageView imageAccount;
-    private List<ImageButton>listCircles = new ArrayList<>();
-    Dialog dialog ;
+    private List<ImageButton> listCircles = new ArrayList<>();
+    Dialog dialog;
+
     public Home_Fragment() {
         // Required empty public constructor
     }
@@ -84,7 +88,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View itemView =  inflater.inflate(R.layout.fragment_home, container, false);
+        View itemView = inflater.inflate(R.layout.fragment_home, container, false);
         mAuth = FirebaseAuth.getInstance();
         sharedPreferences = getContext().getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         initView(itemView);
@@ -95,6 +99,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         createSlide();
         return itemView;
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -106,6 +111,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         super.onResume();
         callApiWeather();
     }
+
     private void setOnlclick() {
         btnLogin.setOnClickListener(this);
         menuBook.setOnClickListener(this);
@@ -117,37 +123,40 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         menuProfile.setOnClickListener(this);
         menuChat.setOnClickListener(this);
     }
+
     @Override
     public void onClick(View v) {
-        if (v.getId() != R.id.btn_login && mAuth.getCurrentUser() == null){
+        if (v.getId() != R.id.btn_login && mAuth.getCurrentUser() == null) {
             showDialogLogin(Gravity.CENTER);
             return;
         }
-        if (v.getId() == R.id.btn_login){
+        if (v.getId() == R.id.btn_login) {
             Intent intent = new Intent(getActivity(), Login.class);
             startActivity(intent);
         }
-        if (v.getId() == R.id.block_book_outside){
+        if (v.getId() == R.id.block_book_outside) {
             refreshSharedPreferences();
             Intent intent = new Intent(getActivity(), Infor_Appoitment_Activity.class);
             startActivity(intent);
         }
-        if (v.getId() == R.id.form_inside_one_above){
+        if (v.getId() == R.id.form_inside_one_above) {
             // menu nhắc lịch
         }
-        if (v.getId() == R.id.form_inside_two_above){
+        if (v.getId() == R.id.form_inside_two_above) {
             // menu quản lý đơn thuốc
+            Intent intent = new Intent(getActivity(), DrugUserManagement.class);
+            startActivity(intent);
         }
-        if (v.getId() == R.id.form_inside_three_below){
+        if (v.getId() == R.id.form_inside_three_below) {
             Intent intent = new Intent(getActivity(), EditProfile.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
-        if (v.getId() == R.id.btn_chat){
+        if (v.getId() == R.id.btn_chat) {
             Intent intent = new Intent(getActivity(), ListEmployee.class);
             startActivity(intent);
         }
-        if (v.getId() == R.id.form_inside_two_below){
+        if (v.getId() == R.id.form_inside_two_below) {
             Intent intent = new Intent(getActivity(), SearchDrugActivity.class);
             startActivity(intent);
         }
@@ -158,18 +167,17 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_notice_login_logout);
         Window window = dialog.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
         window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
+        if (Gravity.BOTTOM == center) {
             dialog.setCancelable(false);
-        }
-        else{
+        } else {
             dialog.setCancelable(true);
         }
         RelativeLayout btnCancel, btnLogin;
@@ -219,13 +227,20 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         menuChat = itemView.findViewById(R.id.btn_chat);
         // slide
         formSlide = itemView.findViewById(R.id.slide);
-        circleOne = itemView.findViewById(R.id.circle_one);listCircles.add(circleOne);
-        circleTwo = itemView.findViewById(R.id.circle_two);listCircles.add(circleTwo);
-        circleThree = itemView.findViewById(R.id.circle_three);listCircles.add(circleThree);
-        circleFour = itemView.findViewById(R.id.circle_four);listCircles.add(circleFour);
-        circleFive = itemView.findViewById(R.id.circle_five);listCircles.add(circleFive);
-        circleSix = itemView.findViewById(R.id.circle_six);listCircles.add(circleSix);
+        circleOne = itemView.findViewById(R.id.circle_one);
+        listCircles.add(circleOne);
+        circleTwo = itemView.findViewById(R.id.circle_two);
+        listCircles.add(circleTwo);
+        circleThree = itemView.findViewById(R.id.circle_three);
+        listCircles.add(circleThree);
+        circleFour = itemView.findViewById(R.id.circle_four);
+        listCircles.add(circleFour);
+        circleFive = itemView.findViewById(R.id.circle_five);
+        listCircles.add(circleFive);
+        circleSix = itemView.findViewById(R.id.circle_six);
+        listCircles.add(circleSix);
     }
+
     private void setViewFormUser() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         Intent intent = getActivity().getIntent();
@@ -234,18 +249,17 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             if (code == 1102) {
                 intent.removeExtra("requestCodeLoadingFormUser");
                 createProgressBarLoadingFormUser(currentUser);
-            }
-            else {
-                if (currentUser != null){
+            } else {
+                if (currentUser != null) {
                     setFormUser(true);
-                }
-                else {
+                } else {
                     setFormUser(false);
                 }
             }
         }
     }
-    private void createProgressBarLoadingFormUser(FirebaseUser currentUser){
+
+    private void createProgressBarLoadingFormUser(FirebaseUser currentUser) {
         loadingForm.setVisibility(View.VISIBLE);
         formUser.setVisibility(View.GONE);
         formLogin.setVisibility(View.GONE);
@@ -253,18 +267,18 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             @Override
             public void run() {
                 loadingForm.setVisibility(View.GONE);
-                if (currentUser != null){
+                if (currentUser != null) {
                     setFormUser(true);
-                }
-                else {
+                } else {
                     setFormUser(false);
                 }
             }
-        },2000);
+        }, 2000);
     }
+
     private void setImageAccount() {
         String profileString = sharedPreferences.getString("profile", "empty");
-        if (!profileString.equals("empty")){
+        if (!profileString.equals("empty")) {
             String[] array = profileString.split(";");
             if (array.length > 0) {
                 Picasso.get().load(array[1]).into(imageAccount);
@@ -296,9 +310,9 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                         double tempMinCelsius = tempMin - 273.15;
                         double tempMaxCelsius = tempMax - 273.15;
 
-                        double tempAverage = (double)(tempMinCelsius + tempMaxCelsius)/2.0;
+                        double tempAverage = (double) (tempMinCelsius + tempMaxCelsius) / 2.0;
                         int tempAverage_round = (int) Math.round(tempAverage);
-                        String tempAStr = String.valueOf(tempAverage_round)+"°C";
+                        String tempAStr = String.valueOf(tempAverage_round) + "°C";
                         if (getActivity() != null) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
@@ -316,6 +330,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             }
         }).start();
     }
+
     private void createCalendarAnimation() {
         final TranslateAnimation moveUp = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0,
                 Animation.RELATIVE_TO_SELF, 0,
@@ -365,6 +380,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         btnCalendar.startAnimation(moveUp);
         btnCalendar.startAnimation(moveUp);
     }
+
     private void createSlide() {
         slidePagerAdapter = new SlidePagerAdapter(getChildFragmentManager(), getLifecycle());
         formSlide.setAdapter(slidePagerAdapter);
@@ -407,7 +423,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             }
         }, 4000, 4000);
     }
-    private void setBackgroundCircle(int position){
+
+    private void setBackgroundCircle(int position) {
         if (isAdded()) {
             int color = ContextCompat.getColor(requireContext(), R.color.colorCircleSelected);
             int colorDefault = ContextCompat.getColor(requireContext(), R.color.mainColor);
@@ -422,13 +439,12 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void setFormUser(boolean b){
-        if (b){
+    private void setFormUser(boolean b) {
+        if (b) {
             setDataUser();
             formUser.setVisibility(View.VISIBLE);
             formLogin.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             formUser.setVisibility(View.GONE);
             formLogin.setVisibility(View.VISIBLE);
         }
@@ -439,20 +455,23 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             if (documentSnapshot.exists()) {
                 UserModel userModel = documentSnapshot.toObject(UserModel.class);
                 textName.setText(userModel.getFullName());
-                textGender_Birth.setText(userModel.getGender()+" - "+userModel.getBirth());
+                textGender_Birth.setText(userModel.getGender() + " - " + userModel.getBirth());
                 textHeight.setText(String.valueOf(userModel.getHeight()));
-                textWeight.setText(String.valueOf(userModel.getWeight())); ;
-                textBMI.setText(AndroidUtil.getBMI(userModel.getHeight(),userModel.getWeight()));
+                textWeight.setText(String.valueOf(userModel.getWeight()));
+                ;
+                textBMI.setText(AndroidUtil.getBMI(userModel.getHeight(), userModel.getWeight()));
             } else {
                 Log.e("ERROR", "User not found");
             }
         });
     }
+
     private void refreshSharedPreferences() {
-        setIndexSelectedSharedPreferences("indexDoctorSelected",0);
-        setIndexSelectedSharedPreferences("indexTimeSelected",-1);
+        setIndexSelectedSharedPreferences("indexDoctorSelected", 0);
+        setIndexSelectedSharedPreferences("indexTimeSelected", -1);
     }
-    private void setIndexSelectedSharedPreferences(String key, int value){
+
+    private void setIndexSelectedSharedPreferences(String key, int value) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(key, value);
         editor.apply();

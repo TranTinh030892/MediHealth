@@ -32,8 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.MainActivity;
-import com.example.medihealth.activitys.appointment.Infor_Appoitment_Activity;
+import com.example.medihealth.activities.MainActivity;
+import com.example.medihealth.activities.appointment.Infor_Appoitment_Activity;
 import com.example.medihealth.adapters.appointment.Employee_AppointmentAdapter;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.CustomToast;

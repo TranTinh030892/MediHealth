@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.appointment.Infor_Appoitment_Activity;
+import com.example.medihealth.activities.appointment.Infor_Appoitment_Activity;
 import com.example.medihealth.models.Doctor;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
