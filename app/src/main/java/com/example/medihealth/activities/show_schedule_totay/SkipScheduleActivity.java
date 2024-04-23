@@ -47,10 +47,10 @@ public class SkipScheduleActivity extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.toString().trim().length() > 0) {
-                        btnSend.setBackgroundColor(getResources().getColor(R.color.main_color));
+                        btnSend.setBackgroundResource(R.drawable.button_background_active);
                         btnSend.setTextColor(getResources().getColor(R.color.white));
                     }else{
-                        btnSend.setBackgroundColor(getResources().getColor(R.color.button_send));
+                        btnSend.setBackgroundResource(R.drawable.button_background_notactive);
                         btnSend.setTextColor(getResources().getColor(R.color.black));
                     }
                 }
@@ -71,10 +71,10 @@ public class SkipScheduleActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
                                 if (response.isSuccessful()) {
-                                    Toast.makeText(SkipScheduleActivity.this, "Successfully", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SkipScheduleActivity.this, "Đã xác nhận", Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(SkipScheduleActivity.this, ScheduleTodayActivity.class));
                                 } else {
-                                    Toast.makeText(SkipScheduleActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SkipScheduleActivity.this, "Lỗi xác nhận", Toast.LENGTH_SHORT).show();
                                 }
                             }
 

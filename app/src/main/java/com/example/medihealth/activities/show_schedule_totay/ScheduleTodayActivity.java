@@ -16,6 +16,8 @@ import com.example.medihealth.adapters.show_schedule_today.ScheduleApdapter;
 import com.example.medihealth.models.Schedule;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
 import com.example.medihealth.apiservices.ScheduleService;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ScheduleTodayActivity extends AppCompatActivity{
+    private FirebaseAuth mAuth;
     private RecyclerView scheRecyclerView;
     private ScheduleApdapter adapter;
     private ImageView imgBack;
@@ -35,6 +38,8 @@ public class ScheduleTodayActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_schedule);
 
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser account = mAuth.getCurrentUser();
         imgBack = findViewById(R.id.image_back);
         scheRecyclerView = findViewById(R.id.scheRecyclerView);
         scheRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -49,7 +54,7 @@ public class ScheduleTodayActivity extends AppCompatActivity{
         scheRecyclerView.setAdapter(adapter);
 
         ScheduleService scheduleService = RetrofitClient.createService(ScheduleService.class);
-        scheduleService.getScheduleToday("12345").enqueue(new Callback<List<Schedule>>() {
+        scheduleService.getScheduleToday(account.getUid()).enqueue(new Callback<List<Schedule>>() {
             @Override
             public void onResponse(Call<List<Schedule>> call, Response<List<Schedule>> response) {
                 if(response.isSuccessful() && response.body() != null && !response.body().isEmpty()){

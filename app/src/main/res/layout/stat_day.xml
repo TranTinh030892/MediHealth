@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background_color"
-    tools:context=".activities.ScheduleTodayActivity">
+    android:background="@color/background_color">
 
     <FrameLayout
         android:id="@+id/frame_layout_1"
@@ -57,17 +56,20 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 
-    <Spinner
-        android:id="@+id/spinnerDrugUser"
+    <EditText
+        android:id="@+id/editTextSelectDU"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:textSize="20dp"
+        android:textSize="16dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
-        android:background="@drawable/spinner_bg"/>
+        android:paddingLeft="10dp"
+        android:clickable="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <EditText
         android:id="@+id/editTextDate"
