@@ -36,20 +36,12 @@ public class Splash extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            setSharedPreferencesDataUser();
-            String currentUserId = user.getUid();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getAllUserIdAndCheck(currentUserId);
-                }
-            },2000);
-        } else {
-            Intent intent = new Intent(Splash.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkRole(user.getUid());
+            }
+        }, 2000);
     }
 
     @Override
@@ -74,7 +66,6 @@ public class Splash extends AppCompatActivity {
     private void checkUserOrEmployee(String currentUserId, List<String> listAllUserId){
         Intent intent;
         if (listAllUserId.contains(currentUserId)) {
-            checkProfile(currentUserId);
             intent = new Intent(Splash.this, MainActivity.class);
         } else {
             intent = new Intent(Splash.this, Employee_MainActivity.class);

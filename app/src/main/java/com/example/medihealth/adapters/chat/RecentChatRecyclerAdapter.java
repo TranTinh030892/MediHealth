@@ -2,6 +2,7 @@ package com.example.medihealth.adapters.chat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,10 +56,10 @@ public class RecentChatRecyclerAdapter extends FirestoreRecyclerAdapter<ChatRoom
                         holder.lastMessageTime.setText(lastMessTime);
 
                         holder.itemView.setOnClickListener(v -> {
+                            Log.e("CHECK","OKKKK");
                             //navigate to chat activity
                             Intent intent = new Intent(context, EmployeeChat_Activity.class);
                             AndroidUtil.passUserModelAsIntent(intent,userModel);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
                         });
 

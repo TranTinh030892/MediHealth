@@ -2,6 +2,7 @@ package com.example.medihealth.models;
 
 public class Appointment {
     private UserModel userModel;
+    private Relative relative;
     private String bookDate;
     private String appointmentDate;
     private String specialist;
@@ -16,6 +17,18 @@ public class Appointment {
     public Appointment(UserModel userModel,String bookDate, String appointmentDate, String specialist, Doctor doctor, String time,
                        String symptom, int stateAppointment) {
         this.userModel = userModel;
+        this.bookDate = bookDate;
+        this.appointmentDate = appointmentDate;
+        this.specialist = specialist;
+        this.doctor = doctor;
+        this.time = time;
+        this.symptom = symptom;
+        this.stateAppointment = stateAppointment;
+    }
+
+    public Appointment(Relative relative, String bookDate, String appointmentDate, String specialist,
+                       Doctor doctor, String time, String symptom, int stateAppointment) {
+        this.relative = relative;
         this.bookDate = bookDate;
         this.appointmentDate = appointmentDate;
         this.specialist = specialist;
@@ -87,5 +100,13 @@ public class Appointment {
 
     public void setStateAppointment(int stateAppointment) {
         this.stateAppointment = stateAppointment;
+    }
+
+    public Relative getRelative() {
+        return relative;
+    }
+
+    public void setRelative(Relative relative) {
+        this.relative = relative;
     }
 }

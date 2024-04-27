@@ -18,7 +18,6 @@ import com.example.medihealth.models.ChatMessage;
 import com.example.medihealth.models.ChatRoom;
 import com.example.medihealth.models.Employee;
 import com.example.medihealth.models.Token;
-import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -31,23 +30,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
 public class UserChat_Activity extends AppCompatActivity implements View.OnClickListener {
     Employee employee;
-    String chatroomId , employeeTokenId = "";
+    String chatroomId ;
     ChatRoom chatRoom;
     TextView textViewName;
     EditText editTextChat;
@@ -88,6 +76,7 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
             String message = editTextChat.getText().toString().trim();
             if (message.isEmpty())
                 return;
+            editTextChat.setText("");
             sendMessage(message);
         }
     }
@@ -144,14 +133,19 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if (task.isSuccessful()) {
-                            editTextChat.setText("");
+                            checkStateEmployee(message);
                         }
                     }
                 });
+        // repFirtMessage
+        feedBackFirtMessage();
+    }
+
+    private void checkStateEmployee(String message) {
         FirebaseFirestore.getInstance().collection("state").document(employee.getUserId()).get()
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        boolean state = task.getResult().getBoolean("isState");
+                .addOnCompleteListener(task1 -> {
+                    if(task1.isSuccessful()){
+                        boolean state = task1.getResult().getBoolean("isState");
                         if (!state){
                             sendMessagetoAllTokenId(message);
                         }
@@ -160,6 +154,39 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
                         Log.e("ERROR","ERROR");
                     }
                 });
+    }
+
+    private void feedBackFirtMessage() {
+        Query query = FirebaseUtil.getChatroomMessageReference(chatroomId);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null) {
+                    int documentCount = querySnapshot.size();
+                    if (documentCount == 1) {
+                        chatRoom.setLastMessageTimestamp(Timestamp.now());
+                        chatRoom.setLastMessageSenderId(employee.getUserId());
+                        String repMessage = "Xin chào, Cảm ơn bạn đã liên hệ với chúng tôi! Chúng tôi đã nhận được tin nhắn của bạn và sẽ sớm phản hồi lại bạn.";
+                        chatRoom.setLastMessage(repMessage);
+                        FirebaseUtil.getChatroomReference(chatroomId).set(chatRoom);
+
+                        ChatMessage chatMessageModel1 = new ChatMessage(repMessage, employee.getUserId(), Timestamp.now());
+                        FirebaseUtil.getChatroomMessageReference(chatroomId).add(chatMessageModel1)
+                                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                                        if (task.isSuccessful()) {
+                                        }
+                                    }
+                                });
+                    }
+                } else {
+                    System.err.println("Không thể lấy QuerySnapshot từ task.");
+                }
+            } else {
+                System.err.println("Lỗi trong quá trình truy vấn: " + task.getException());
+            }
+        });
     }
 
     private void sendMessagetoAllTokenId(String message) {

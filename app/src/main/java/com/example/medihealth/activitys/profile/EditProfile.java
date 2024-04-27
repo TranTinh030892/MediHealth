@@ -45,7 +45,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
+        setContentView(R.layout.activity_edit_profile_user);
         initView();
         setOnlick();
         setupUserDetail();
@@ -75,7 +75,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
                 UserModel userModel = task.getResult().toObject(UserModel.class);
-                setupViewDetail(userModel);
+                if (userModel != null){
+                    setupViewDetail(userModel);
+                }
             }
             else {
                 Log.e("ERROR","Lỗi kết nối");
@@ -100,10 +102,11 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.back_btn){
-            finish();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         }
         if (v.getId() == R.id.btn_edit){
-            showComfirm(Gravity.CENTER);
+            setupView(true);
         }
         if (v.getId() == R.id.enterBook){
             saveUserDetail();
@@ -114,48 +117,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private void showComfirm(int center) {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_dialog_notice_login_logout);
-        Window window = dialog.getWindow();
-        if (window == null){
-            return;
-        }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        WindowManager.LayoutParams windowAttributes = window.getAttributes();
-        windowAttributes.gravity = center;
-        window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
-            dialog.setCancelable(false);
-        }
-        else{
-            dialog.setCancelable(true);
-        }
-        RelativeLayout btnCancel, btnEdit, blockTitle;
-        TextView textEdit;
-        btnCancel = dialog.findViewById(R.id.cancel);
-        btnEdit = dialog.findViewById(R.id.agree);
-        blockTitle = dialog.findViewById(R.id.title);
-        textEdit = dialog.findViewById(R.id.textAgree);
-        textEdit.setText("Sửa");
-        blockTitle.setVisibility(View.GONE);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setupView(true);
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
     private void showDialogCalendar(int center) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

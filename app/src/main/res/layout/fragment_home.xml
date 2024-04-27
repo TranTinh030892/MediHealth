@@ -140,8 +140,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_below="@id/fullName_user"
                                         android:layout_marginTop="3dp"
-                                        android:textSize="15sp"
-                                        android:text="Nam - 03/08/1992"/>
+                                        android:textSize="15sp"/>
                                 </RelativeLayout>
                             </RelativeLayout>
                             //
@@ -474,9 +473,9 @@
                                         android:id="@+id/icon_wallet"
                                         android:layout_width="50dp"
                                         android:layout_height="52dp"
-                                        android:layout_marginTop="14dp"
+                                        android:layout_marginTop="11dp"
                                         android:layout_centerHorizontal="true"
-                                        android:src="@drawable/wallet" />
+                                        android:src="@drawable/statistics" />
                                 </RelativeLayout>
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -485,7 +484,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_centerHorizontal="true"
                                     android:fontFamily="sans-serif-medium"
-                                    android:text="Thanh toán"
+                                    android:text="Thống kê"
                                     android:textColor="#012537"
                                     android:textSize="12sp" />
                             </RelativeLayout>

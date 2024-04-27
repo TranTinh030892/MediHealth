@@ -139,7 +139,9 @@ public class FirebaseUtil {
     public static String timestampToString(Timestamp timestamp){
         return new SimpleDateFormat("HH:MM").format(timestamp.toDate());
     }
-
+    public static CollectionReference getDrugCollectionReference(){
+        return FirebaseFirestore.getInstance().collection("medicine");
+    }
     public static void logout(){
         FirebaseAuth.getInstance().signOut();
     }
@@ -149,7 +151,9 @@ public class FirebaseUtil {
     public static DocumentReference getNotificationDetailsById(String notificationId){
         return FirebaseFirestore.getInstance().collection("notification").document(notificationId);
     }
-
+    public static CollectionReference getRelativeCollectionReference(){
+        return FirebaseFirestore.getInstance().collection("relative");
+    }
     public static void sendMessageNotificationtoEmployeeTokenId(String requestCode,String message,String tokenId) {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
@@ -172,14 +176,15 @@ public class FirebaseUtil {
             }
         });
     }
-    public static void sendMessageNotificationtoCustomerTokenId(String requestCode,String tokenId) {
+    public static void sendMessageNotificationToCustomerTokenId(String requestCode,String tokenId,
+    String title, String body) {
         try {
             JSONObject jsonObject = new JSONObject();
 
             JSONObject dataObj = new JSONObject();
             dataObj.put("requestCode", requestCode);
-            dataObj.put("title", "Đặt lịch khám thành công");
-            dataObj.put("body", "Bạn đã đặt lịch khám thành công tại Medihealth");
+            dataObj.put("title", title);
+            dataObj.put("body", body);
             jsonObject.put("data", dataObj);
             jsonObject.put("to", tokenId);
 
@@ -210,17 +215,6 @@ public class FirebaseUtil {
             }
         });
     }
-//    public static StorageReference  getCurrentProfilePicStorageRef(){
-//        return FirebaseStorage.getInstance().getReference().child("profile_pic")
-//                .child(FirebaseUtil.currentUserId());
-//    }
-
-//    public static StorageReference  getOtherProfilePicStorageRef(String otherUserId){
-//        return FirebaseStorage.getInstance().getReference().child("profile_pic")
-//                .child(otherUserId);
-//    }
-
-
 }
 
 

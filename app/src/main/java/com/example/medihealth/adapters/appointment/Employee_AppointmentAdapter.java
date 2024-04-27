@@ -15,6 +15,7 @@ import com.example.medihealth.R;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.Doctor;
 import com.example.medihealth.models.NotificationModel;
+import com.example.medihealth.models.Relative;
 import com.example.medihealth.models.Token;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;
@@ -51,10 +52,16 @@ public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appoin
         }
 
         UserModel userModel = model.getUserModel();
-        if (userModel != null) {
+        Relative relative = model.getRelative();
+        if (userModel != null && relative == null) {
             holder.userName.setText(userModel.getFullName());
             holder.userPhonenumber.setText(userModel.getPhoneNumber());
-        } else {
+        }
+        else if (userModel == null && relative != null){
+            holder.userName.setText(relative.getFullName());
+            holder.userPhonenumber.setText(relative.getPhoneNumber());
+        }
+        else {
             holder.userName.setText("");
             holder.userPhonenumber.setText("");
         }

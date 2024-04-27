@@ -1,5 +1,8 @@
 package com.example.medihealth.fragments.CustomerFragment;
 
+import static androidx.fragment.app.FragmentManager.TAG;
+
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -135,12 +138,14 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         if (v.getId() == R.id.form_inside_one_above){
             // menu nhắc lịch
         }
+        if (v.getId() == R.id.form_inside_one_below){
+            // thong ke
+        }
         if (v.getId() == R.id.form_inside_two_above){
             // menu quản lý đơn thuốc
         }
         if (v.getId() == R.id.form_inside_three_below){
             Intent intent = new Intent(getActivity(), EditProfile.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
         if (v.getId() == R.id.btn_chat){
@@ -434,17 +439,24 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     private void setDataUser() {
-        FirebaseUtil.currentUserDetails().get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                UserModel userModel = documentSnapshot.toObject(UserModel.class);
-                textName.setText(userModel.getFullName());
-                textGender_Birth.setText(userModel.getGender()+" - "+userModel.getBirth());
-                textHeight.setText(String.valueOf(userModel.getHeight()));
-                textWeight.setText(String.valueOf(userModel.getWeight())); ;
-                textBMI.setText(AndroidUtil.getBMI(userModel.getHeight(),userModel.getWeight()));
+        FirebaseUtil.currentUserDetails().addSnapshotListener((snapshot, e) -> {
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e);
+                return;
+            }
+            if (snapshot != null && snapshot.exists()) {
+                UserModel userModel = snapshot.toObject(UserModel.class);
+                if (userModel != null) {
+                    textName.setText(userModel.getFullName());
+                    textGender_Birth.setText(userModel.getGender() + " - " + userModel.getBirth());
+                    textHeight.setText(String.valueOf(userModel.getHeight()));
+                    textWeight.setText(String.valueOf(userModel.getWeight()));
+                    textBMI.setText(AndroidUtil.getBMI(userModel.getHeight(), userModel.getWeight()));
+                }
             } else {
-                Log.e("ERROR", "User not found");
+                Log.d(TAG, "Current data: null");
             }
         });
     }

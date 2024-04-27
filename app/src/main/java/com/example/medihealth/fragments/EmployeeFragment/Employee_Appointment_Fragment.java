@@ -43,6 +43,7 @@ import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -234,11 +235,10 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
     private void setupRecyclerViewData(String dateStr, String search) {
         String nameSearch = standardizedFullName(search);
 
-        Query query = FirebaseUtil.getAppointmentCollectionReference()
-                .whereEqualTo("bookDate", dateStr)
-                .whereGreaterThanOrEqualTo("userModel.fullName", nameSearch)
-                .whereLessThan("userModel.fullName", nameSearch + "\uf8ff")
-                .whereEqualTo("stateAppointment", btnSelected);
+        Query query = FirebaseUtil.getAppointmentCollectionReference().where(Filter.and(
+                Filter.equalTo("bookDate", dateStr),
+                Filter.equalTo("stateAppointment", btnSelected)
+        ));
 
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
                 .setQuery(query, Appointment.class).build();
@@ -390,7 +390,10 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
             if (task.isSuccessful()){
                 Appointment appointment = task.getResult().toObject(Appointment.class);
                 if (appointment != null){
-                    pushNotification(appointment);
+                    String title = "Đặt lịch khám thành công";
+                    String body = "Quý khách đã đặt lịch khám thành công tại Medihealth. Trân thành cảm ơn và hân hạnh được " +
+                            "phục vụ quý khách";
+                    saveNotification(appointment,title,body);
                     String userId = appointment.getUserModel().getUserId();
                     sendMessagetoCustomerTokenId(userId);
                 }
@@ -411,7 +414,10 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
                     if (token != null) {
                         List<String> tokenList = token.getTokenList();
                         for (String tokenString : tokenList){
-                            FirebaseUtil.sendMessageNotificationtoCustomerTokenId("customer",tokenString);
+                            String title = "Đặt lịch khám thành công";
+                            String body = "Quý khách đã đặt lịch khám thành công tại Medihealth. Trân thành cảm ơn và hân hạnh được " +
+                                    "phục vụ quý khách";
+                            FirebaseUtil.sendMessageNotificationToCustomerTokenId("customer",tokenString,title,body);
                         }
                     }
                 }
@@ -422,10 +428,7 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
         });
     }
 
-    private void pushNotification(Appointment appointment) {
-        String title = "Đặt lịch khám thành công";
-        String body = "Quý khách đã đặt lịch khám thành công tại Medihealth. Trân thành cảm ơn và hân hạnh được " +
-                "phục vụ quý khách";
+    private void saveNotification(Appointment appointment,String title,String body) {
         boolean seen = false;
         Timestamp timestamp = Timestamp.now();
         String userId = appointment.getUserModel().getUserId();

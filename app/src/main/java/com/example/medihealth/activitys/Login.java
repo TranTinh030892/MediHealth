@@ -206,24 +206,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         Intent intent = googleSignInClient.getSignInIntent();
         startActivityForResult(intent,RC_SIGN_IN);
     }
-    private void checkProfile(String userId) {
-        FirebaseFirestore.getInstance().collection("users")
-                .document(userId)
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.e("ERROR", "Listen failed.", e);
-                        }
-                        if (documentSnapshot.exists() && !documentSnapshot.getData().isEmpty()) {
-                            checkRole(userId);
-                        } else {
-                            Intent intent = new Intent(Login.this, Profile.class);
-                            startActivity(intent);
-                        }
-                    }
-                });
-    }
     private void checkRole(String currentUserid) {
         addTokenId();
         FirebaseFirestore.getInstance().collection("role")
@@ -357,7 +339,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    getAllUserIdAndCheck(currentUserid);
+                                    checkRole(currentUserid);
                                 }
                             }, 2000);
                         }
@@ -388,7 +370,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                 });
                             }
                             String currentUserid = mAuth.getCurrentUser().getUid();
-                            getAllUserIdAndCheck(currentUserid);
+                            checkRole(currentUserid);
                         }
                         else {
                             CustomToast.showToast(getApplicationContext(),"Lỗi kết nối mạng",Toast.LENGTH_LONG);
@@ -404,26 +386,26 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         editor.apply();
 
     }
-    private void getAllUserIdAndCheck(String currentUserId){
-        FirebaseFirestore.getInstance().collection("users").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                List<String> listAllUserId = new ArrayList<>();
-                QuerySnapshot querySnapshot = task.getResult();
-                for (QueryDocumentSnapshot document : querySnapshot) {
-                    listAllUserId.add(document.getId());
-                }
-                checkUserOrEmployee(currentUserId, listAllUserId);
-            } else {
-                Log.e("ERROR","ERROR");
-            }
-        });
-    }
-    private void checkUserOrEmployee(String currentUserId,List<String> listAllUserId){
-        if (listAllUserId.contains(currentUserId)){
-            checkProfile(currentUserId);
-        }
-        else checkRole(currentUserId);
-    }
+//    private void getAllUserIdAndCheck(String currentUserId){
+//        FirebaseFirestore.getInstance().collection("users").get().addOnCompleteListener(task -> {
+//            if (task.isSuccessful()){
+//                List<String> listAllUserId = new ArrayList<>();
+//                QuerySnapshot querySnapshot = task.getResult();
+//                for (QueryDocumentSnapshot document : querySnapshot) {
+//                    listAllUserId.add(document.getId());
+//                }
+//                checkUserOrEmployee(currentUserId, listAllUserId);
+//            } else {
+//                Log.e("ERROR","ERROR");
+//            }
+//        });
+//    }
+//    private void checkUserOrEmployee(String currentUserId,List<String> listAllUserId){
+//        if (listAllUserId.contains(currentUserId)){
+//            checkProfile(currentUserId);
+//        }
+//        else checkRole(currentUserId);
+//    }
     private void setSharedPreferencesDataEmployee() {
         FirebaseUtil.currentEmployeeDetails().get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {

@@ -20,6 +20,15 @@
             android:textSize="20dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"/>
+        <ImageButton
+            android:layout_width="32dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/icon_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/white"
+            android:layout_marginTop="6dp"
+            android:id="@+id/back_btn"/>
     </RelativeLayout>
 <!--    #EDEDED-->
     <androidx.cardview.widget.CardView
@@ -65,16 +74,9 @@
         android:layout_height="match_parent"
         android:layout_below="@id/block_menu">
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_Appointment"
+            android:id="@+id/list_drug"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-        <ProgressBar
-            android:id="@+id/loading"
-            android:visibility="gone"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:layout_width="35dp"
-            android:layout_height="35dp"/>
     </RelativeLayout>
 
 </RelativeLayout>

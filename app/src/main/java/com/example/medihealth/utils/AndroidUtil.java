@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.AppointmentDTO;
+import com.example.medihealth.models.Drug;
 import com.example.medihealth.models.Employee;
 import com.example.medihealth.models.UserModel;
 
@@ -45,29 +46,26 @@ public class AndroidUtil {
         employee.setTokenId(intent.getStringExtra("tokenId"));
         return employee;
     }
-    public static void passAppointmentDTOAsIntent(Intent intent, AppointmentDTO model){
-        intent.putExtra("userName",model.getUserName());
-        intent.putExtra("bookDate",model.getBookDate());
-        intent.putExtra("appointmentDate",model.getAppointmentDate());
-        intent.putExtra("specialist",model.getSpecialist());
-        intent.putExtra("doctorId",model.getDoctorId());
-        intent.putExtra("doctorName",model.getDoctorName());
-        intent.putExtra("time",model.getTime());
-        intent.putExtra("symptom",model.getSymptom());
-        intent.putExtra("stateAppointment",model.getStateAppointment());
+    public static void passDrugModelAsIntent(Intent intent, Drug model){
+        intent.putExtra("name",model.getName());
+        intent.putExtra("ingredients",model.getIngredients());
+        intent.putExtra("function",model.getFunction());
+        intent.putExtra("expiry",model.getExpiry());
+        intent.putExtra("sideEffects",model.getSideEffects());
+        intent.putExtra("contraindicated",model.getContraindicated());
+        intent.putExtra("interactions",model.getInteractions());
     }
-    public static AppointmentDTO getAppointmentDTOFromIntent(Intent intent){
-        AppointmentDTO appointmentDTO = new AppointmentDTO();
-        appointmentDTO.setUserName(intent.getStringExtra("userName"));
-        appointmentDTO.setBookDate(intent.getStringExtra("bookDate"));
-        appointmentDTO.setAppointmentDate(intent.getStringExtra("appointmentDate"));
-        appointmentDTO.setSpecialist(intent.getStringExtra("specialist"));
-        appointmentDTO.setDoctorId(intent.getStringExtra("doctorId"));
-        appointmentDTO.setDoctorName(intent.getStringExtra("doctorName"));
-        appointmentDTO.setTime(intent.getStringExtra("time"));
-        appointmentDTO.setSymptom(intent.getStringExtra("symptom"));
-        appointmentDTO.setStateAppointment(intent.getIntExtra("stateAppointment",-1));
-        return appointmentDTO;
+
+    public static Drug getDrugModelFromIntent(Intent intent){
+        Drug drug = new Drug();
+        drug.setName(intent.getStringExtra("name"));
+        drug.setIngredients(intent.getStringExtra("ingredients"));
+        drug.setFunction(intent.getStringExtra("function"));
+        drug.setExpiry(intent.getStringExtra("expiry"));
+        drug.setSideEffects(intent.getStringExtra("sideEffects"));
+        drug.setContraindicated(intent.getStringExtra("contraindicated"));
+        drug.setInteractions(intent.getStringExtra("interactions"));
+        return drug;
     }
     public static void setProfilePic(Context context, Uri imageUri, ImageView imageView){
         Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(imageView);

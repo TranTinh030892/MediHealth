@@ -6,19 +6,25 @@ public class Doctor {
     private String phoneNumber;
     private String degree;
     private String specialist;
-    private double price;
+    private String experience;
+    private String achievement;
+    private String work;
+    private int price;
     private String doctorId;
 
     public Doctor() {
     }
 
-    public Doctor(String fullName, String gender, String phoneNumber, String degree,
-                  String specialist, double price, String doctorId) {
+    public Doctor(String fullName, String gender, String phoneNumber, String degree, String specialist,
+                  String experience, String achievement, String work, int price, String doctorId) {
         this.fullName = fullName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.degree = degree;
         this.specialist = specialist;
+        this.experience = experience;
+        this.achievement = achievement;
+        this.work = work;
         this.price = price;
         this.doctorId = doctorId;
     }
@@ -63,11 +69,35 @@ public class Doctor {
         this.specialist = specialist;
     }
 
-    public double getPrice() {
+    public String getExperience() {
+        return experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
+    }
+
+    public String getAchievement() {
+        return achievement;
+    }
+
+    public void setAchievement(String achievement) {
+        this.achievement = achievement;
+    }
+
+    public String getWork() {
+        return work;
+    }
+
+    public void setWork(String work) {
+        this.work = work;
+    }
+
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

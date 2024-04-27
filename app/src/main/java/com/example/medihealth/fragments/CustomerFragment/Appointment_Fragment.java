@@ -20,6 +20,7 @@ import com.example.medihealth.adapters.appointment.Customer_AppoitnmentAdapter;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.Query;
 
 import java.util.Arrays;
@@ -80,9 +81,10 @@ public class Appointment_Fragment extends Fragment implements View.OnClickListen
         }
     }
     private void setupAppointmentRecyclerView(String currentId) {
-        Query query = FirebaseUtil.getAppointmentCollectionReference()
-                .whereEqualTo("userModel.userId",currentId)
-                .whereIn("stateAppointment", Arrays.asList(0, 1,-1));
+        Query query = FirebaseUtil.getAppointmentCollectionReference().where(Filter.or(
+                Filter.equalTo("userModel.userId",currentId),
+                Filter.equalTo("relative.userId",currentId)
+        ));
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
                 .setQuery(query,Appointment.class).build();
         appoitnmentAdapter = new Customer_AppoitnmentAdapter(options,getContext());
