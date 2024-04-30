@@ -1,7 +1,10 @@
 package com.example.medihealth.utils;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import com.example.medihealth.models.Token;
 import com.example.medihealth.models.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -9,7 +12,9 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
@@ -172,6 +177,29 @@ public class FirebaseUtil {
             }
         });
     }
+
+    public static void sendNotifyDataChange() {
+        Query query = FirebaseUtil.getTokenId().whereEqualTo("userId",FirebaseAuth.getInstance().getUid());
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                    Token token = documentSnapshot.toObject(Token.class);
+                    if (token != null) {
+                        List<String> tokenList = token.getTokenList();
+                        for (String tokenString : tokenList){
+                            sendMessageNotificationtoCustomerTokenId("notify_data_changed", tokenString);
+                        }
+                    }
+                }
+            }
+            else {
+                Log.e("ERROR","Lỗi kết nối");
+            }
+        });
+    }
+
     public static void sendMessageNotificationtoCustomerTokenId(String requestCode,String tokenId) {
         try {
             JSONObject jsonObject = new JSONObject();

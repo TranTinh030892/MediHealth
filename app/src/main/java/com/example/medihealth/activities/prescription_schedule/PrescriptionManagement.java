@@ -3,9 +3,12 @@ package com.example.medihealth.activities.prescription_schedule;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.medihealth.R;
 import com.example.medihealth.adapters.prescription_schedule.PrescriptionAdapter;
@@ -25,6 +29,7 @@ import com.example.medihealth.retrofitcustom.LocalDateAdapter;
 import com.example.medihealth.retrofitcustom.LocalDateTimeAdapter;
 import com.example.medihealth.retrofitcustom.LocalTimeAdapter;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
+import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -50,6 +55,9 @@ public class PrescriptionManagement extends AppCompatActivity {
     List<Prescription> prescriptions = new ArrayList<>();
     PrescriptionAdapter prescriptionAdapter;
     static DrugUser drugUser;
+    RelativeLayout defaultView;
+    LinearLayout loadingView;
+    SwipeRefreshLayout srlRefresh;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +77,12 @@ public class PrescriptionManagement extends AppCompatActivity {
             }
         });
 
+        srlRefresh = findViewById(R.id.srl_refresh);
+        srlRefresh.setOnRefreshListener(() -> {
+            getData();
+            srlRefresh.setRefreshing(false);
+        });
+
         fabCreatePrescription = findViewById(R.id.fab_create_prescription);
         fabCreatePrescription.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +97,13 @@ public class PrescriptionManagement extends AppCompatActivity {
             }
         });
 
+        defaultView = findViewById(R.id.default_view);
+        loadingView = findViewById(R.id.loading_view);
+        loadingView.setVisibility(View.VISIBLE);
+        defaultView.setVisibility(View.GONE);
+
         rcvListPrescription = findViewById(R.id.rcv_list_prescription);
+        rcvListPrescription.setVisibility(View.GONE);
         rcvListPrescription.setLayoutManager(new LinearLayoutManager(this));
         rcvListPrescription.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -121,6 +141,18 @@ public class PrescriptionManagement extends AppCompatActivity {
         rcvListPrescription.setAdapter(prescriptionAdapter);
     }
 
+    private void showDefaultView() {
+        rcvListPrescription.setVisibility(View.GONE);
+        loadingView.setVisibility(View.GONE);
+        defaultView.setVisibility(View.VISIBLE);
+    }
+
+    private void showListView() {
+        loadingView.setVisibility(View.GONE);
+        defaultView.setVisibility(View.GONE);
+        rcvListPrescription.setVisibility(View.VISIBLE);
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private void savePrescription(Prescription prescription) {
         PrescriptionService prescriptionService = RetrofitClient.createService(PrescriptionService.class);
@@ -143,6 +175,7 @@ public class PrescriptionManagement extends AppCompatActivity {
                     prescriptionAdapter.notifyDataSetChanged();
                 }
                 SyncService.sync(PrescriptionManagement.this);
+                FirebaseUtil.sendNotifyDataChange();
                 Log.i("ACTIVE_PRESCRIPTION", response.body().getMessage());
             }
 
@@ -183,12 +216,18 @@ public class PrescriptionManagement extends AppCompatActivity {
                             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                             .create();
-                    prescriptions.addAll(gson.fromJson(
+                    List<Prescription> results = gson.fromJson(
                             new Gson().toJson(responseObject.getData()),
                             new TypeToken<List<Prescription>>() {
                             }.getType()
-                    ));
+                    );
+                    if (results.isEmpty()) {
+                        showDefaultView();
+                        return;
+                    }
+                    prescriptions.addAll(results);
                     prescriptionAdapter.notifyDataSetChanged();
+                    showListView();
                 }
                 Log.i("GET_PRESCRIPTIONS", response.body().getMessage());
             }

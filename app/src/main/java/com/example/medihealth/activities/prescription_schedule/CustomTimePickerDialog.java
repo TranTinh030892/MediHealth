@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 
 import com.example.medihealth.R;
 
+import java.time.LocalTime;
+
 public class CustomTimePickerDialog extends Dialog {
 
     TextView tvTitle;
@@ -31,6 +33,9 @@ public class CustomTimePickerDialog extends Dialog {
         this.tpTime = findViewById(R.id.tp_time);
         this.btnNegative = findViewById(R.id.btn_negative);
         this.btnPositive = findViewById(R.id.btn_positive);
+
+        tpTime.setHour(LocalTime.now().getHour());
+        tpTime.setMinute(LocalTime.now().getMinute());
 
         setCancelable(false);
         Window window = getWindow();

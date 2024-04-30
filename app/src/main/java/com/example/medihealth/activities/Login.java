@@ -27,10 +27,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activities.chat.Employee_MainActivity;
+import com.example.medihealth.activities.prescription_schedule.SyncService;
 import com.example.medihealth.activities.profile.Profile;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Employee;
 import com.example.medihealth.models.Token;
+import com.example.medihealth.services.RemindService;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -240,6 +242,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                 Intent intent = null;
                                 if (isRole == 3) {
                                     intent = new Intent(Login.this, MainActivity.class);
+                                    SyncService.sync(Login.this);
                                 } else if (isRole == 2){
                                     intent = new Intent(Login.this, Employee_MainActivity.class);
                                     intent.putExtra("requestCodeEmployee", 1103);

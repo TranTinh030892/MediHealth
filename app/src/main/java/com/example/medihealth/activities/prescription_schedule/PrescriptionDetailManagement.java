@@ -29,6 +29,7 @@ import com.example.medihealth.retrofitcustom.LocalDateAdapter;
 import com.example.medihealth.retrofitcustom.LocalDateTimeAdapter;
 import com.example.medihealth.retrofitcustom.LocalTimeAdapter;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
+import com.example.medihealth.utils.FirebaseUtil;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -302,6 +303,7 @@ public class PrescriptionDetailManagement extends AppCompatActivity {
                             Toast.LENGTH_SHORT
                     ).show();
                     SyncService.sync(PrescriptionDetailManagement.this);
+                    FirebaseUtil.sendNotifyDataChange();
                     // Back to prescription management
                     finish();
                 } else {

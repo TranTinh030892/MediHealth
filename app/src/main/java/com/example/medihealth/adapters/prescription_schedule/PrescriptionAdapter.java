@@ -9,6 +9,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
@@ -86,7 +87,7 @@ public class PrescriptionAdapter extends RecyclerView.Adapter<PrescriptionAdapte
     public static class PrescriptionViewHolder extends RecyclerView.ViewHolder {
 
         TextView title;
-        Switch status;
+        SwitchCompat status;
 
         public PrescriptionViewHolder(@NonNull View itemView) {
             super(itemView);

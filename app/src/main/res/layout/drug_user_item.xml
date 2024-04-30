@@ -15,32 +15,38 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="1"
         android:paddingStart="10dp"
+        android:text="1"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         tools:ignore="HardcodedText,MissingConstraints,RtlSymmetry" />
 
-    <TextView
-        android:id="@+id/tv_drug_user_name"
+    <RelativeLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:layout_weight="4"
-        android:text="Trịnh Bá Hàm"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        tools:ignore="HardcodedText,MissingConstraints" />
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/iv_drug_user_more"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:contentDescription="more"
-        android:src="@drawable/ic_more_vert_24"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:ignore="HardcodedText,MissingConstraints" />
+        <TextView
+            android:id="@+id/tv_drug_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/iv_drug_user_more"
+            android:text="Trịnh Bá Hàm"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            tools:ignore="HardcodedText,MissingConstraints" />
+
+        <ImageView
+            android:id="@+id/iv_drug_user_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="more"
+            android:src="@drawable/ic_more_vert_24"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:ignore="HardcodedText,MissingConstraints" />
+    </RelativeLayout>
 
 </LinearLayout>

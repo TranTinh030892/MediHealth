@@ -6,6 +6,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.example.medihealth.models.Schedule;
@@ -35,7 +36,7 @@ public class RemindScheduler {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(context, RemindReceiver.class);
-        intent.putExtra("schedule", schedule);
+        intent.putExtra("schedule_id", schedule.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
                 Math.toIntExact(schedule.getId()),
@@ -43,7 +44,7 @@ public class RemindScheduler {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
         );
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        Log.e("REMIND_SCHEDULE", String.format("Created, notification of schedule_id: %d will show in : %dms", schedule.getId(), timeToPushNotification));
+        Log.i("REMIND_SCHEDULE", String.format("Created, notification of schedule_id: %d will show in : %dms", schedule.getId(), timeToPushNotification));
     }
 
     public static void cancelRemind(Context context, Schedule schedule) {
@@ -66,7 +67,7 @@ public class RemindScheduler {
         long timeToPushNotification = calendar.getTimeInMillis() - now.getTimeInMillis();
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(context, RemindReceiver.class);
-        intent.putExtra("schedule", schedule);
+        intent.putExtra("schedule_id", schedule.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
                 Math.toIntExact(schedule.getId()),
@@ -74,6 +75,6 @@ public class RemindScheduler {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
         );
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        Log.e("REMIND_SCHEDULE", String.format("Snoozed, notification of schedule_id: %d will show in : %dms", schedule.getId(), timeToPushNotification));
+        Log.v("REMIND_SCHEDULE", String.format("Snoozed, notification of schedule_id: %d will show in : %dms", schedule.getId(), timeToPushNotification));
     }
 }

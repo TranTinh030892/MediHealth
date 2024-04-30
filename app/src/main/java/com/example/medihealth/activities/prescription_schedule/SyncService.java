@@ -41,7 +41,7 @@ public class SyncService {
             @Override
             public void onResponse(List<Schedule> schedules) {
                 schedules.forEach((schedule) -> {
-                    Log.e("SCHEDULE", String.format("{id: %d, active: %b}", schedule.getId(), schedule.isActive()));
+                    Log.i("SCHEDULE", String.format("{id: %d, active: %b}", schedule.getId(), schedule.isActive()));
                     if (schedule.isActive()
                             && schedule.getPrescription().isActive()
                             && schedule.getPrescription().getDrugUser().isActive()) {

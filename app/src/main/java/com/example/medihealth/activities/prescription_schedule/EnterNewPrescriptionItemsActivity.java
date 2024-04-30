@@ -1,5 +1,6 @@
 package com.example.medihealth.activities.prescription_schedule;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -103,6 +104,7 @@ public class EnterNewPrescriptionItemsActivity extends AppCompatActivity impleme
         prescription = (Prescription) bundle.getSerializable("prescription");
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void addPrescriptionItemToList() {
         EditText etName = findViewById(R.id.et_name);
         EditText etNote = findViewById(R.id.et_note);

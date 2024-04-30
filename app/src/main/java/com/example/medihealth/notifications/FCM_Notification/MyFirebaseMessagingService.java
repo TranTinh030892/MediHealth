@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -17,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import com.example.medihealth.R;
 import com.example.medihealth.activities.MainActivity;
 import com.example.medihealth.activities.chat.EmployeeChat_Activity;
+import com.example.medihealth.activities.prescription_schedule.SyncService;
 import com.example.medihealth.models.NotificationDismissReceiver;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
@@ -39,6 +39,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String title = remoteMessage.getData().get("title");
             String body = remoteMessage.getData().get("body");
             String userId = remoteMessage.getData().get("userId");
+            if (requestCode.equalsIgnoreCase("notify_data_changed")) {
+                SyncService.sync(this);
+                return;
+            }
             if(requestCode.equals("employee")){
                 if (isCloseNotice.equals("Yes")){
                     return;

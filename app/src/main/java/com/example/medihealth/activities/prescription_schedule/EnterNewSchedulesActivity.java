@@ -25,6 +25,7 @@ import com.example.medihealth.models.Prescription;
 import com.example.medihealth.models.ResponseObject;
 import com.example.medihealth.models.Schedule;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
+import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -117,7 +118,6 @@ public class EnterNewSchedulesActivity extends AppCompatActivity implements Item
         CustomTimePickerDialog timePickerDialog = new CustomTimePickerDialog(this);
         timePickerDialog.setIs24HourView(true);
         timePickerDialog.setTitle("Thêm mới");
-        timePickerDialog.setTime(LocalTime.NOON.getHour(), 0);
         timePickerDialog.setNegativeButton("Hủy", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,6 +196,7 @@ public class EnterNewSchedulesActivity extends AppCompatActivity implements Item
                             Toast.LENGTH_SHORT
                     ).show();
                     SyncService.sync(EnterNewSchedulesActivity.this);
+                    FirebaseUtil.sendNotifyDataChange();
                 } else {
                     Toast.makeText(
                             EnterNewSchedulesActivity.this,

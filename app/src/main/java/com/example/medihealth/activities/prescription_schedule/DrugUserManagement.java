@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,8 +50,11 @@ public class DrugUserManagement extends AppCompatActivity {
     DrugUserAdapter drugUserAdapter;
     FloatingActionButton fabAddDrugUser;
     TextView tvToolbar;
+    ImageView btnBackToolbar;
     SwipeRefreshLayout srlListDrugUser;
     RecyclerView rcvListDrugUser;
+    RelativeLayout listView, defaultView;
+    LinearLayout loadingView;
 
 
     @Override
@@ -57,6 +63,17 @@ public class DrugUserManagement extends AppCompatActivity {
         setContentView(R.layout.activity_drug_user_management);
         tvToolbar = findViewById(R.id.tv_toolbar);
         tvToolbar.setText("Người dùng thuốc");
+        btnBackToolbar = findViewById(R.id.btn_back_toolbar);
+        btnBackToolbar.setOnClickListener((v) -> {
+            finish();
+        });
+
+        loadingView = findViewById(R.id.loading_view);
+        listView = findViewById(R.id.list_view);
+        defaultView = findViewById(R.id.default_view);
+        loadingView.setVisibility(View.VISIBLE);
+        listView.setVisibility(View.GONE);
+        defaultView.setVisibility(View.GONE);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             String[] permissions = new String[]{Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS};
@@ -73,12 +90,9 @@ public class DrugUserManagement extends AppCompatActivity {
         });
 
         srlListDrugUser = findViewById(R.id.srl_list_drug_user);
-        srlListDrugUser.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getData();
-                srlListDrugUser.setRefreshing(false);
-            }
+        srlListDrugUser.setOnRefreshListener(() -> {
+            getData();
+            srlListDrugUser.setRefreshing(false);
         });
 
         drugUserAdapter = new DrugUserAdapter(drugUsers, new CustomOnClickListener<DrugUser>() {
@@ -176,7 +190,12 @@ public class DrugUserManagement extends AppCompatActivity {
                     drugUsers = new Gson().fromJson(new Gson().toJson(data),
                             new TypeToken<List<DrugUser>>() {
                             }.getType());
+                    if (drugUsers.isEmpty()) {
+                        showDefaultView();
+                        return;
+                    }
                     drugUserAdapter.setData(drugUsers);
+                    showListView();
                 }
                 Log.i("GET_LIST_DRUG_USER", response.body().getMessage());
             }
@@ -186,6 +205,18 @@ public class DrugUserManagement extends AppCompatActivity {
                 Log.e("GET_LIST_DRUG_USER", Objects.requireNonNull(t.getMessage()));
             }
         });
+    }
+
+    private void showDefaultView() {
+        listView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.GONE);
+        defaultView.setVisibility(View.VISIBLE);
+    }
+
+    private void showListView() {
+        defaultView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.GONE);
+        listView.setVisibility(View.VISIBLE);
     }
 
     private void addDrugUser(DrugUser newDrugUser) {

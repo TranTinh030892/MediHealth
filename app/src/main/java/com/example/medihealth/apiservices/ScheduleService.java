@@ -18,7 +18,7 @@ public interface ScheduleService {
     @GET("schedule")
     Call<ResponseObject> getAllByUser(@Query("uid") String uid);
 
-    @GET("schedule/{id}/status")
-    Call<ResponseObject> checkStatus(@Path("id") Long id);
+    @GET("schedule/{id}")
+    Call<ResponseObject> getById(@Path("id") Long id);
 
 }

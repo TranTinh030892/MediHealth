@@ -24,6 +24,9 @@
 
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
     <application
         android:name=".applications.MainApplication"
         android:allowBackup="true"
@@ -131,7 +134,7 @@
         <receiver android:name=".receiver.RemindReceiver" />
         <receiver android:name=".receiver.SnoozeRemindReceiver" />
         <receiver
-            android:name="com.example.medihealth.receiver.BootReceiver"
+            android:name=".receiver.BootReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

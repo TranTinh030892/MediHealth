@@ -23,7 +23,7 @@ public class RemindService extends Service {
     private static final int ID = 114;
     public static final String CHANNEL_ID = "4953";
     Timer timer;
-    private final long INTERVAL = 30 * 60 * 1000; // update sau mỗi 30p
+    private final long INTERVAL = 8 * 60 * 60 * 1000; // update sau mỗi 8h
 
     @Nullable
     @Override
@@ -40,7 +40,7 @@ public class RemindService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("MediHealth")
                 .setContentText("Dịch vụ nhắc lịch uống thuốc đang hoạt động")
-                .setSmallIcon(R.drawable.icon_alarm_2)
+                .setSmallIcon(R.drawable.ic_notification_active_20)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setAutoCancel(true);
 
