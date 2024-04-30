@@ -36,7 +36,7 @@
             android:layout_height="24dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="3dp"
-            android:background="@drawable/edit"
+            android:background="@drawable/edit_icon"
             android:layout_alignParentEnd="true"
             android:backgroundTint="@color/white"/>
     </RelativeLayout>
@@ -64,12 +64,12 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/image_account"
                     android:layout_centerHorizontal="true"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:src="@drawable/profile"/>
                 <RelativeLayout
                     android:layout_below="@id/image_account"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="8dp"
                     android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">

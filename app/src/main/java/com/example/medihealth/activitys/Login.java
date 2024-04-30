@@ -40,6 +40,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -334,12 +335,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            String currentUserid = mAuth.getCurrentUser().getUid();
                             showDialogLoadingLogin(Gravity.CENTER);
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    checkRole(currentUserid);
+                                    if (email.contains("nhanvien")){
+                                        String currentUserId = FirebaseUtil.currentUserId();
+                                        checkRole(currentUserId);
+                                    }
+                                    else checkProfile();
                                 }
                             }, 2000);
                         }
@@ -365,18 +369,43 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                 FirebaseUtil.roleUser().set(role).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        Log.e("LOGIN_GOOGLE_RESULT","SUCESSFULL");
+                                        checkProfile();
                                     }
                                 });
                             }
-                            String currentUserid = mAuth.getCurrentUser().getUid();
-                            checkRole(currentUserid);
                         }
                         else {
                             CustomToast.showToast(getApplicationContext(),"Lỗi kết nối mạng",Toast.LENGTH_LONG);
                         }
                     }
                 });
+    }
+
+    private void checkProfile() {
+        String currentUserId = FirebaseUtil.currentUserId();
+        Query query = FirebaseUtil.allUserCollectionReference()
+                .whereEqualTo("userId",currentUserId);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot snapshot = task.getResult();
+                    if (snapshot != null) {
+                        int size = snapshot.size();
+                        if (size == 0){
+                            Intent intent = new Intent(Login.this, Profile.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                        else checkRole(currentUserId);
+                    } else {
+                        Log.e("ERROR","Không có kết quả trả về");
+                    }
+                } else {
+                    Log.d("TAG", "Lỗi khi lấy dữ liệu: ", task.getException());
+                }
+            }
+        });
     }
 
     private void setSharedPreferences(String displayName, Uri photoUrl) {
@@ -386,26 +415,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         editor.apply();
 
     }
-//    private void getAllUserIdAndCheck(String currentUserId){
-//        FirebaseFirestore.getInstance().collection("users").get().addOnCompleteListener(task -> {
-//            if (task.isSuccessful()){
-//                List<String> listAllUserId = new ArrayList<>();
-//                QuerySnapshot querySnapshot = task.getResult();
-//                for (QueryDocumentSnapshot document : querySnapshot) {
-//                    listAllUserId.add(document.getId());
-//                }
-//                checkUserOrEmployee(currentUserId, listAllUserId);
-//            } else {
-//                Log.e("ERROR","ERROR");
-//            }
-//        });
-//    }
-//    private void checkUserOrEmployee(String currentUserId,List<String> listAllUserId){
-//        if (listAllUserId.contains(currentUserId)){
-//            checkProfile(currentUserId);
-//        }
-//        else checkRole(currentUserId);
-//    }
+
     private void setSharedPreferencesDataEmployee() {
         FirebaseUtil.currentEmployeeDetails().get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {

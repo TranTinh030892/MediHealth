@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activitys.profile.Profile">
+    android:background="@color/white"
+    tools:context=".activitys.profile.EditProfileRelative">
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
@@ -17,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hồ sơ"
+            android:text="Sửa hồ sơ"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:fontFamily="sans-serif-medium"
@@ -32,13 +33,33 @@
             android:backgroundTint="@color/white"
             android:layout_centerVertical="true"
             android:id="@+id/back_btn"/>
+        <ImageButton
+            android:id="@+id/btn_edit"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/edit_icon"
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="@color/white"/>
+        <ImageButton
+            android:id="@+id/icon_delete"
+            android:visibility="gone"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/trash"
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="@color/white"/>
     </RelativeLayout>
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_below="@id/top_layout"
+        android:layout_above="@id/bottom_Layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <RelativeLayout
             android:id="@+id/body"
             android:paddingStart="15dp"
@@ -66,13 +87,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:id="@+id/name_account"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/btnRelationship"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:paddingTop="1.5dp"
+                        android:paddingBottom="1.5dp"
+                        android:textColor="@color/white"
+                        android:textSize="10.5sp"
                         android:fontFamily="sans-serif-medium"
-                        android:textColor="@color/text_Color"
-                        android:textSize="16dp"/>
-
+                        android:backgroundTint="@color/colorCircleSelected"
+                        android:background="@drawable/custom_button_google"
+                        android:gravity="center_vertical|center_horizontal"/>
                 </RelativeLayout>
             </RelativeLayout>
 
@@ -106,6 +133,7 @@
                     android:layout_below="@id/top_block_two"
                     android:paddingStart="10dp"
                     android:layout_marginTop="10dp"
+                    android:enabled="false"
                     android:singleLine="true"
                     android:textColor="@color/text_Color"
                     android:layout_width="match_parent"
@@ -116,7 +144,7 @@
             <RelativeLayout
                 android:id="@+id/block_three"
                 android:layout_below="@id/block_two"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RelativeLayout
@@ -145,6 +173,7 @@
                     android:paddingStart="10dp"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/text_Color"
+                    android:enabled="false"
                     android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -154,7 +183,7 @@
             <RelativeLayout
                 android:id="@+id/block_four"
                 android:layout_below="@id/block_three"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RelativeLayout
@@ -182,6 +211,7 @@
                     android:layout_below="@id/top_block_four"
                     android:paddingStart="10dp"
                     android:layout_marginTop="10dp"
+                    android:enabled="false"
                     android:singleLine="true"
                     android:textColor="@color/text_Color"
                     android:layout_width="match_parent"
@@ -192,7 +222,7 @@
             <RelativeLayout
                 android:id="@+id/block_five"
                 android:layout_below="@id/block_four"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RelativeLayout
@@ -229,6 +259,7 @@
                             android:paddingTop="10dp"
                             android:layout_marginTop="10dp"
                             android:textSize="18dp"
+                            android:enabled="false"
                             android:textColor="@color/text_Color"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -256,11 +287,13 @@
                         <RadioButton
                             android:id="@+id/male"
                             android:text="Nam"
+                            android:enabled="false"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <RadioButton
                             android:id="@+id/female"
                             android:text="Nữ"
+                            android:enabled="false"
                             android:layout_marginLeft="40dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -304,6 +337,7 @@
                         android:layout_below="@id/top_block_six_col_one"
                         android:paddingStart="10dp"
                         android:layout_marginTop="10dp"
+                        android:enabled="false"
                         android:singleLine="true"
                         android:textColor="@color/text_Color"
                         android:layout_width="match_parent"
@@ -342,6 +376,7 @@
                         android:layout_below="@id/top_block_six_col_two"
                         android:paddingStart="10dp"
                         android:layout_marginTop="10dp"
+                        android:enabled="false"
                         android:textColor="@color/text_Color"
                         android:singleLine="true"
                         android:layout_width="match_parent"
@@ -349,18 +384,59 @@
                         android:background="@drawable/custom_edittext_profile"/>
                 </RelativeLayout>
             </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/block_seven"
+                android:layout_below="@id/block_six"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:id="@+id/top_block_seven"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/title_relationship"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Quan hệ"
+                        android:textColor="@color/text_Color"
+                        android:textSize="17dp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:text="*"
+                        android:textColor="@color/Red"
+                        android:layout_toEndOf="@id/title_relationship"/>
+                </RelativeLayout>
+                <EditText
+                    android:id="@+id/relationship"
+                    android:layout_below="@id/top_block_seven"
+                    android:paddingStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/text_Color"
+                    android:enabled="false"
+                    android:singleLine="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_edittext_profile"/>
+            </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/bottom_Layout"
-        app:cardElevation="7dp"
+        app:cardElevation="8dp"
         android:background="@color/white"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="77dp">
         <RelativeLayout
             android:id="@+id/enterBook"
+            android:visibility="gone"
             android:background="@drawable/custom_button"
             android:clickable="true"
             android:layout_marginTop="12dp"
@@ -379,5 +455,27 @@
                 android:fontFamily="sans-serif-medium"
                 android:textColor="@color/white"/>
         </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/delete"
+            android:background="@drawable/custom_btn_detail_doctor"
+            android:clickable="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <TextView
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Xóa hồ sơ"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/mainColor"/>
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
+
 </RelativeLayout>

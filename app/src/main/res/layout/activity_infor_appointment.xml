@@ -66,10 +66,10 @@ tools:context=".activitys.appointment.Infor_Appoitment_Activity">
             android:layout_height="wrap_content">
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_user"
-                android:layout_width="57dp"
+                android:layout_width="53dp"
                 android:src="@drawable/profile"
                 android:padding="3dp"
-                android:layout_height="57dp"/>
+                android:layout_height="53dp"/>
             <RelativeLayout
                 android:id="@+id/form"
                 android:layout_toEndOf="@id/image_user"
@@ -136,7 +136,7 @@ tools:context=".activitys.appointment.Infor_Appoitment_Activity">
                         android:layout_height="wrap_content"
                         android:text="Chọn ngày khám"
                         android:textColor="@color/text_Color"
-                        android:textSize="19sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -173,13 +173,12 @@ tools:context=".activitys.appointment.Infor_Appoitment_Activity">
 
                     <TextView
                         android:id="@+id/textSpecialist"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Chuyên khoa"
                         android:textColor="@color/text_Color"
-                        android:textSize="19sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
-
                     <TextView
                         android:id="@+id/specialist"
                         android:layout_width="match_parent"
@@ -188,7 +187,7 @@ tools:context=".activitys.appointment.Infor_Appoitment_Activity">
                         android:layout_marginTop="15dp"
                         android:background="@drawable/edit_text_book"
                         android:gravity="center_vertical"
-                        android:text="Tất cả"
+                        android:text="Chưa xác định"
                         android:textColor="@color/text_Color"
                         android:paddingStart="8dp"
                         android:textSize="17sp" />
@@ -217,7 +216,7 @@ tools:context=".activitys.appointment.Infor_Appoitment_Activity">
                         android:layout_height="wrap_content"
                         android:text="Bác sĩ"
                         android:textColor="@color/text_Color"
-                        android:textSize="19sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -280,7 +279,7 @@ tools:context=".activitys.appointment.Infor_Appoitment_Activity">
                         android:layout_height="wrap_content"
                         android:text="Giờ khám mong muốn"
                         android:textColor="@color/text_Color"
-                        android:textSize="19sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/listTime"
@@ -340,7 +339,7 @@ tools:context=".activitys.appointment.Infor_Appoitment_Activity">
                         android:layout_height="wrap_content"
                         android:text="Chọn người tới khám"
                         android:textColor="@color/text_Color"
-                        android:textSize="19sp"
+                        android:textSize="18sp"
                         android:textStyle="bold"/>
                     <RelativeLayout
                         android:layout_below="@id/text_block_person"
@@ -378,7 +377,6 @@ tools:context=".activitys.appointment.Infor_Appoitment_Activity">
                                 android:layout_marginTop="6dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="QUẢNG"
                                 android:textSize="17dp"
                                 android:textColor="@color/text_Color"
                                 android:fontFamily="sans-serif-medium"/>
@@ -463,7 +461,7 @@ tools:context=".activitys.appointment.Infor_Appoitment_Activity">
                         android:layout_height="wrap_content"
                         android:text="Triệu chứng"
                         android:textColor="@color/text_Color"
-                        android:textSize="19sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <EditText
@@ -480,6 +478,7 @@ tools:context=".activitys.appointment.Infor_Appoitment_Activity">
                         android:textColorHint="@color/text_Color"
                         android:hint="Nhập triệu chứng..." />
                 </RelativeLayout>
+
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
@@ -504,7 +503,7 @@ tools:context=".activitys.appointment.Infor_Appoitment_Activity">
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đặt lịch"
+            android:text="Tiếp theo"
             android:textAllCaps="false"
             android:textSize="20sp"
             android:fontFamily="sans-serif-medium"

@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -51,7 +52,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
     EditText fullName, phoneNumber, address,  height, weight;
     TextView birth;
     RadioButton male, female;
-    Button save;
+    RelativeLayout save;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +64,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
     }
     private void initView() {
         imageAccount = findViewById(R.id.image_account);
-        title = findViewById(R.id.title);
+        title = findViewById(R.id.name_account);
         setImageAndTitle();
         btnBack = findViewById(R.id.back_btn);
         fullName = findViewById(R.id.fullName_user);
@@ -75,7 +76,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         weight = findViewById(R.id.weight_user);
         male = findViewById(R.id.male);
         female = findViewById(R.id.female);
-        save = findViewById(R.id.btn_save);
+        save = findViewById(R.id.enterBook);
     }
 
     private void setImageAndTitle() {
@@ -84,7 +85,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
             String[] array = profileString.split(";");
             if (array.length > 0) {
                 Picasso.get().load(array[1]).into(imageAccount);
-                title.setText("Xin chào "+array[0]);
+                title.setText("Xin chào, "+array[0]);
             } else {
                 Log.e("ERROR", "profileString rỗng");
             }
@@ -98,7 +99,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
     }
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_save){
+        if (v.getId() == R.id.enterBook){
             // kiểm tra điều kiện dữ liệu
             String name = fullName.getText().toString();
             String gender = "";
@@ -137,15 +138,20 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
             UserModel userModel = new UserModel(name, gender, phone, addressUser, birthUser, userHeight, userWeight, Timestamp.now(), currentUser.getUid());
             FirebaseFirestore.getInstance().collection("users").document(currentUser.getUid()).set(userModel).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    Log.d("SUCCESSFULL", "Save UserInfor Success");
+                    CustomToast.showToast(getApplicationContext(),"Lưu thành công",Toast.LENGTH_SHORT);
                 } else {
-                    Log.e("ERROR", "Lỗi kết nối mạng");
+                    CustomToast.showToast(getApplicationContext(),"Lưu không thành công",Toast.LENGTH_SHORT);
                 }
             });
 
             // Chuyển activity
-            Intent intent = new Intent(Profile.this, MainActivity.class);
-            startActivity(intent);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(Profile.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }, 3000);
         }
         else if (v.getId() == R.id.back_btn){
             SharedPreferences.Editor editor = sharedPreferences.edit();

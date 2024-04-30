@@ -73,10 +73,24 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
         // Khởi tạo GoogleSignInClient
         googleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
         initView(itemView);
+        setupUserImage();
         setInforUser();
         setOnclick();
         return itemView;
     }
+
+    private void setupUserImage() {
+        String profileString = sharedPreferences.getString("profile", "empty");
+        if (!profileString.equals("empty")){
+            String[] array = profileString.split(";");
+            if (array.length > 0) {
+                Picasso.get().load(array[1]).into(imageAccount);
+            } else {
+                Log.e("ERROR", "profileString rỗng");
+            }
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -113,7 +127,7 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
             if (documentSnapshot.exists()) {
                 UserModel userModel = documentSnapshot.toObject(UserModel.class);
                 userName.setText(userModel.getFullName());
-                userGenderBirth.setText(userModel.getBirth());
+                userGenderBirth.setText(userModel.getGender()+" - "+ userModel.getBirth());
             } else {
                 Log.e("ERROR", "User not found");
             }

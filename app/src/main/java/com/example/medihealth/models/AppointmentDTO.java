@@ -1,29 +1,44 @@
 package com.example.medihealth.models;
 
 public class AppointmentDTO {
-    private String userName;
+    private String userId;
+    private String relativePhoneNumber;
+    private String doctorId;
+    private String specialist;
+    private String time;
     private String bookDate;
     private String appointmentDate;
-    private String specialist;
-    private String doctorId;
-    private String doctorName;
-    private String time;
     private String symptom;
-    private int stateAppointment;
 
     public AppointmentDTO() {
     }
-    public AppointmentDTO(String userName,String bookDate, String appointmentDate, String specialist,String doctorId,
-                          String doctorName, String time, String symptom, int stateAppointment) {
-        this.userName = userName;
+
+    public AppointmentDTO(String userId, String relativePhoneNumber, String doctorId,
+                          String specialist, String time, String bookDate, String appointmentDate, String symptom) {
+        this.userId = userId;
+        this.relativePhoneNumber = relativePhoneNumber;
+        this.doctorId = doctorId;
+        this.specialist = specialist;
+        this.time = time;
         this.bookDate = bookDate;
         this.appointmentDate = appointmentDate;
-        this.specialist = specialist;
-        this.doctorId = doctorId;
-        this.doctorName = doctorName;
-        this.time = time;
         this.symptom = symptom;
-        this.stateAppointment = stateAppointment;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getRelativePhoneNumber() {
+        return relativePhoneNumber;
+    }
+
+    public void setRelativePhoneNumber(String relativePhoneNumber) {
+        this.relativePhoneNumber = relativePhoneNumber;
     }
 
     public String getDoctorId() {
@@ -34,12 +49,20 @@ public class AppointmentDTO {
         this.doctorId = doctorId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getSpecialist() {
+        return specialist;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setSpecialist(String specialist) {
+        this.specialist = specialist;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getBookDate() {
@@ -58,43 +81,11 @@ public class AppointmentDTO {
         this.appointmentDate = appointmentDate;
     }
 
-    public String getSpecialist() {
-        return specialist;
-    }
-
-    public void setSpecialist(String specialist) {
-        this.specialist = specialist;
-    }
-
-    public String getDoctorName() {
-        return doctorName;
-    }
-
-    public void setDoctorName(String doctorName) {
-        this.doctorName = doctorName;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     public String getSymptom() {
         return symptom;
     }
 
     public void setSymptom(String symptom) {
         this.symptom = symptom;
-    }
-
-    public int getStateAppointment() {
-        return stateAppointment;
-    }
-
-    public void setStateAppointment(int stateAppointment) {
-        this.stateAppointment = stateAppointment;
     }
 }

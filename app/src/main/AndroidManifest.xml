@@ -16,11 +16,26 @@
         android:theme="@style/Theme.MediHealth"
         tools:targetApi="31">
         <activity
+            android:name=".activitys.profile.EditProfileRelative"
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible"/>
+        <activity
+            android:name=".activitys.profile.AddRelative"
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible"/>
+        <activity
+            android:name=".activitys.appointment.ConfirmAppointment"
+            android:exported="false" />
+        <activity
+            android:name=".activitys.profile.ListProfile"
+            android:exported="false" />
+        <activity
             android:name=".activitys.Search.DrugDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".activitys.profile.EditProfile"
-            android:exported="false" />
+            android:name=".activitys.profile.EditProfileUser"
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible"/>
         <activity
             android:name=".activitys.Search.SearchDrugActivity"
             android:exported="false"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activitys.profile.Profile">
+    tools:context=".activitys.profile.AddRelative">
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
@@ -37,6 +37,7 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_below="@id/top_layout"
+        android:layout_above="@id/bottom_Layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
@@ -59,23 +60,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/profile"/>
-                <RelativeLayout
-                    android:layout_below="@id/image_account"
-                    android:layout_marginTop="6dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/name_account"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:textColor="@color/text_Color"
-                        android:textSize="16dp"/>
-
-                </RelativeLayout>
             </RelativeLayout>
-
             <RelativeLayout
                 android:id="@+id/block_two"
                 android:layout_below="@id/block_one"
@@ -116,7 +101,7 @@
             <RelativeLayout
                 android:id="@+id/block_three"
                 android:layout_below="@id/block_two"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RelativeLayout
@@ -154,7 +139,7 @@
             <RelativeLayout
                 android:id="@+id/block_four"
                 android:layout_below="@id/block_three"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RelativeLayout
@@ -192,7 +177,7 @@
             <RelativeLayout
                 android:id="@+id/block_five"
                 android:layout_below="@id/block_four"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RelativeLayout
@@ -271,7 +256,7 @@
             <RelativeLayout
                 android:id="@+id/block_six"
                 android:layout_below="@id/block_five"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -348,6 +333,45 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/custom_edittext_profile"/>
                 </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/block_seven"
+                android:layout_below="@id/block_six"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:id="@+id/top_block_seven"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/title_relative"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đây là hồ sơ của ai ?"
+                        android:textColor="@color/text_Color"
+                        android:textSize="17dp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:text="*"
+                        android:textColor="@color/Red"
+                        android:layout_toEndOf="@id/title_relative"/>
+                </RelativeLayout>
+                <EditText
+                    android:id="@+id/relationship"
+                    android:layout_below="@id/top_block_seven"
+                    android:paddingStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/text_Color"
+                    android:singleLine="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_edittext_profile"/>
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
@@ -360,7 +384,7 @@
         android:layout_width="match_parent"
         android:layout_height="77dp">
         <RelativeLayout
-            android:id="@+id/enterBook"
+            android:id="@+id/btn_saveRelative"
             android:background="@drawable/custom_button"
             android:clickable="true"
             android:layout_marginTop="12dp"

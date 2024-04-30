@@ -1,5 +1,6 @@
 package com.example.medihealth.activitys;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,12 +16,15 @@ import com.example.medihealth.activitys.chat.Employee_MainActivity;
 import com.example.medihealth.activitys.profile.Profile;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -36,12 +40,19 @@ public class Splash extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkRole(user.getUid());
-            }
-        }, 2000);
+        if (user == null){
+            Intent intent = new Intent(this, Login.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+        else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkProfile(user.getUid());
+                }
+            }, 2000);
+        }
     }
 
     @Override
@@ -49,48 +60,31 @@ public class Splash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
     }
-    private void getAllUserIdAndCheck(String currentUserId){
-        FirebaseFirestore.getInstance().collection("users").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                List<String> listAllUserId = new ArrayList<>();
-                QuerySnapshot querySnapshot = task.getResult();
-                for (QueryDocumentSnapshot document : querySnapshot) {
-                    listAllUserId.add(document.getId());
-                }
-                checkUserOrEmployee(currentUserId, listAllUserId);
-            } else {
-                Log.e("ERROR","ERROR");
-            }
-        });
-    }
-    private void checkUserOrEmployee(String currentUserId, List<String> listAllUserId){
-        Intent intent;
-        if (listAllUserId.contains(currentUserId)) {
-            intent = new Intent(Splash.this, MainActivity.class);
-        } else {
-            intent = new Intent(Splash.this, Employee_MainActivity.class);
-        }
-        intent.putExtra("requestCodeLoadingFormUser", 1102);
-        startActivity(intent);
-        finish();
-    }
+
     private void checkProfile(String userId) {
-        FirebaseFirestore.getInstance().collection("users")
-                .document(userId)
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.e("ERROR", "Listen failed.", e);
-                        }
-                        if (documentSnapshot.exists() && !documentSnapshot.getData().isEmpty()) {
-                            checkRole(userId);
-                        } else {
+        Query query = FirebaseUtil.allUserCollectionReference()
+                .whereEqualTo("userId",userId);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot snapshot = task.getResult();
+                    if (snapshot != null) {
+                        int size = snapshot.size();
+                        if (size == 0){
                             Intent intent = new Intent(Splash.this, Profile.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                         }
+                        else checkRole(userId);
+                    } else {
+                        Log.e("ERROR","Không có kết quả trả về");
                     }
-                });
+                } else {
+                    Log.d("TAG", "Lỗi khi lấy dữ liệu: ", task.getException());
+                }
+            }
+        });
     }
     private void checkRole(String currentUserid) {
         FirebaseFirestore.getInstance().collection("role")

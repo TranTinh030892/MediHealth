@@ -1,11 +1,12 @@
 package com.example.medihealth.activitys.profile;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,26 +18,24 @@ import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.Login;
 import com.example.medihealth.activitys.MainActivity;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.squareup.picasso.Picasso;
 
-public class EditProfile extends AppCompatActivity implements View.OnClickListener {
+public class EditProfileUser extends AppCompatActivity implements View.OnClickListener {
+    SharedPreferences sharedPreferences;
     ImageButton btnBack,btnEdit;
+    ImageView imageAccount;
     EditText fullName, phoneNumber, address, height, weight;
     RadioButton  male, female;
     TextView birth;
@@ -46,14 +45,17 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile_user);
+        sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         initView();
         setOnlick();
+        setupUserImage();
         setupUserDetail();
     }
 
     private void initView() {
         btnBack = findViewById(R.id.back_btn);
         btnEdit = findViewById(R.id.btn_edit);
+        imageAccount = findViewById(R.id.image_account);
         fullName = findViewById(R.id.fullName_user);
         phoneNumber = findViewById(R.id.phoneNumber_user);
         address = findViewById(R.id.address_user);
@@ -70,6 +72,17 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         btnEdit.setOnClickListener(this);
         birth.setOnClickListener(this);
         btnSave.setOnClickListener(this);
+    }
+    private void setupUserImage() {
+        String profileString = sharedPreferences.getString("profile", "empty");
+        if (!profileString.equals("empty")){
+            String[] array = profileString.split(";");
+            if (array.length > 0) {
+                Picasso.get().load(array[1]).into(imageAccount);
+            } else {
+                Log.e("ERROR", "profileString rỗng");
+            }
+        }
     }
     private void setupUserDetail() {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {

@@ -37,7 +37,7 @@ import com.example.medihealth.activitys.Login;
 import com.example.medihealth.activitys.Search.SearchDrugActivity;
 import com.example.medihealth.activitys.appointment.Infor_Appoitment_Activity;
 import com.example.medihealth.activitys.chat.ListEmployee;
-import com.example.medihealth.activitys.profile.EditProfile;
+import com.example.medihealth.activitys.profile.ListProfile;
 import com.example.medihealth.adapters.main.SlidePagerAdapter;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
@@ -145,7 +145,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             // menu quản lý đơn thuốc
         }
         if (v.getId() == R.id.form_inside_three_below){
-            Intent intent = new Intent(getActivity(), EditProfile.class);
+            Intent intent = new Intent(getActivity(), ListProfile.class);
             startActivity(intent);
         }
         if (v.getId() == R.id.btn_chat){
