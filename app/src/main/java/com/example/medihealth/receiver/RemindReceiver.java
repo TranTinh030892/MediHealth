@@ -40,7 +40,6 @@ public class RemindReceiver extends BroadcastReceiver {
 
     private final static String TAG = "REMIND_RECEIVER";
     private static final int CLICK_CODE = 0;
-    private static final int SNOOZE_CODE = 1;
 
 
     public interface MyCallback {
@@ -80,7 +79,7 @@ public class RemindReceiver extends BroadcastReceiver {
         snoozeIntent.putExtra("schedule", schedule);
         PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(
                 context,
-                SNOOZE_CODE,
+                getResultCode(),
                 snoozeIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE
         );
