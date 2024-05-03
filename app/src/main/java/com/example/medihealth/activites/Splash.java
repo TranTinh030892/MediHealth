@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys;
+package com.example.medihealth.activites;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,7 +12,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.chat.Employee_MainActivity;
+import com.example.medihealth.activites.chat.Employee_MainActivity;
 import com.example.medihealth.trang.profile.activity.Profile;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.trang.login.activity.Login;

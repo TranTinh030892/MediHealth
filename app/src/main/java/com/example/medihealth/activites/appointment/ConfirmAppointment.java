@@ -1,10 +1,8 @@
-package com.example.medihealth.activitys.appointment;
+package com.example.medihealth.activites.appointment;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,7 +23,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.MainActivity;
+import com.example.medihealth.activites.MainActivity;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.AppointmentConfirm;
 import com.example.medihealth.models.AppointmentDTO;
@@ -39,8 +37,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
-
-import java.util.Calendar;
 
 public class ConfirmAppointment extends AppCompatActivity implements View.OnClickListener{
     SharedPreferences sharedPreferences;

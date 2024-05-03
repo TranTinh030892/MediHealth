@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 import com.example.medihealth.R;
 import com.example.medihealth.trang.login.activity.Login;
-import com.example.medihealth.activitys.MainActivity;
+import com.example.medihealth.activites.MainActivity;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.UserModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;

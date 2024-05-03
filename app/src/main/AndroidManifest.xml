@@ -16,7 +16,7 @@
         android:theme="@style/Theme.MediHealth"
         tools:targetApi="31">
         <activity
-            android:name=".activitys.appointment.DoctorDetail"
+            android:name=".activites.appointment.DoctorDetail"
             android:exported="false" />
         <activity
             android:name=".trang.profile.activity.EditProfileRelative"
@@ -27,7 +27,7 @@
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activitys.appointment.ConfirmAppointment"
+            android:name=".activites.appointment.ConfirmAppointment"
             android:exported="false" />
         <activity
             android:name=".trang.profile.activity.ListProfile"
@@ -44,16 +44,16 @@
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activitys.appointment.Infor_Appoitment_Activity"
+            android:name=".activites.appointment.Infor_Appoitment_Activity"
             android:exported="false" />
         <activity
-            android:name=".activitys.chat.EmployeeChat_Activity"
+            android:name=".activites.chat.EmployeeChat_Activity"
             android:exported="false" />
         <activity
-            android:name=".activitys.chat.Employee_MainActivity"
+            android:name=".activites.chat.Employee_MainActivity"
             android:exported="false" />
         <activity
-            android:name=".activitys.chat.ListEmployee"
+            android:name=".activites.chat.ListEmployee"
             android:exported="false" />
         <activity
             android:name=".trang.login.activity.Login"
@@ -64,14 +64,14 @@
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activitys.MainActivity"
+            android:name=".activites.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".activitys.chat.UserChat_Activity"
+            android:name=".activites.chat.UserChat_Activity"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activitys.Splash"
+            android:name=".activites.Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

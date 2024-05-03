@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys.appointment;
+package com.example.medihealth.activites.appointment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -32,7 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.MainActivity;
+import com.example.medihealth.activites.MainActivity;
 import com.example.medihealth.trang.profile.activity.AddRelative;
 import com.example.medihealth.adapters.appointment.DoctorAdapter;
 import com.example.medihealth.adapters.appointment.RelativeAdapter;

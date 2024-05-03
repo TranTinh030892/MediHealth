@@ -1,18 +1,14 @@
-package com.example.medihealth.activitys.chat;
+package com.example.medihealth.activites.chat;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.MainActivity;
 import com.example.medihealth.adapters.chat.EmployeeAdapter;
 import com.example.medihealth.models.Employee;
 import com.example.medihealth.utils.FirebaseUtil;

@@ -22,10 +22,9 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.MainActivity;
+import com.example.medihealth.activites.MainActivity;
 import com.example.medihealth.models.Token;
 import com.example.medihealth.models.UserModel;
-import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
