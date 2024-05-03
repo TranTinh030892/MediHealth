@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activitys.Search.SearchDrugActivity">
+    tools:context=".trang.search.activity.SearchDrugActivity">
     <RelativeLayout
         android:id="@+id/top_layout"
         android:background="@drawable/custom_top_layout_appointment"

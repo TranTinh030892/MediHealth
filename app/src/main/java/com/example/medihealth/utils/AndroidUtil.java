@@ -72,6 +72,7 @@ public class AndroidUtil {
     }
     public static void passAppoitmentConfirmModelAsIntent(Intent intent, AppointmentConfirm model){
         intent.putExtra("personName",model.getPersonName());
+        intent.putExtra("personPhone",model.getPhoneNumber());
         intent.putExtra("relationship",model.getRelationship());
         intent.putExtra("gender",model.getGender());
         intent.putExtra("birth",model.getBirth());
@@ -84,6 +85,7 @@ public class AndroidUtil {
     public static AppointmentConfirm getAppointmentConfirmModelFromIntent(Intent intent){
         AppointmentConfirm appointmentConfirm = new AppointmentConfirm();
         appointmentConfirm.setPersonName(intent.getStringExtra("personName"));
+        appointmentConfirm.setPhoneNumber(intent.getStringExtra("personPhone"));
         appointmentConfirm.setRelationship(intent.getStringExtra("relationship"));
         appointmentConfirm.setGender(intent.getStringExtra("gender"));
         appointmentConfirm.setBirth(intent.getStringExtra("birth"));
@@ -139,6 +141,7 @@ public class AndroidUtil {
     }
     public static void passDrugModelAsIntent(Intent intent, Drug model){
         intent.putExtra("name",model.getName());
+        intent.putExtra("image",model.getImage());
         intent.putExtra("ingredients",model.getIngredients());
         intent.putExtra("function",model.getFunction());
         intent.putExtra("expiry",model.getExpiry());
@@ -150,6 +153,7 @@ public class AndroidUtil {
     public static Drug getDrugModelFromIntent(Intent intent){
         Drug drug = new Drug();
         drug.setName(intent.getStringExtra("name"));
+        drug.setImage(intent.getStringExtra("image"));
         drug.setIngredients(intent.getStringExtra("ingredients"));
         drug.setFunction(intent.getStringExtra("function"));
         drug.setExpiry(intent.getStringExtra("expiry"));

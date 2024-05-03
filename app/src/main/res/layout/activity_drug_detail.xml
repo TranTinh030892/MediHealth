@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EBEEF8"
-    tools:context=".activitys.Search.DrugDetailActivity">
+    tools:context=".trang.search.activity.DrugDetailActivity">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,9 +55,7 @@
                 android:layout_below="@+id/name"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:paddingStart="25dp"
-                android:paddingEnd="25dp">
+                android:layout_height="150dp">
                 <ImageView
                     android:id="@+id/imageDrug"
                     android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys.profile;
+package com.example.medihealth.trang.profile.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +16,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -27,7 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activitys.Login;
+import com.example.medihealth.trang.login.activity.Login;
 import com.example.medihealth.activitys.MainActivity;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.UserModel;

@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys.Search;
+package com.example.medihealth.trang.search.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,15 +9,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.medihealth.R;
-import com.example.medihealth.adapters.search.DrugAdapter;
-import com.example.medihealth.models.Appointment;
+import com.example.medihealth.trang.search.adapter.DrugAdapter;
 import com.example.medihealth.models.Drug;
 import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
@@ -96,6 +94,7 @@ public class SearchDrugActivity extends AppCompatActivity {
                         // Ánh xạ dữ liệu từ snapshot vào đối tượng Drug
                         Drug drug = new Drug();
                         drug.setName(snapshot.getString("name"));
+                        drug.setImage(snapshot.getString("image"));
                         drug.setIngredients(snapshot.getString("ingredients"));
                         drug.setFunction(snapshot.getString("function"));
                         drug.setExpiry(snapshot.getString("expiry"));
@@ -107,11 +106,10 @@ public class SearchDrugActivity extends AppCompatActivity {
                 }).build();
         drugAdapter = new DrugAdapter(options, getApplicationContext(), new DrugAdapter.IDrugViewHolder() {
             @Override
-            public void onClickItem(int positon, String imageName) {
+            public void onClickItem(int positon) {
                 Drug drug = drugAdapter.getItem(positon);
                 Intent intent = new Intent(SearchDrugActivity.this, DrugDetailActivity.class);
                 AndroidUtil.passDrugModelAsIntent(intent,drug);
-                intent.putExtra("imageName",imageName);
                 startActivity(intent);
             }
 

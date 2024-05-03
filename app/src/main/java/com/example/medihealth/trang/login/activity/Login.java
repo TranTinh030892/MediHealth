@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys;
+package com.example.medihealth.trang.login.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,12 +26,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
+import com.example.medihealth.activitys.MainActivity;
 import com.example.medihealth.activitys.chat.Employee_MainActivity;
-import com.example.medihealth.activitys.profile.Profile;
+import com.example.medihealth.trang.profile.activity.Profile;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Employee;
 import com.example.medihealth.models.Token;
-import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -40,7 +40,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,7 +50,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 

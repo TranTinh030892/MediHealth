@@ -32,13 +32,10 @@ import com.example.medihealth.fragments.CustomerFragment.Menu_Fragment;
 import com.example.medihealth.fragments.CustomerFragment.Notification_Fragment;
 import com.example.medihealth.fragments.CustomerFragment.Profile_Fragment;
 import com.example.medihealth.models.CustomToast;
-import com.example.medihealth.models.UserModel;
+import com.example.medihealth.trang.login.activity.Login;
 import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.Query;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Dialog dialog;

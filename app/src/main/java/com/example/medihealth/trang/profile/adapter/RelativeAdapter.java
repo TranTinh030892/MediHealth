@@ -1,4 +1,4 @@
-package com.example.medihealth.adapters.profile;
+package com.example.medihealth.trang.profile.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,13 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
-import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Relative;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;

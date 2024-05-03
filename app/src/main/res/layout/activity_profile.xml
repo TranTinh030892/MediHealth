@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activitys.profile.Profile">
+    tools:context=".trang.profile.activity.Profile">
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"

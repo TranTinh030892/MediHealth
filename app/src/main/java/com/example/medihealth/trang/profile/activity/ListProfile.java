@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys.profile;
+package com.example.medihealth.trang.profile.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -14,11 +14,9 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.medihealth.R;
-import com.example.medihealth.adapters.profile.RelativeAdapter;
-import com.example.medihealth.models.CustomToast;
+import com.example.medihealth.trang.profile.adapter.RelativeAdapter;
 import com.example.medihealth.models.Relative;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;

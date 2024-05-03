@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys.profile;
+package com.example.medihealth.trang.profile.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 

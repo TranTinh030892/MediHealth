@@ -33,7 +33,7 @@ import android.widget.Toast;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.MainActivity;
-import com.example.medihealth.activitys.profile.AddRelative;
+import com.example.medihealth.trang.profile.activity.AddRelative;
 import com.example.medihealth.adapters.appointment.DoctorAdapter;
 import com.example.medihealth.adapters.appointment.RelativeAdapter;
 import com.example.medihealth.adapters.appointment.TimeAdapter;
@@ -48,10 +48,8 @@ import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Filter;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -61,12 +59,10 @@ import java.util.List;
 public class Infor_Appoitment_Activity extends AppCompatActivity implements View.OnClickListener {
     private EditText editTextSymptom;
     private ImageButton btnDateDialog, btnSpecialist, btnBack;
-    private ImageView imageAccount;
     RelativeLayout  btnInforDoctor, btnEnter,blockLoadTimeList, blockNotify,formCurrentUser,tick,
     btnAdd;
     ProgressBar progressBarLoadDoctors;
-    private TextView editTextDate, editTextSpecialist, textViewName,fullNameUser,
-            birthUser,btnDetailCurrentUser,nameCurrentUser;
+    private TextView editTextDate, editTextSpecialist, textViewName,btnDetailCurrentUser,nameCurrentUser;
     RecyclerView recyclerView, recyclerViewTime, recyclerViewRelative;
     DoctorAdapter adapterModel;
     TimeAdapter timeAdapter;
@@ -96,24 +92,10 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         setContentView(R.layout.activity_infor_appointment);
         sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         initReference();
-        setupUserImage();
-        setInforUser();
         getDataDoctors();
         getDataRelative();
         setViewFormCurrentUser();
         setOnclick();
-    }
-
-    private void setupUserImage() {
-        String profileString = sharedPreferences.getString("profile", "empty");
-        if (!profileString.equals("empty")){
-            String[] array = profileString.split(";");
-            if (array.length > 0) {
-                Picasso.get().load(array[1]).into(imageAccount);
-            } else {
-                Log.e("ERROR", "profileString rỗng");
-            }
-        }
     }
 
     private void setUpListTime(int indexDoctorSelected, String date) {
@@ -165,18 +147,6 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         });
         recyclerViewTime.setLayoutManager(layoutManager);
         recyclerViewTime.setAdapter(timeAdapter);
-    }
-
-    private void setInforUser() {
-        FirebaseUtil.currentUserDetails().get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                UserModel userModel = documentSnapshot.toObject(UserModel.class);
-                fullNameUser.setText(userModel.getFullName());
-                birthUser.setText(userModel.getGender()+" - "+ userModel.getBirth());
-            } else {
-                Log.e("ERROR", "User not found");
-            }
-        });
     }
 
     private void getDataDoctors() {
@@ -340,9 +310,6 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
 
     @SuppressLint("SetTextI18n")
     private void initReference() {
-        fullNameUser = findViewById(R.id.fullName_user);
-        birthUser = findViewById(R.id.birth_user);
-        imageAccount = findViewById(R.id.image_user);
         editTextDate = findViewById(R.id.date);
         editTextDate.setText(getCurrentDate());
         editTextSpecialist = findViewById(R.id.specialist);
@@ -539,7 +506,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
                 appointmentDTO = new AppointmentDTO(userModel.getUserId(),null,doctor.getDoctorId(),
                         editTextSpecialist.getText().toString(),timeSelected,getCurrentDate(),
                         editTextDate.getText().toString(),editTextSymptom.getText().toString());
-                appointmentConfirm = new AppointmentConfirm(userModel.getFullName(),"Tôi",userModel.getGender(),
+                appointmentConfirm = new AppointmentConfirm(userModel.getFullName(),"Tôi",userModel.getPhoneNumber(),userModel.getGender(),
                         userModel.getBirth(),editTextSpecialist.getText().toString(),doctor.getFullName(),
                         timeSelected,editTextDate.getText().toString(),editTextSymptom.getText().toString());
             }
@@ -551,7 +518,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
                     appointmentDTO = new AppointmentDTO(null,relative.getPhoneNumber(),doctor.getDoctorId(),
                             editTextSpecialist.getText().toString(),timeSelected,getCurrentDate(),
                             editTextDate.getText().toString(),editTextSymptom.getText().toString());
-                    appointmentConfirm = new AppointmentConfirm(relative.getFullName(),relative.getRelationship(),relative.getGender(),
+                    appointmentConfirm = new AppointmentConfirm(relative.getFullName(),relative.getRelationship(),relative.getPhoneNumber(),relative.getGender(),
                             relative.getBirth(),editTextSpecialist.getText().toString(),doctor.getFullName(),
                             timeSelected,editTextDate.getText().toString(),editTextSymptom.getText().toString());
                 } else {

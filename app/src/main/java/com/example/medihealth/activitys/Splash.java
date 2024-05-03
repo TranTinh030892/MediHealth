@@ -13,8 +13,9 @@ import android.util.Log;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activitys.chat.Employee_MainActivity;
-import com.example.medihealth.activitys.profile.Profile;
+import com.example.medihealth.trang.profile.activity.Profile;
 import com.example.medihealth.models.UserModel;
+import com.example.medihealth.trang.login.activity.Login;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,11 +26,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Splash extends AppCompatActivity {
     FirebaseAuth mAuth;
@@ -49,7 +46,11 @@ public class Splash extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    checkProfile(user.getUid());
+                    String email = user.getEmail();
+                    if (email.contains("nhanvien")){
+                        checkRole(user.getUid());
+                    }
+                    else checkProfile(user.getUid());
                 }
             }, 2000);
         }

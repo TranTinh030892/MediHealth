@@ -1,4 +1,4 @@
-package com.example.medihealth.adapters.search;
+package com.example.medihealth.trang.search.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.medihealth.R;
 
 import com.example.medihealth.models.Drug;
@@ -37,24 +38,15 @@ public class DrugAdapter extends FirestoreRecyclerAdapter<Drug,DrugAdapter.DrugV
         holder.name.setText(model.getName());
         holder.active.setText("Hoạt chất:      "+model.getName()+" "+generateRandom(1)+"00mg");
         holder.number.setText("Số ĐK:             GC-"+generateRandom(3)+"-"+generateRandom(2));
-
-        List<String> listImage = new ArrayList<>();
-        listImage.add("drug");listImage.add("drug1");listImage.add("drug2");
-        listImage.add("drug3");listImage.add("drug4");listImage.add("drug1");listImage.add("drug2");
-        listImage.add("drug3");listImage.add("drug4");listImage.add("drug1");
-        int index = generateRandom(1);
-        String imageName = listImage.get(index);
-
-        Resources resources = context.getResources();
-        String packageName = context.getPackageName();
-
-        int imageResourceId = resources.getIdentifier(imageName, "drawable", packageName);
-
-        holder.imageDrug.setImageResource(imageResourceId);
+        if(model.getImage() != null){
+            Glide.with(context)
+                    .load(model.getImage())
+                    .into(holder.imageDrug);
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                iViewHolder.onClickItem(position,imageName);
+                iViewHolder.onClickItem(position);
             }
         });
     }
@@ -84,7 +76,7 @@ public class DrugAdapter extends FirestoreRecyclerAdapter<Drug,DrugAdapter.DrugV
         }
     }
     public interface IDrugViewHolder{
-        void onClickItem(int positon,String imageName);
+        void onClickItem(int positon);
         void onDataLoaded(int size);
     }
     private int generateRandom(int numberOfDigits) {

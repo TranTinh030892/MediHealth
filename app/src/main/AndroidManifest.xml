@@ -16,28 +16,31 @@
         android:theme="@style/Theme.MediHealth"
         tools:targetApi="31">
         <activity
-            android:name=".activitys.profile.EditProfileRelative"
-            android:exported="false"
-            android:windowSoftInputMode="stateVisible"/>
+            android:name=".activitys.appointment.DoctorDetail"
+            android:exported="false" />
         <activity
-            android:name=".activitys.profile.AddRelative"
+            android:name=".trang.profile.activity.EditProfileRelative"
             android:exported="false"
-            android:windowSoftInputMode="stateVisible"/>
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".trang.profile.activity.AddRelative"
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".activitys.appointment.ConfirmAppointment"
             android:exported="false" />
         <activity
-            android:name=".activitys.profile.ListProfile"
+            android:name=".trang.profile.activity.ListProfile"
             android:exported="false" />
         <activity
-            android:name=".activitys.Search.DrugDetailActivity"
+            android:name=".trang.search.activity.DrugDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".activitys.profile.EditProfileUser"
+            android:name=".trang.profile.activity.EditProfileUser"
             android:exported="false"
-            android:windowSoftInputMode="stateVisible"/>
+            android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activitys.Search.SearchDrugActivity"
+            android:name=".trang.search.activity.SearchDrugActivity"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
@@ -53,11 +56,11 @@
             android:name=".activitys.chat.ListEmployee"
             android:exported="false" />
         <activity
-            android:name=".activitys.Login"
+            android:name=".trang.login.activity.Login"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activitys.profile.Profile"
+            android:name=".trang.profile.activity.Profile"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
@@ -93,6 +96,9 @@
                 <action android:name="com.example.medihealth.ACTION_DISMISS_NOTIFICATION" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".models.AlarmReciver"
+            android:exported="false" />
     </application>
 
 </manifest>

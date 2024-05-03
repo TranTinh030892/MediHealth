@@ -1,4 +1,4 @@
-package com.example.medihealth.activitys.Search;
+package com.example.medihealth.trang.search.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.medihealth.R;
 import com.example.medihealth.models.Drug;
 import com.example.medihealth.utils.AndroidUtil;
@@ -53,11 +54,10 @@ public class DrugDetailActivity extends AppCompatActivity {
         sideEffects.setText(drug.getSideEffects());
         contraindicated.setText(drug.getContraindicated());
         interactions.setText(drug.getInteractions());
-
-        String imageName = getIntent().getStringExtra("imageName");
-        Resources resources = getResources();
-        String packageName = getPackageName();
-        int imageResourceId = resources.getIdentifier(imageName, "drawable", packageName);
-        imageDrug.setImageResource(imageResourceId);
+        if(drug.getImage() != null){
+            Glide.with(this)
+                    .load(drug.getImage())
+                    .into(imageDrug);
+        }
     }
 }

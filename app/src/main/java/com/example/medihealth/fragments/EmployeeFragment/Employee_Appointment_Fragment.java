@@ -1,6 +1,10 @@
 package com.example.medihealth.fragments.EmployeeFragment;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -31,6 +35,7 @@ import android.widget.Toast;
 
 import com.example.medihealth.R;
 import com.example.medihealth.adapters.appointment.Employee_AppointmentAdapter;
+import com.example.medihealth.models.AlarmReciver;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.NotificationModel;
@@ -54,6 +59,8 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
     Employee_AppointmentAdapter appoitnmentAdapter;
     ProgressBar progressBar;
     int btnSelected = 0;
+    AlarmManager alarmManager;
+    PendingIntent pendingIntent;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private static final int DELAY = 1000;
     public Employee_Appointment_Fragment() {
@@ -451,7 +458,10 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
                 appointment.setStateAppointment(state);
                 FirebaseUtil.getAppointmentDetailsById(appointmentId).set(appointment).addOnCompleteListener(task1 -> {
                     if(task1.isSuccessful()){
-                        Log.e("SUCCESSFULL","Update lịch hẹn thành công");
+                        Log.e("SUCCESSFULL","Update thành công lịch hẹn");
+                        if (state == 1 && appointment.getReminder()){
+                            setupReminder(appointment);
+                        }
                     }
                     else {
                         Log.e("ERROR","Lỗi kết nối mạng");
@@ -462,5 +472,21 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
                 Log.e("ERROR","Lỗi kết nối mạng");
             }
         });
+    }
+
+    private void setupReminder(Appointment appointment){
+        String[]str = appointment.getReminderTime().trim().split(":");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(str[0]));
+        calendar.set(Calendar.MINUTE,Integer.parseInt(str[1]));
+        Intent intent = new Intent(getContext(), AlarmReciver.class);
+        intent.setAction("reminder");
+        intent.putExtra("reminderDate",appointment.getReminderDate());
+        intent.putExtra("detailAppointment",appointment.getTime()+";"+appointment.getAppointmentDate()+";"+appointment.getUserModel().getUserId());
+        alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        pendingIntent = PendingIntent.getBroadcast(getContext(),11,intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
     }
 }
