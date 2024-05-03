@@ -35,6 +35,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class FirebaseUtil {
+
+    public static final String DATA_CHANGED_REQ_CODE = "DATA_CHANGED_REQ_CODE";
+
     public interface StateCallback {
         void onStateReceived(boolean isOnline);
     }
@@ -189,7 +192,7 @@ public class FirebaseUtil {
                     if (token != null) {
                         List<String> tokenList = token.getTokenList();
                         for (String tokenString : tokenList){
-                            sendMessageNotificationtoCustomerTokenId("notify_data_changed", tokenString);
+                            sendMessageNotificationtoCustomerTokenId(DATA_CHANGED_REQ_CODE, tokenString);
                         }
                     }
                 }

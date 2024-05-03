@@ -47,7 +47,7 @@ public class SyncService {
                             && schedule.getPrescription().getDrugUser().isActive()) {
                         RemindScheduler.scheduleRemind(context, schedule);
                     } else {
-                        RemindScheduler.cancelRemind(context, schedule);
+                        RemindScheduler.cancelRemind(context, schedule.getId());
                     }
                 });
             }
@@ -104,7 +104,7 @@ public class SyncService {
             @Override
             public void onResponse(List<Schedule> schedules) {
                 schedules.forEach((schedule) -> {
-                    RemindScheduler.cancelRemind(context, schedule);
+                    RemindScheduler.cancelRemind(context, schedule.getId());
                 });
             }
 

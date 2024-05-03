@@ -39,8 +39,6 @@ import retrofit2.Response;
 public class RemindReceiver extends BroadcastReceiver {
 
     private final static String TAG = "REMIND_RECEIVER";
-    private static final int CLICK_CODE = 0;
-
 
     public interface MyCallback {
         void onResponse(Schedule schedule);
@@ -48,7 +46,7 @@ public class RemindReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Long scheduleId = intent.getLongExtra("schedule_id", -1);
+        long scheduleId = intent.getLongExtra("schedule_id", -1);
         if (scheduleId == -1) {
             Log.e(TAG, "schedule is null.");
             return;
@@ -67,19 +65,21 @@ public class RemindReceiver extends BroadcastReceiver {
     @SuppressLint("MissingPermission")
     private void createNotification(Context context, Schedule schedule) {
         Intent notificationIntent = new Intent(context, ScheduleTodayDetailActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         notificationIntent.putExtra("schedule", schedule);
         PendingIntent contentIntent = PendingIntent.getActivity(
                 context,
-                CLICK_CODE,
+                Math.toIntExact(schedule.getId()),
                 notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE
         );
 
+        // Tạo action snooze
         Intent snoozeIntent = new Intent(context, SnoozeRemindReceiver.class);
-        snoozeIntent.putExtra("schedule", schedule);
+        snoozeIntent.putExtra("schedule_id", schedule.getId());
         PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(
                 context,
-                getResultCode(),
+                Math.toIntExact(schedule.getId()),
                 snoozeIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE
         );
@@ -110,7 +110,7 @@ public class RemindReceiver extends BroadcastReceiver {
         Log.v(TAG, String.format("Notification: {schedule_id: %d, time: %TR}", schedule.getId(), schedule.getTime()));
     }
 
-    private void getSchedule(Long id, MyCallback myCallback) {
+    private void getSchedule(long id, MyCallback myCallback) {
         ScheduleService service = RetrofitClient.createService(ScheduleService.class);
         service.getById(id).enqueue(new Callback<ResponseObject>() {
             @Override

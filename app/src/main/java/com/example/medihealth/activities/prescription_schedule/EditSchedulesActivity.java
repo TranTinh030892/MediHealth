@@ -1,6 +1,7 @@
 package com.example.medihealth.activities.prescription_schedule;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -114,7 +116,7 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
             @Override
             public void onClick(View v) {
                 prescription.setSchedules(schedules);
-                updatePrescription();
+                showAlertDialog();
             }
         });
     }
@@ -207,6 +209,17 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
                 Log.e("EDIT_SCHEDULES", Objects.requireNonNull(t.getMessage()));
             }
         });
+    }
+
+    private void showAlertDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setMessage("Bạn có chắc chắn muốn cập nhật thông tin đơn thuốc này không?");
+        alertDialog.setTitle("Xác nhận");
+        alertDialog.setPositiveButton("Lưu", (dialog, which) -> updatePrescription());
+
+        alertDialog.setNegativeButton("Hủy", (dialog, which) -> {
+        });
+        alertDialog.show();
     }
 
     @SuppressLint("NotifyDataSetChanged")

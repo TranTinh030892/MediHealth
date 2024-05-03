@@ -16,7 +16,7 @@ import java.time.LocalTime;
 import java.util.Calendar;
 
 public class RemindScheduler {
-
+    private static final String TAG = "REMIND_SCHEDULER";
     public final static int SNOOZE_TIME = 10;
 
     public static void scheduleRemind(Context context, Schedule schedule) {
@@ -29,6 +29,8 @@ public class RemindScheduler {
         calendar.set(Calendar.MILLISECOND, 0);
 
         long timeToPushNotification = calendar.getTimeInMillis() - now.getTimeInMillis();
+
+        // timeout -> set for the next day
         if (timeToPushNotification < 0) {
             calendar.add(Calendar.DATE, 1);
             timeToPushNotification = calendar.getTimeInMillis() - now.getTimeInMillis();
@@ -44,37 +46,37 @@ public class RemindScheduler {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
         );
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        Log.i("REMIND_SCHEDULE", String.format("Created, notification of schedule_id: %d will show in : %dms", schedule.getId(), timeToPushNotification));
+        Log.i(TAG, String.format("Created, notification of schedule_id: %d will show in: %dms", schedule.getId(), timeToPushNotification));
     }
 
-    public static void cancelRemind(Context context, Schedule schedule) {
+    public static void cancelRemind(Context context, long scheduleId) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(context, RemindReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
-                Math.toIntExact(schedule.getId()),
+                Math.toIntExact(scheduleId),
                 intent,
                 PendingIntent.FLAG_IMMUTABLE
         );
         alarmManager.cancel(pendingIntent);
-        Log.i("REMIND_SCHEDULE", String.format("Canceled schedule_id: %d", schedule.getId()));
+        Log.i(TAG, String.format("Canceled schedule_id: %d", scheduleId));
     }
 
-    public static void snoozeRemind(Context context, Schedule schedule) {
+    public static void snoozeRemind(Context context, long scheduleId) {
         Calendar now = Calendar.getInstance();
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MINUTE, LocalTime.now().getMinute() + SNOOZE_TIME);
+        calendar.add(Calendar.MINUTE, SNOOZE_TIME);
         long timeToPushNotification = calendar.getTimeInMillis() - now.getTimeInMillis();
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(context, RemindReceiver.class);
-        intent.putExtra("schedule_id", schedule.getId());
+        intent.putExtra("schedule_id", scheduleId);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
-                Math.toIntExact(schedule.getId()),
+                Math.toIntExact(scheduleId),
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
         );
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        Log.v("REMIND_SCHEDULE", String.format("Snoozed, notification of schedule_id: %d will show in : %dms", schedule.getId(), timeToPushNotification));
+        Log.v(TAG, String.format("Snoozed, notification of schedule_id: %d will show in :%dms", scheduleId, timeToPushNotification));
     }
 }

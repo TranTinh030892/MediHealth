@@ -1,6 +1,7 @@
 package com.example.medihealth.activities.prescription_schedule;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +27,7 @@ import com.example.medihealth.models.PrescriptionItem;
 import com.example.medihealth.models.ResponseObject;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +45,8 @@ public class EditPrescriptionItemsActivity extends AppCompatActivity implements 
     RelativeLayout rootView;
     Button btnAddToList;
     Button btnComplete;
-    EditText etName;
-    EditText etNote;
+    TextInputLayout etName;
+    TextInputLayout etNote;
     List<PrescriptionItem> prescriptionItems = new ArrayList<>();
     RecyclerView rcvListPrescriptionItem;
     PrescriptionItemAdapter prescriptionItemAdapter;
@@ -97,7 +100,7 @@ public class EditPrescriptionItemsActivity extends AppCompatActivity implements 
         btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                savePrescription();
+                showAlertDialog();
             }
         });
     }
@@ -142,6 +145,25 @@ public class EditPrescriptionItemsActivity extends AppCompatActivity implements 
         });
     }
 
+    private void showAlertDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setMessage("Bạn có chắc chắn muốn cập nhật thông tin đơn thuốc này không?");
+        alertDialog.setTitle("Xác nhận");
+        alertDialog.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                savePrescription();
+            }
+        });
+
+        alertDialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertDialog.show();
+    }
+
     private void loadData() {
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) return;
@@ -151,8 +173,8 @@ public class EditPrescriptionItemsActivity extends AppCompatActivity implements 
 
     @SuppressLint("NotifyDataSetChanged")
     private void addPrescriptionItemToList() {
-        String name = etName.getText().toString().trim();
-        String note = etNote.getText().toString().trim();
+        String name = etName.getEditText().getText().toString().trim();
+        String note = etNote.getEditText().getText().toString().trim();
         if (name.isEmpty() || note.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT)
                     .show();

@@ -20,6 +20,7 @@ import com.example.medihealth.activities.prescription_schedule.SyncService;
 import com.example.medihealth.models.NotificationDismissReceiver;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
+import com.example.medihealth.utils.FirebaseUtil;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -39,7 +40,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String title = remoteMessage.getData().get("title");
             String body = remoteMessage.getData().get("body");
             String userId = remoteMessage.getData().get("userId");
-            if (requestCode.equalsIgnoreCase("notify_data_changed")) {
+            if (requestCode.equalsIgnoreCase(FirebaseUtil.DATA_CHANGED_REQ_CODE)) {
                 SyncService.sync(this);
                 return;
             }

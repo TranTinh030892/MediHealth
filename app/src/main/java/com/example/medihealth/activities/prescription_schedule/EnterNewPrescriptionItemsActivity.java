@@ -22,6 +22,7 @@ import com.example.medihealth.adapters.prescription_schedule.PrescriptionItemAda
 import com.example.medihealth.models.Prescription;
 import com.example.medihealth.models.PrescriptionItem;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class EnterNewPrescriptionItemsActivity extends AppCompatActivity impleme
     RelativeLayout rootView;
     Prescription prescription;
     TextView tvToolbar;
+    TextInputLayout etName, etNote;
     ImageView btnBackToolbar;
     List<PrescriptionItem> prescriptionItems = new ArrayList<>();
     PrescriptionItemAdapter prescriptionItemAdapter;
@@ -54,6 +56,9 @@ public class EnterNewPrescriptionItemsActivity extends AppCompatActivity impleme
                 finish();
             }
         });
+
+        etName = findViewById(R.id.et_name);
+        etNote = findViewById(R.id.et_note);
 
         // Handle button add new prescription item to list below
         Button btnAddToList;
@@ -106,10 +111,8 @@ public class EnterNewPrescriptionItemsActivity extends AppCompatActivity impleme
 
     @SuppressLint("NotifyDataSetChanged")
     private void addPrescriptionItemToList() {
-        EditText etName = findViewById(R.id.et_name);
-        EditText etNote = findViewById(R.id.et_note);
-        String name = etName.getText().toString().trim();
-        String note = etNote.getText().toString().trim();
+        String name = etName.getEditText().getText().toString().trim();
+        String note = etNote.getEditText().getText().toString().trim();
         if (name.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT)
                     .show();
