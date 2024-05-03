@@ -16,9 +16,13 @@ import java.util.List;
 public class ScheduleofStatWeekApdapter extends RecyclerView.Adapter<ScheduleofStatWeekApdapter.ScheduleofStatWeekHolder>{
 
     private List<Schedule> scheduleList;
+    private List<Boolean> checkSchedule;
+    private boolean check;
 
-    public ScheduleofStatWeekApdapter(List<Schedule> scheduleList) {
+    public ScheduleofStatWeekApdapter(List<Schedule> scheduleList, List<Boolean> checkSchedule) {
         this.scheduleList = scheduleList;
+        this.checkSchedule = checkSchedule;
+        this.check = false;
     }
 
     @NonNull
@@ -32,10 +36,16 @@ public class ScheduleofStatWeekApdapter extends RecyclerView.Adapter<ScheduleofS
     public void onBindViewHolder(@NonNull ScheduleofStatWeekHolder holder, int position) {
         Schedule schedule = scheduleList.get(position);
         if(schedule.getConfirmNotifications().isEmpty()){
-            holder.imageView.setImageResource(R.drawable.circle_check_fill);
+            if(checkSchedule.get(position) || check){
+                holder.imageView.setImageResource(R.drawable.circle_check_fill);
+            }else{
+                holder.imageView.setImageResource(R.drawable.circle_fill);
+            }
         }else if(schedule.getConfirmNotifications().get(0).isCheck()){
+            check = true;
             holder.imageView.setImageResource(R.drawable.circle_checked_fill);
         }else{
+            check = true;
             holder.imageView.setImageResource(R.drawable.circle_x_fill);
         }
     }
