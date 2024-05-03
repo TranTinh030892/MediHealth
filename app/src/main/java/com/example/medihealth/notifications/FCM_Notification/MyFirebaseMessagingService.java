@@ -71,18 +71,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("requestCode",113);
+        intent.putExtra("requestCode", 113);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         int notificationId = generateNotificationId();
+
+        // Tạo một phần lớn nội dung cho notification
+        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+        bigTextStyle.bigText(body); // Thiết lập nội dung dài hơn
+
+        // Tạo notification
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, MyApplicationFCM.CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(R.drawable.notification)
                 .setColor(ContextCompat.getColor(this, R.color.mainColor))
                 .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
+                .setAutoCancel(true)
+                .setStyle(bigTextStyle); // Sử dụng BigTextStyle để hiển thị nội dung dài hơn
+
+        // Gửi notification
         notificationManager.notify(notificationId, notificationBuilder.build());
     }
 

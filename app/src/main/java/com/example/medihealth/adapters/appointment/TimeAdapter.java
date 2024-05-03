@@ -73,12 +73,6 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeViewHolder
     public int getItemCount() {
         return timeList.size();
     }
-//    public String getItem(int position) {
-//        if (position >= 0 && position < timeList.size()) {
-//            return timeList.get(position);
-//        }
-//        return null;
-//    }
 
     public static class TimeViewHolder extends RecyclerView.ViewHolder{
         TextView textTime;

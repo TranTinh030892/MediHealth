@@ -1,5 +1,8 @@
 package com.example.medihealth.fragments.CustomerFragment;
 
+import static androidx.fragment.app.FragmentManager.TAG;
+
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +25,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -32,12 +34,12 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activities.prescription_schedule.DrugUserManagement;
-import com.example.medihealth.activities.profile.EditProfile;
 import com.example.medihealth.activities.Login;
 import com.example.medihealth.activities.Search.SearchDrugActivity;
 import com.example.medihealth.activities.appointment.Infor_Appoitment_Activity;
 import com.example.medihealth.activities.chat.ListEmployee;
+import com.example.medihealth.activities.prescription_schedule.DrugUserManagement;
+import com.example.medihealth.activities.profile.ListProfile;
 import com.example.medihealth.activities.show_schedule_totay.ScheduleTodayActivity;
 import com.example.medihealth.activities.stat.StatHomeActivity;
 import com.example.medihealth.adapters.main.SlidePagerAdapter;
@@ -145,8 +147,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             // menu nhắc lịch
             Intent intent = new Intent(getActivity(), ScheduleTodayActivity.class);
             startActivity(intent);
-        }
-        else if (v.getId() == R.id.form_inside_one_below) {
+        } else if (v.getId() == R.id.form_inside_one_below) {
             // menu thống kê
             Intent intent = new Intent(getActivity(), StatHomeActivity.class);
             startActivity(intent);
@@ -157,8 +158,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             startActivity(intent);
         }
         if (v.getId() == R.id.form_inside_three_below) {
-            Intent intent = new Intent(getActivity(), EditProfile.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent intent = new Intent(getActivity(), ListProfile.class);
             startActivity(intent);
         }
         if (v.getId() == R.id.btn_chat) {
@@ -459,18 +459,24 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     private void setDataUser() {
-        FirebaseUtil.currentUserDetails().get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                UserModel userModel = documentSnapshot.toObject(UserModel.class);
-                textName.setText(userModel.getFullName());
-                textGender_Birth.setText(userModel.getGender() + " - " + userModel.getBirth());
-                textHeight.setText(String.valueOf(userModel.getHeight()));
-                textWeight.setText(String.valueOf(userModel.getWeight()));
-                ;
-                textBMI.setText(AndroidUtil.getBMI(userModel.getHeight(), userModel.getWeight()));
+        FirebaseUtil.currentUserDetails().addSnapshotListener((snapshot, e) -> {
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e);
+                return;
+            }
+            if (snapshot != null && snapshot.exists()) {
+                UserModel userModel = snapshot.toObject(UserModel.class);
+                if (userModel != null) {
+                    textName.setText(userModel.getFullName());
+                    textGender_Birth.setText(userModel.getGender() + " - " + userModel.getBirth());
+                    textHeight.setText(String.valueOf(userModel.getHeight()));
+                    textWeight.setText(String.valueOf(userModel.getWeight()));
+                    textBMI.setText(AndroidUtil.getBMI(userModel.getHeight(), userModel.getWeight()));
+                }
             } else {
-                Log.e("ERROR", "User not found");
+                Log.d(TAG, "Current data: null");
             }
         });
     }

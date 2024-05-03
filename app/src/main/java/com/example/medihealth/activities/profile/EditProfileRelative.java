@@ -1,15 +1,12 @@
 package com.example.medihealth.activities.profile;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -23,32 +20,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activities.Login;
 import com.example.medihealth.activities.MainActivity;
 import com.example.medihealth.models.CustomToast;
-import com.example.medihealth.models.UserModel;
+import com.example.medihealth.models.Relative;
+import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
-import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class EditProfile extends AppCompatActivity implements View.OnClickListener {
-    ImageButton btnBack,btnEdit;
-    EditText fullName, phoneNumber, address, height, weight;
-    RadioButton  male, female;
-    TextView birth;
-    CardView bottomLayout;
-    RelativeLayout btnSave;
+public class EditProfileRelative extends AppCompatActivity implements View.OnClickListener{
+    ImageButton btnBack,btnEdit,iconDelete;
+    EditText fullName, phoneNumber, address, height, weight,relationship;
+    RadioButton male, female;
+    TextView birth,btnRelationship;
+    RelativeLayout btnSave,btnDelete;
+    Relative relative;
+    String relativeDocumentId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
+        setContentView(R.layout.activity_edit_profile_relative);
+        relative = AndroidUtil.getRelativeModelFromIntent(getIntent());
         initView();
         setOnlick();
-        setupUserDetail();
+        setupRelativeDetail(relative);
+        getDocument();
     }
 
     private void initView() {
@@ -62,40 +60,33 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         weight = findViewById(R.id.weight_user);
         male = findViewById(R.id.male);
         female = findViewById(R.id.female);
-        bottomLayout = findViewById(R.id.bottom_Layout);
         btnSave = findViewById(R.id.enterBook);
+        btnDelete = findViewById(R.id.delete);
+        relationship = findViewById(R.id.relationship);
+        iconDelete = findViewById(R.id.icon_delete);
+        btnRelationship = findViewById(R.id.btnRelationship);
     }
     private void setOnlick() {
         btnBack.setOnClickListener(this);
         btnEdit.setOnClickListener(this);
         birth.setOnClickListener(this);
         btnSave.setOnClickListener(this);
+        btnDelete.setOnClickListener(this);
+        iconDelete.setOnClickListener(this);
     }
-    private void setupUserDetail() {
-        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                UserModel userModel = task.getResult().toObject(UserModel.class);
-                setupViewDetail(userModel);
-            }
-            else {
-                Log.e("ERROR","Lỗi kết nối");
-            }
-        });
-    }
-
-    private void setupViewDetail(UserModel userModel) {
-        fullName.setText(userModel.getFullName());
-        phoneNumber.setText(userModel.getPhoneNumber());
-        address.setText(userModel.getAddress());
-        birth.setText(userModel.getBirth());
-        height.setText(String.valueOf(userModel.getHeight()));
-        weight.setText(String.valueOf(userModel.getWeight()));
-        if (userModel.getGender().equals("Nam")){
+    private void setupRelativeDetail(Relative relative) {
+        btnRelationship.setText(relative.getRelationship());
+        fullName.setText(relative.getFullName());
+        phoneNumber.setText(relative.getPhoneNumber());
+        address.setText(relative.getAddress());
+        birth.setText(relative.getBirth());
+        if (relative.getGender().equals("Nam")){
             male.setChecked(true);
         }
-        if (userModel.getGender().equals("Nữ")){
-            female.setChecked(true);
-        }
+        else female.setChecked(true);
+        height.setText(String.valueOf(relative.getHeight()));
+        weight.setText(String.valueOf(relative.getWeight()));
+        relationship.setText(relative.getRelationship());
     }
     @Override
     public void onClick(View v) {
@@ -103,18 +94,25 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             finish();
         }
         if (v.getId() == R.id.btn_edit){
-            showComfirm(Gravity.CENTER);
+            getDocument();
+            setupView(true);
         }
         if (v.getId() == R.id.enterBook){
-            saveUserDetail();
+            setupView(false);
+            saveDetailRelative();
+        }
+        if (v.getId() == R.id.icon_delete){
             setupView(false);
         }
         if (v.getId() == R.id.birth_user){
             showDialogCalendar(Gravity.CENTER);
         }
+        if (v.getId() == R.id.delete){
+            showDialogConfirm(Gravity.CENTER);
+        }
     }
 
-    private void showComfirm(int center) {
+    private void showDialogConfirm(int center) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_notice_login_logout);
@@ -133,29 +131,44 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         else{
             dialog.setCancelable(true);
         }
-        RelativeLayout btnCancel, btnEdit, blockTitle;
-        TextView textEdit;
+
+        TextView titleTop, titleBelow;
+        RelativeLayout btnCancel, btnEnter;
+        titleTop = dialog.findViewById(R.id.title_top);
+        titleBelow = dialog.findViewById(R.id.title_below);
         btnCancel = dialog.findViewById(R.id.cancel);
-        btnEdit = dialog.findViewById(R.id.agree);
-        blockTitle = dialog.findViewById(R.id.title);
-        textEdit = dialog.findViewById(R.id.textAgree);
-        textEdit.setText("Sửa");
-        blockTitle.setVisibility(View.GONE);
+        btnEnter = dialog.findViewById(R.id.agree);
+        titleTop.setText("Xác nhận");
+        titleBelow.setText("Bạn có chắc chắn muốn xóa ?");
+
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
-        btnEdit.setOnClickListener(new View.OnClickListener() {
+        btnEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setupView(true);
                 dialog.dismiss();
+                deleteRelative();
             }
         });
         dialog.show();
     }
+
+    private void deleteRelative() {
+        FirebaseUtil.getRelativeCollectionReference().document(relativeDocumentId).delete().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                CustomToast.showToast(getApplicationContext(),"Xóa thành công",Toast.LENGTH_SHORT);
+                finish();
+            }
+            else{
+                CustomToast.showToast(getApplicationContext(),"Xóa không thành công",Toast.LENGTH_SHORT);
+            }
+        });
+    }
+
     private void showDialogCalendar(int center) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -198,6 +211,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
         dialog.show();
     }
+
     private void getBirthDay(DatePicker datePicker) {
         int dayOfMonth = datePicker.getDayOfMonth();
         int monthOfYear = datePicker.getMonth();
@@ -209,19 +223,21 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         String selectedDate = dayOfMonthStr + "/" + monthOfYearStr + "/" + year;
         birth.setText(selectedDate);
     }
-    private void setupView(boolean b) {
-        fullName.setEnabled(b); phoneNumber.setEnabled(b);address.setEnabled(b);birth.setEnabled(b);
-        height.setEnabled(b);weight.setEnabled(b);male.setEnabled(b);female.setEnabled(b);
-        if (b){
-            bottomLayout.setVisibility(View.VISIBLE);
-            btnEdit.setVisibility(View.GONE);
-        }
-        else {
-            bottomLayout.setVisibility(View.GONE);
-            btnEdit.setVisibility(View.VISIBLE);
-        }
+
+    private void getDocument() {
+        Query query = FirebaseUtil.getRelativeCollectionReference().whereEqualTo("phoneNumber",phoneNumber.getText().toString());
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    String documentId = documentSnapshot.getId();
+                    relativeDocumentId = documentId;
+                }
+            }
+        });
     }
-    private void saveUserDetail() {
+
+    private void saveDetailRelative() {
         String name = fullName.getText().toString();
         String gender = "";
         if (male.isChecked()) {
@@ -234,9 +250,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         String birthUser = birth.getText().toString();
         String heightStr = height.getText().toString();
         String weightStr = weight.getText().toString();
-
+        String relationshipStr = relationship.getText().toString();
         if (name.isEmpty() || gender.isEmpty() || phone.isEmpty() ||
-                addressUser.isEmpty() || birthUser.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty()) {
+                addressUser.isEmpty() || birthUser.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty()|| relationshipStr.isEmpty()) {
             CustomToast.showToast(getApplicationContext(),"Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT);
             return;
         }
@@ -253,14 +269,32 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             CustomToast.showToast(getApplicationContext(),"Cân nặng không hợp lệ",Toast.LENGTH_SHORT);
             return;
         }
-        // Lưu dữ liệu
         String currentUserId = FirebaseUtil.currentUserId();
-        UserModel userModel = new UserModel(name, gender, phone, addressUser, birthUser, userHeight,
-                userWeight, Timestamp.now(), currentUserId);
-        FirebaseUtil.currentUserDetails().set(userModel).addOnCompleteListener(task -> {
-           if (task.isSuccessful()){
-               CustomToast.showToast(getApplicationContext(),"Lưu thành công",Toast.LENGTH_SHORT);
-           }
+        Relative relative = new Relative(name, gender, phone, addressUser, birthUser, userHeight, userWeight, relationshipStr, currentUserId);
+        FirebaseUtil.getRelativeCollectionReference().document(relativeDocumentId).set(relative).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                CustomToast.showToast(getApplicationContext(),"Lưu thành công",Toast.LENGTH_SHORT);
+                setupRelativeDetail(relative);
+            }
+            else{
+                CustomToast.showToast(getApplicationContext(),"Lưu không thành công",Toast.LENGTH_SHORT);
+            }
         });
+    }
+    private void setupView(boolean b) {
+        fullName.setEnabled(b); phoneNumber.setEnabled(b);address.setEnabled(b);birth.setEnabled(b);
+        height.setEnabled(b);weight.setEnabled(b);male.setEnabled(b);female.setEnabled(b);relationship.setEnabled(b);
+        if (b){
+            btnDelete.setVisibility(View.GONE);
+            btnEdit.setVisibility(View.GONE);
+            btnSave.setVisibility(View.VISIBLE);
+            iconDelete.setVisibility(View.VISIBLE);
+        }
+        else {
+            btnDelete.setVisibility(View.VISIBLE);
+            btnEdit.setVisibility(View.VISIBLE);
+            btnSave.setVisibility(View.GONE);
+            iconDelete.setVisibility(View.GONE);
+        }
     }
 }

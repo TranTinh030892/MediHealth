@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/notify_form_sucessfull"
         android:layout_width="match_parent"
         android:background="@drawable/custom_inforbook"
-        android:layout_height="270dp"
+        android:layout_height="wrap_content"
         android:padding="10dp">
         <Button
             android:id="@+id/icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
             android:background="@drawable/checked"/>
@@ -32,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title_under"
-                android:text="Bạn đã đặt lịch khám thành công tại Medi Health, chúng tôi sẽ liên lạc với bạn trước khi duyệt lịch khám"
+                android:text="Bạn đã đặt lịch khám thành công tại Medi Health."
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 android:lineSpacingExtra="3dp"

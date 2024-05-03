@@ -225,6 +225,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (intent != null){
             int requestCode = intent.getIntExtra("requestCode",1);
             if (requestCode == 113){
+                Fragment fragmentSelected = new Notification_Fragment();
+                bottomNavigationView.setSelectedItemId(R.id.item_notification);
+                getSupportFragmentManager().beginTransaction().replace(R.id.page_home, fragmentSelected).commit();
+            }
+            else if (requestCode == 131){
                 Fragment fragmentSelected = new Appointment_Fragment();
                 bottomNavigationView.setSelectedItemId(R.id.item_appointment);
                 getSupportFragmentManager().beginTransaction().replace(R.id.page_home, fragmentSelected).commit();

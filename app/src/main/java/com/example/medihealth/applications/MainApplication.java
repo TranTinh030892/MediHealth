@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
+
 import com.example.medihealth.notifications.FCM_Notification.MyApplicationFCM;
 import com.example.medihealth.services.RemindService;
 import com.example.medihealth.utils.FirebaseUtil;
@@ -63,27 +65,27 @@ public class MainApplication extends Application implements Application.Activity
     }
 
     @Override
-    public void onActivityStarted(Activity activity) {
-        handler.removeCallbacks(runLogout);
+    public void onActivityStarted(@NonNull Activity activity) {
+
     }
 
     @Override
-    public void onActivityResumed(Activity activity) {
-        handler.removeCallbacks(runLogout);
-        FirebaseUtil.setState(true);
+    public void onActivityResumed(@NonNull Activity activity) {
+
     }
 
     @Override
-    public void onActivityPaused(Activity activity) {
-        handler.postDelayed(runLogout, 1000);
+    public void onActivityPaused(@NonNull Activity activity) {
+
     }
 
     @Override
-    public void onActivityStopped(Activity activity) {
+    public void onActivityStopped(@NonNull Activity activity) {
+
     }
 
     @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
 
     }
 

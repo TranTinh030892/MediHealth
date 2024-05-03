@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.medihealth.R;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.Doctor;
+import com.example.medihealth.models.Relative;
 import com.example.medihealth.models.UserModel;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -29,12 +30,14 @@ public class Customer_AppoitnmentAdapter extends FirestoreRecyclerAdapter<Appoin
     @Override
     protected void onBindViewHolder(@NonNull AppointmentViewHolder holder, int position, @NonNull Appointment model) {
         UserModel userModel = model.getUserModel();
-        if (userModel != null) {
+        Relative relative = model.getRelative();
+        if (userModel != null && relative == null) {
             holder.userName.setText(userModel.getFullName());
-        } else {
-            holder.userName.setText("");
         }
-
+        else if (userModel == null && relative != null) {
+            holder.userName.setText(relative.getFullName());
+        }
+        else  holder.userName.setText("");
         setColorStateAppoiment(model,holder);
 
         String calendarStr = model.getTime()+" - "+model.getAppointmentDate();

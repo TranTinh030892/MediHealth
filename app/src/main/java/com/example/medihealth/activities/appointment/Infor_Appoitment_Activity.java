@@ -1,6 +1,7 @@
 package com.example.medihealth.activities.appointment;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,14 +13,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -31,23 +33,28 @@ import android.widget.Toast;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activities.MainActivity;
+import com.example.medihealth.activities.profile.AddRelative;
 import com.example.medihealth.adapters.appointment.DoctorAdapter;
+import com.example.medihealth.adapters.appointment.RelativeAdapter;
 import com.example.medihealth.adapters.appointment.TimeAdapter;
 import com.example.medihealth.models.Appointment;
+import com.example.medihealth.models.AppointmentConfirm;
 import com.example.medihealth.models.AppointmentDTO;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Doctor;
+import com.example.medihealth.models.Relative;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -55,17 +62,21 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     private EditText editTextSymptom;
     private ImageButton btnDateDialog, btnSpecialist, btnBack;
     private ImageView imageAccount;
-    RelativeLayout  btnInforDoctor, btnEnter,blockLoadTimeList, blockNotify;
+    RelativeLayout  btnInforDoctor, btnEnter,blockLoadTimeList, blockNotify,formCurrentUser,tick,
+    btnAdd;
     ProgressBar progressBarLoadDoctors;
     private TextView editTextDate, editTextSpecialist, textViewName,fullNameUser,
-            birthUser;
-    RecyclerView recyclerView, recyclerViewTime;
+            birthUser,btnDetailCurrentUser,nameCurrentUser;
+    RecyclerView recyclerView, recyclerViewTime, recyclerViewRelative;
     DoctorAdapter adapterModel;
     TimeAdapter timeAdapter;
+    RelativeAdapter relativeAdapter;
     SharedPreferences sharedPreferences;
     private int indexDoctorSelected = 0;
+    private int indexPersonSelected = -1;
     private String timeSelected = "";
     UserModel userModel;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -85,9 +96,24 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         setContentView(R.layout.activity_infor_appointment);
         sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         initReference();
+        setupUserImage();
         setInforUser();
         getDataDoctors();
+        getDataRelative();
+        setViewFormCurrentUser();
         setOnclick();
+    }
+
+    private void setupUserImage() {
+        String profileString = sharedPreferences.getString("profile", "empty");
+        if (!profileString.equals("empty")){
+            String[] array = profileString.split(";");
+            if (array.length > 0) {
+                Picasso.get().load(array[1]).into(imageAccount);
+            } else {
+                Log.e("ERROR", "profileString rỗng");
+            }
+        }
     }
 
     private void setUpListTime(int indexDoctorSelected, String date) {
@@ -142,16 +168,15 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     }
 
     private void setInforUser() {
-        String inforFormUser = sharedPreferences.getString("inforFormUser", "empty");
-        if (!inforFormUser.equals("empty")){
-            String[] array = inforFormUser.split(";");
-            if (array.length > 0) {
-                fullNameUser.setText(array[0]);
-                birthUser.setText(array[1]);
+        FirebaseUtil.currentUserDetails().get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                UserModel userModel = documentSnapshot.toObject(UserModel.class);
+                fullNameUser.setText(userModel.getFullName());
+                birthUser.setText(userModel.getGender()+" - "+ userModel.getBirth());
             } else {
-                Log.e("ERROR", "Infor rỗng");
+                Log.e("ERROR", "User not found");
             }
-        }
+        });
     }
 
     private void getDataDoctors() {
@@ -169,12 +194,14 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     private void setListDoctors() {
         String specialistInput = editTextSpecialist.getText().toString().trim();
         Query query = null;
-        if(specialistInput.equals("Tất cả")){
+        if(specialistInput.equals("Chưa xác định")){
             query = FirebaseUtil.allDoctorCollectionReference();
         }
         else {
-            query = FirebaseUtil.allDoctorCollectionReference()
-                    .whereIn("specialist", Arrays.asList("Mặc định", specialistInput));
+            query = FirebaseUtil.allDoctorCollectionReference().where(Filter.or(
+                    Filter.equalTo("specialist","Chưa xác định"),
+                    Filter.equalTo("specialist",specialistInput)
+            ));
         }
 
         FirestoreRecyclerOptions<Doctor> options = new FirestoreRecyclerOptions.Builder<Doctor>()
@@ -203,12 +230,14 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     private void setListDoctorsWithStateOnReSume() {
         String specialistInput = editTextSpecialist.getText().toString().trim();
         Query query = null;
-        if(specialistInput.equals("Tất cả")){
+        if(specialistInput.equals("Chưa xác định")){
             query = FirebaseUtil.allDoctorCollectionReference();
         }
         else {
-            query = FirebaseUtil.allDoctorCollectionReference()
-                    .whereIn("specialist", Arrays.asList("Mặc định", specialistInput));
+            query = FirebaseUtil.allDoctorCollectionReference().where(Filter.or(
+                    Filter.equalTo("specialist","Chưa xác định"),
+                    Filter.equalTo("specialist",specialistInput)
+            ));
         }
 
         FirestoreRecyclerOptions<Doctor> options = new FirestoreRecyclerOptions.Builder<Doctor>()
@@ -257,6 +286,44 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
             }
         }, 700);
     }
+    private void setViewFormCurrentUser() {
+        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                UserModel currentUser = task.getResult().toObject(UserModel.class);
+                if (currentUser != null){
+                    nameCurrentUser.setText(getNameFromFullName(currentUser.getFullName()));
+                }
+            }
+            else {
+                Log.e("ERROR","Lỗi kết nối");
+            }
+        });
+        setBackgroundItem(formCurrentUser);
+    }
+
+    private void getDataRelative() {
+        String currentUserId = FirebaseUtil.currentUserId();
+        Query query = FirebaseUtil.getRelativeCollectionReference()
+                .whereEqualTo("userId",currentUserId);
+
+        FirestoreRecyclerOptions<Relative> options = new FirestoreRecyclerOptions.Builder<Relative>()
+                .setQuery(query,Relative.class).build();
+        relativeAdapter = new RelativeAdapter(options, getApplicationContext(), new RelativeAdapter.IRelativeViewHolder() {
+            @Override
+            public void onClickItem(int positon) {
+                setBackgroundNotSelectedItem(formCurrentUser);
+                tick.setVisibility(View.GONE);
+                indexPersonSelected = positon;
+            }
+            @Override
+            public void onDataLoaded(int size) {
+
+            }
+        });
+        recyclerViewRelative.setLayoutManager(new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false));
+        recyclerViewRelative.setAdapter(relativeAdapter);
+        relativeAdapter.startListening();
+    }
     private void setOnclick() {
         editTextDate.setOnClickListener(this);
         editTextSpecialist.setOnClickListener(this);
@@ -266,6 +333,9 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         btnBack.setOnClickListener(this);
         btnInforDoctor.setOnClickListener(this);
         btnEnter.setOnClickListener(this);
+        formCurrentUser.setOnClickListener(this);
+        btnDetailCurrentUser.setOnClickListener(this);
+        btnAdd.setOnClickListener(this);
     }
 
     @SuppressLint("SetTextI18n")
@@ -288,6 +358,12 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         recyclerView = findViewById(R.id.doctorList);
         recyclerViewTime = findViewById(R.id.listTime);
         btnBack = findViewById(R.id.back_btn);
+        recyclerViewRelative = findViewById(R.id.listPerson);
+        formCurrentUser = findViewById(R.id.form_currentUser);
+        nameCurrentUser = findViewById(R.id.name);
+        tick = findViewById(R.id.tick);
+        btnDetailCurrentUser = findViewById(R.id.btn_Detail_currentUser);
+        btnAdd = findViewById(R.id.form_add);
     }
 
     private String getCurrentDate() {
@@ -325,7 +401,17 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         }
         else if (v.getId() == R.id.enterBook){
             if (!validation()) return;
-            showDialogConfirm(Gravity.CENTER);
+            passAppointmentAsIntent();
+        }
+        else if (v.getId() == R.id.form_currentUser){
+            setBackgroundItem(formCurrentUser);
+            tick.setVisibility(View.VISIBLE);
+            relativeAdapter.clearBackgroundItems();
+            indexPersonSelected = -1;
+        }
+        else if (v.getId() == R.id.form_add){
+            Intent intent = new Intent(this, AddRelative.class);
+            startActivity(intent);
         }
     }
 
@@ -379,7 +465,6 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
                 editTextSpecialist.setText(textSpecialist2.getText().toString());
                 dialog.dismiss();
                 refreshOnclickSpecialist();
-                recyclerView.setVisibility(View.VISIBLE);
                 getDataDoctors();
             }
         });
@@ -440,113 +525,57 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         dialog.show();
     }
 
-    private void showDialogConfirm(int center) {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_dialog_notice_login_logout);
-        Window window = dialog.getWindow();
-        if (window == null){
-            return;
-        }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        WindowManager.LayoutParams windowAttributes = window.getAttributes();
-        windowAttributes.gravity = center;
-        window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
-            dialog.setCancelable(false);
-        }
-        else{
-            dialog.setCancelable(true);
-        }
-
-        TextView titleTop, titleBelow;
-        RelativeLayout btnCancel, btnEnter;
-        titleTop = dialog.findViewById(R.id.title_top);
-        titleBelow = dialog.findViewById(R.id.title_below);
-        btnCancel = dialog.findViewById(R.id.cancel);
-        btnEnter = dialog.findViewById(R.id.agree);
-        titleTop.setText("Xác nhận");
-        titleBelow.setText("Bạn có chắc chắn muốn đặt lịch khám ?");
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        btnEnter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                saveAppointment();
-            }
-        });
-        dialog.show();
-    }
-
-    private void saveAppointment() {
+    private void passAppointmentAsIntent() {
         Doctor doctor = null;
         if (adapterModel != null){
             doctor = adapterModel.getItem(indexDoctorSelected);
         }
         else CustomToast.showToast(getApplicationContext(),"ERROR",Toast.LENGTH_SHORT);
         if (doctor != null){
-            Appointment appointment = new Appointment(userModel,getCurrentDate(),
-                    editTextDate.getText().toString(), editTextSpecialist.getText().toString(),doctor,
-                   timeSelected,editTextSymptom.getText().toString(),0);
-            FirebaseFirestore.getInstance().collection("appointment")
-                    .add(appointment).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
-                            showDialogSuccessfull(Gravity.BOTTOM);
-                        }
-                        else {
-                            Log.e("ERROR","Lỗi kết nối mạng");
-                        }
-                    });
+            AppointmentDTO appointmentDTO = null;
+            AppointmentConfirm appointmentConfirm = null;
+            Relative relative = null;
+            if (indexPersonSelected == -1){
+                appointmentDTO = new AppointmentDTO(userModel.getUserId(),null,doctor.getDoctorId(),
+                        editTextSpecialist.getText().toString(),timeSelected,getCurrentDate(),
+                        editTextDate.getText().toString(),editTextSymptom.getText().toString());
+                appointmentConfirm = new AppointmentConfirm(userModel.getFullName(),"Tôi",userModel.getGender(),
+                        userModel.getBirth(),editTextSpecialist.getText().toString(),doctor.getFullName(),
+                        timeSelected,editTextDate.getText().toString(),editTextSymptom.getText().toString());
+            }
+            else {
+                if (relativeAdapter != null){
+                    relative = relativeAdapter.getItem(indexPersonSelected);
+                }
+                if (relative != null){
+                    appointmentDTO = new AppointmentDTO(null,relative.getPhoneNumber(),doctor.getDoctorId(),
+                            editTextSpecialist.getText().toString(),timeSelected,getCurrentDate(),
+                            editTextDate.getText().toString(),editTextSymptom.getText().toString());
+                    appointmentConfirm = new AppointmentConfirm(relative.getFullName(),relative.getRelationship(),relative.getGender(),
+                            relative.getBirth(),editTextSpecialist.getText().toString(),doctor.getFullName(),
+                            timeSelected,editTextDate.getText().toString(),editTextSymptom.getText().toString());
+                } else {
+                    appointmentDTO = null;
+                }
+            }
+            if (appointmentDTO != null){
+                Intent intent = new Intent(getApplicationContext(), ConfirmAppointment.class);
+                AndroidUtil.passAppoitmentDTOModelAsIntent(intent,appointmentDTO);
+                AndroidUtil.passAppoitmentConfirmModelAsIntent(intent,appointmentConfirm);
+                startActivity(intent);
+//                FirebaseFirestore.getInstance().collection("appointment").add(appointment).addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()){
+//                        Intent intent = new Intent(getApplicationContext(), ConfirmAppointment.class);
+//                        AndroidUtil.passAppoitmentModelAsIntent(intent,appointment);
+//                        startActivity(intent);
+//                    }
+//                    else {
+//                        Log.e("ERROR","Lỗi kết nối mạng");
+//                    }
+//                });
+            }
         }
         else CustomToast.showToast(getApplicationContext(),"ERROR",Toast.LENGTH_SHORT);
-    }
-
-    private void showDialogSuccessfull(int bottom) {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_dialog_notify_successfull);
-        Window window = dialog.getWindow();
-        if (window == null){
-            return;
-        }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        WindowManager.LayoutParams windowAttributes = window.getAttributes();
-        windowAttributes.gravity = Gravity.BOTTOM;
-        window.setAttributes(windowAttributes);
-        dialog.setCancelable(false);
-
-        Button btnHome, btnDetail;
-        btnHome = dialog.findViewById(R.id.btn_Home);
-        btnDetail = dialog.findViewById(R.id.btn_detail);
-        btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                Intent intent = new Intent(Infor_Appoitment_Activity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
-
-        btnDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                Intent intent = new Intent(Infor_Appoitment_Activity.this, MainActivity.class);
-                intent.putExtra("requestCode",113);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
-        dialog.show();
     }
 
     private boolean validation() {
@@ -591,22 +620,58 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         else{
             dialog.setCancelable(true);
         }
-        TextView textFullName, textGender, textSpecialist, textPrice,textDegree;
-        Button btnConfirm;
-        textFullName = dialog.findViewById(R.id.name_doctor);
-        textDegree = dialog.findViewById(R.id.degree);
-        textGender = dialog.findViewById(R.id.gender);
-        textSpecialist = dialog.findViewById(R.id.specialist);
-        textPrice = dialog.findViewById(R.id.price);
+        ImageView imageDoctor,close;
+        TextView fullName, gender, specialist, price,degree,number_appointment,experience,
+                achievement,work;
+        imageDoctor = dialog.findViewById(R.id.block1_col1);
+        fullName = dialog.findViewById(R.id.fullName_doctor);
+        degree = dialog.findViewById(R.id.degree);
+        gender = dialog.findViewById(R.id.gender);
+        specialist = dialog.findViewById(R.id.specialist);
+        price = dialog.findViewById(R.id.price);
+        number_appointment = dialog.findViewById(R.id.number_appointment);
+        experience = dialog.findViewById(R.id.experience);
+        achievement = dialog.findViewById(R.id.achievement);
+        work = dialog.findViewById(R.id.work);
+        close = dialog.findViewById(R.id.close);
         if (doctor != null){
-            textFullName.setText(doctor.getFullName());
-            textDegree.setText("Học vị: "+doctor.getDegree());
-            textGender.setText("Giới tính: "+doctor.getGender());
-            textSpecialist.setText("Chuyên khoa: "+doctor.getSpecialist());
-            textPrice.setText("Giá khám: "+String.valueOf(doctor.getPrice())+"đ");
+            if (doctor.getGender().equals("Nam") || doctor.getGender().equals("")) {
+                imageDoctor.setImageResource(R.drawable.doctor);
+            } else {
+                imageDoctor.setImageResource(R.drawable.doctor2);
+            }
+            fullName.setText(doctor.getFullName());
+            degree.setText(doctor.getDegree());
+            gender.setText(doctor.getGender());
+            specialist.setText(doctor.getSpecialist());
+            price.setText(formatPrice(doctor.getPrice())+" đ");
+            experience.setText(doctor.getExperience());
+            if (!doctor.getAchievement().equals("")){
+                String formatAchievement = doctor.getAchievement().replace(". ", ".<br>");
+                achievement.setText(Html.fromHtml(formatAchievement));
+            }
+            else achievement.setText(doctor.getAchievement());
+
+            if (!doctor.getWork().equals("")){
+                String formatWork = doctor.getWork().replace(". ", ".<br>");
+                work.setText(Html.fromHtml(formatWork));
+            }
+            else work.setText(doctor.getWork());
+
+            Query query = FirebaseUtil.getAppointmentCollectionReference()
+                    .whereEqualTo("doctor.doctorId",doctor.getDoctorId());
+            query.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    int number = task.getResult().size();
+                    number_appointment.setText(String.valueOf(number));
+                }
+                else {
+                    Log.e("ERROR","Lỗi kết nối");
+                }
+            });
         }
-        btnConfirm = dialog.findViewById(R.id.confirm);
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
+        close = dialog.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -716,5 +781,23 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         textViewName.setText("");
         setIndexSelectedSharedPreferences("indexDoctorSelected",0);
         setIndexSelectedSharedPreferences("indexTimeSelected",-1);
+    }
+    private String formatPrice(int price){
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        String formattedNumber = decimalFormat.format(price);
+        return formattedNumber;
+    }
+    private void setBackgroundNotSelectedItem(RelativeLayout formRelative) {
+        Drawable selectedBackground = ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_form_person_notselected);
+        formRelative.setBackground(selectedBackground);
+    }
+
+    private void setBackgroundItem(RelativeLayout formRelative) {
+        Drawable selectedBackground = ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_form_person_selected);
+        formRelative.setBackground(selectedBackground);
+    }
+    private String getNameFromFullName(String fullName){
+        String[]str = fullName.split(" ");
+        return str[str.length-1];
     }
 }

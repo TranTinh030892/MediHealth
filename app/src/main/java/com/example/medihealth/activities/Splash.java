@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,40 +16,38 @@ import com.example.medihealth.activities.chat.Employee_MainActivity;
 import com.example.medihealth.activities.profile.Profile;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Splash extends AppCompatActivity {
     FirebaseAuth mAuth;
     SharedPreferences sharedPreferences;
+
     @Override
     protected void onStart() {
         super.onStart();
         sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            setSharedPreferencesDataUser();
-            String currentUserId = user.getUid();
+        if (user == null) {
+            Intent intent = new Intent(this, Login.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    getAllUserIdAndCheck(currentUserId);
+                    checkProfile(user.getUid());
                 }
-            },2000);
-        } else {
-            Intent intent = new Intent(Splash.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            }, 2000);
         }
     }
 
@@ -57,50 +56,32 @@ public class Splash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
     }
-    private void getAllUserIdAndCheck(String currentUserId){
-        FirebaseFirestore.getInstance().collection("users").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                List<String> listAllUserId = new ArrayList<>();
-                QuerySnapshot querySnapshot = task.getResult();
-                for (QueryDocumentSnapshot document : querySnapshot) {
-                    listAllUserId.add(document.getId());
+
+    private void checkProfile(String userId) {
+        Query query = FirebaseUtil.allUserCollectionReference()
+                .whereEqualTo("userId", userId);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot snapshot = task.getResult();
+                    if (snapshot != null) {
+                        int size = snapshot.size();
+                        if (size == 0) {
+                            Intent intent = new Intent(Splash.this, Profile.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        } else checkRole(userId);
+                    } else {
+                        Log.e("ERROR", "Không có kết quả trả về");
+                    }
+                } else {
+                    Log.d("TAG", "Lỗi khi lấy dữ liệu: ", task.getException());
                 }
-                checkUserOrEmployee(currentUserId, listAllUserId);
-            } else {
-                Log.e("ERROR","ERROR");
             }
         });
     }
-    private void checkUserOrEmployee(String currentUserId, List<String> listAllUserId){
-        Intent intent;
-        if (listAllUserId.contains(currentUserId)) {
-            checkProfile(currentUserId);
-            intent = new Intent(Splash.this, MainActivity.class);
-        } else {
-            intent = new Intent(Splash.this, Employee_MainActivity.class);
-        }
-        intent.putExtra("requestCodeLoadingFormUser", 1102);
-        startActivity(intent);
-        finish();
-    }
-    private void checkProfile(String userId) {
-        FirebaseFirestore.getInstance().collection("users")
-                .document(userId)
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.e("ERROR", "Listen failed.", e);
-                        }
-                        if (documentSnapshot.exists() && !documentSnapshot.getData().isEmpty()) {
-                            checkRole(userId);
-                        } else {
-                            Intent intent = new Intent(Splash.this, Profile.class);
-                            startActivity(intent);
-                        }
-                    }
-                });
-    }
+
     private void checkRole(String currentUserid) {
         FirebaseFirestore.getInstance().collection("role")
                 .document(currentUserid)
@@ -112,13 +93,13 @@ public class Splash extends AppCompatActivity {
                         }
                         if (documentSnapshot != null && documentSnapshot.contains("isRole")) {
                             Number isRoleNumber = documentSnapshot.getLong("isRole");
-                            if(isRoleNumber != null){
+                            if (isRoleNumber != null) {
                                 int isRole = isRoleNumber.intValue();
                                 Intent intent = null;
                                 if (isRole == 3) {
                                     intent = new Intent(Splash.this, MainActivity.class);
                                     setSharedPreferencesDataUser();
-                                } else if (isRole == 2){
+                                } else if (isRole == 2) {
                                     intent = new Intent(Splash.this, Employee_MainActivity.class);
                                     intent.putExtra("requestCodeEmployee", 1103);
                                 }
@@ -135,6 +116,7 @@ public class Splash extends AppCompatActivity {
                     }
                 });
     }
+
     private void setSharedPreferencesDataUser() {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
@@ -142,8 +124,8 @@ public class Splash extends AppCompatActivity {
                 if (currentUser != null) {
                     sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("inforFormUser",currentUser.getFullName()+";"+currentUser.getGender()+" - "+currentUser.getBirth()+";"+
-                            String.valueOf(currentUser.getHeight())+";"+String.valueOf(currentUser.getWeight())+";"+
+                    editor.putString("inforFormUser", currentUser.getFullName() + ";" + currentUser.getGender() + " - " + currentUser.getBirth() + ";" +
+                            String.valueOf(currentUser.getHeight()) + ";" + String.valueOf(currentUser.getWeight()) + ";" +
                             getBMI(currentUser.getHeight(), currentUser.getWeight()));
                     editor.apply();
                 } else {
@@ -155,9 +137,9 @@ public class Splash extends AppCompatActivity {
         });
     }
 
-    private String getBMI(int height, int weight){
-        double heightDouble = (double) height/100;
-        double BMI = (double) weight/(heightDouble * heightDouble);
+    private String getBMI(int height, int weight) {
+        double heightDouble = (double) height / 100;
+        double BMI = (double) weight / (heightDouble * heightDouble);
         double roundedNumber = Math.round(BMI * 10) / 10.0;
         return String.valueOf(roundedNumber);
     }

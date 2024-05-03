@@ -1,7 +1,6 @@
 package com.example.medihealth.fragments.EmployeeFragment;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -23,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -32,8 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activities.MainActivity;
-import com.example.medihealth.activities.appointment.Infor_Appoitment_Activity;
 import com.example.medihealth.adapters.appointment.Employee_AppointmentAdapter;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.CustomToast;
@@ -43,6 +39,7 @@ import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -234,11 +231,10 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
     private void setupRecyclerViewData(String dateStr, String search) {
         String nameSearch = standardizedFullName(search);
 
-        Query query = FirebaseUtil.getAppointmentCollectionReference()
-                .whereEqualTo("bookDate", dateStr)
-                .whereGreaterThanOrEqualTo("userModel.fullName", nameSearch)
-                .whereLessThan("userModel.fullName", nameSearch + "\uf8ff")
-                .whereEqualTo("stateAppointment", btnSelected);
+        Query query = FirebaseUtil.getAppointmentCollectionReference().where(Filter.and(
+                Filter.equalTo("bookDate", dateStr),
+                Filter.equalTo("stateAppointment", btnSelected)
+        ));
 
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
                 .setQuery(query, Appointment.class).build();
@@ -390,9 +386,10 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
             if (task.isSuccessful()){
                 Appointment appointment = task.getResult().toObject(Appointment.class);
                 if (appointment != null){
-                    pushNotification(appointment);
-                    String userId = appointment.getUserModel().getUserId();
-                    sendMessagetoCustomerTokenId(userId);
+                    String title = "Đặt lịch khám thành công";
+                    String body = "Quý khách đã đặt lịch khám thành công ngày " +appointment.getBookDate()+" tại Medihealth. Vui lòng đến đúng theo thời gian đã hẹn. Trân thành cảm ơn và hân hạnh được " +
+                            "phục vụ quý khách.";
+                    saveNotification(appointment,title,body);
                 }
             }
             else {
@@ -400,7 +397,7 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
             }
         });
     }
-    private void sendMessagetoCustomerTokenId(String userId) {
+    private void sendMessagetoCustomerTokenId(String userId, Appointment appointment) {
         Query query = FirebaseUtil.getTokenId().whereEqualTo("userId",userId);
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
@@ -411,7 +408,10 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
                     if (token != null) {
                         List<String> tokenList = token.getTokenList();
                         for (String tokenString : tokenList){
-                            FirebaseUtil.sendMessageNotificationtoCustomerTokenId("customer",tokenString);
+                            String title = "Đặt lịch khám thành công";
+                            String body = "Quý khách đã đặt lịch khám thành công ngày " +appointment.getBookDate()+" tại Medihealth. Vui lòng đến đúng theo thời gian đã hẹn. Trân thành cảm ơn và hân hạnh được " +
+                                    "phục vụ quý khách.";
+                            FirebaseUtil.sendMessageNotificationToCustomerTokenId("customer",tokenString,title,body);
                         }
                     }
                 }
@@ -422,13 +422,17 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
         });
     }
 
-    private void pushNotification(Appointment appointment) {
-        String title = "Đặt lịch khám thành công";
-        String body = "Quý khách đã đặt lịch khám thành công tại Medihealth. Trân thành cảm ơn và hân hạnh được " +
-                "phục vụ quý khách";
+    private void saveNotification(Appointment appointment,String title,String body) {
         boolean seen = false;
         Timestamp timestamp = Timestamp.now();
-        String userId = appointment.getUserModel().getUserId();
+        String userId = null;
+        if (appointment.getUserModel() != null){
+            userId = appointment.getUserModel().getUserId();
+        }
+        if (appointment.getRelative() != null){
+            userId = appointment.getRelative().getUserId();
+        }
+        if (userId == null)return;
         NotificationModel notificationModel = new NotificationModel(title,body,timestamp,seen,userId);
         FirebaseUtil.getNotificationsCollectionReference().add(notificationModel).addOnCompleteListener(task -> {
             if (task.isSuccessful()){
@@ -438,26 +442,25 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
                 Log.e("ERROR","Lỗi kết nối");
             }
         });
+        sendMessagetoCustomerTokenId(userId,appointment);
     }
     private void updateStateAppointment(String appointmentId,int state) {
-        FirebaseUtil.getAppointmentDetailsById(appointmentId).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        Appointment appointment = task.getResult().toObject(Appointment.class);
-                        appointment.setStateAppointment(state);
-                        FirebaseUtil.getAppointmentDetailsById(appointmentId).set(appointment)
-                                .addOnCompleteListener(task1 -> {
-                                    if(task1.isSuccessful()){
-                                        Log.e("SUCCESSFULL","Update lịch hẹn thành công");
-                                    }
-                                    else {
-                                        Log.e("ERROR","Lỗi kết nối mạng");
-                                    }
-                                });
+        FirebaseUtil.getAppointmentDetailsById(appointmentId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Appointment appointment = task.getResult().toObject(Appointment.class);
+                appointment.setStateAppointment(state);
+                FirebaseUtil.getAppointmentDetailsById(appointmentId).set(appointment).addOnCompleteListener(task1 -> {
+                    if(task1.isSuccessful()){
+                        Log.e("SUCCESSFULL","Update lịch hẹn thành công");
                     }
                     else {
                         Log.e("ERROR","Lỗi kết nối mạng");
                     }
                 });
+            }
+            else {
+                Log.e("ERROR","Lỗi kết nối mạng");
+            }
+        });
     }
 }

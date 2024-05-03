@@ -16,7 +16,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import org.json.JSONObject;
 
@@ -42,27 +41,30 @@ public class FirebaseUtil {
         void onStateReceived(boolean isOnline);
     }
 
-    public static String currentUserId(){
+    public static String currentUserId() {
         return FirebaseAuth.getInstance().getUid();
     }
 
-    public static boolean isLoggedIn(){
-        if(currentUserId()!=null){
+    public static boolean isLoggedIn() {
+        if (currentUserId() != null) {
             return true;
         }
         return false;
     }
 
-    public static DocumentReference currentUserDetails(){
+    public static DocumentReference currentUserDetails() {
         return FirebaseFirestore.getInstance().collection("users").document(currentUserId());
     }
-    public static DocumentReference currentEmployeeDetails(){
+
+    public static DocumentReference currentEmployeeDetails() {
         return FirebaseFirestore.getInstance().collection("employee").document(currentUserId());
     }
-    public static DocumentReference getDoctorDetailsById(String doctorId){
+
+    public static DocumentReference getDoctorDetailsById(String doctorId) {
         return FirebaseFirestore.getInstance().collection("doctor").document(doctorId);
     }
-//    public static DocumentReference statusUser(){
+
+    //    public static DocumentReference statusUser(){
 //        return FirebaseFirestore.getInstance().collection("status").document(currentUserId());
 //    }
 //    public static void setStatus(boolean b){
@@ -75,11 +77,12 @@ public class FirebaseUtil {
 //            }
 //        });
 //    }
-    public static DocumentReference stateUserOlline(){
+    public static DocumentReference stateUserOlline() {
         return FirebaseFirestore.getInstance().collection("state").document(currentUserId());
     }
-    public static void setState(boolean b){
-        if (FirebaseAuth.getInstance().getCurrentUser() != null){
+
+    public static void setState(boolean b) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             Map<String, Boolean> stateUser = new HashMap<>();
             stateUser.put("isState", b);
             FirebaseUtil.stateUserOlline().set(stateUser).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -90,77 +93,95 @@ public class FirebaseUtil {
             });
         }
     }
-    public static DocumentReference roleUser(){
+
+    public static DocumentReference roleUser() {
         return FirebaseFirestore.getInstance().collection("role").document(currentUserId());
     }
 
-    public static CollectionReference getTokenId(){
+    public static CollectionReference getTokenId() {
         return FirebaseFirestore.getInstance().collection("token");
     }
-    public static DocumentReference getTokenByDocument(String documentId){
+
+    public static DocumentReference getTokenByDocument(String documentId) {
         return FirebaseFirestore.getInstance().collection("token").document(documentId);
     }
-    public static CollectionReference allUserCollectionReference(){
+
+    public static CollectionReference allUserCollectionReference() {
         return FirebaseFirestore.getInstance().collection("users");
     }
-    public static CollectionReference allEmployeeCollectionReference(){
+
+    public static CollectionReference allEmployeeCollectionReference() {
         return FirebaseFirestore.getInstance().collection("employee");
     }
-    public static CollectionReference allDoctorCollectionReference(){
+
+    public static CollectionReference allDoctorCollectionReference() {
         return FirebaseFirestore.getInstance().collection("doctor");
     }
+
     // thêm một đối tượng appointment vào document của collection appointment với id được lấy tự động
-    public static CollectionReference getAppointmentCollectionReference(){
+    public static CollectionReference getAppointmentCollectionReference() {
         return FirebaseFirestore.getInstance().collection("appointment");
     }
-    public static DocumentReference getAppointmentDetailsById(String appointmentId){
+
+    public static DocumentReference getAppointmentDetailsById(String appointmentId) {
         return FirebaseFirestore.getInstance().collection("appointment").document(appointmentId);
     }
-    public static DocumentReference getChatroomReference(String chatroomId){
+
+    public static DocumentReference getChatroomReference(String chatroomId) {
         return FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId);
     }
 
-    public static CollectionReference getChatroomMessageReference(String chatroomId){
+    public static CollectionReference getChatroomMessageReference(String chatroomId) {
         return getChatroomReference(chatroomId).collection("chats");
     }
 
-    public static String getChatroomId(String userId1,String userId2){
-        if(userId1.hashCode()<userId2.hashCode()){
-            return userId1+"_"+userId2;
-        }else{
-            return userId2+"_"+userId1;
+    public static String getChatroomId(String userId1, String userId2) {
+        if (userId1.hashCode() < userId2.hashCode()) {
+            return userId1 + "_" + userId2;
+        } else {
+            return userId2 + "_" + userId1;
         }
     }
 
-    public static CollectionReference allChatroomCollectionReference(){
+    public static CollectionReference allChatroomCollectionReference() {
         return FirebaseFirestore.getInstance().collection("chatrooms");
     }
 
-    public static DocumentReference getOtherUserFromChatroom(List<String> userIds){
-        if(userIds.get(0).equals(FirebaseUtil.currentUserId())){
+    public static DocumentReference getOtherUserFromChatroom(List<String> userIds) {
+        if (userIds.get(0).equals(FirebaseUtil.currentUserId())) {
             return allUserCollectionReference().document(userIds.get(1));
-        }else{
+        } else {
             return allUserCollectionReference().document(userIds.get(0));
         }
     }
 
-    public static String timestampToString(Timestamp timestamp){
+    public static String timestampToString(Timestamp timestamp) {
         return new SimpleDateFormat("HH:MM").format(timestamp.toDate());
     }
 
-    public static void logout(){
+    public static CollectionReference getDrugCollectionReference() {
+        return FirebaseFirestore.getInstance().collection("medicine");
+    }
+
+    public static void logout() {
         FirebaseAuth.getInstance().signOut();
     }
-    public static CollectionReference getNotificationsCollectionReference(){
+
+    public static CollectionReference getNotificationsCollectionReference() {
         return FirebaseFirestore.getInstance().collection("notification");
     }
-    public static DocumentReference getNotificationDetailsById(String notificationId){
+
+    public static DocumentReference getNotificationDetailsById(String notificationId) {
         return FirebaseFirestore.getInstance().collection("notification").document(notificationId);
     }
 
-    public static void sendMessageNotificationtoEmployeeTokenId(String requestCode,String message,String tokenId) {
+    public static CollectionReference getRelativeCollectionReference() {
+        return FirebaseFirestore.getInstance().collection("relative");
+    }
+
+    public static void sendMessageNotificationtoEmployeeTokenId(String requestCode, String message, String tokenId) {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 UserModel currentUser = task.getResult().toObject(UserModel.class);
                 try {
                     JSONObject jsonObject = new JSONObject();
@@ -182,35 +203,34 @@ public class FirebaseUtil {
     }
 
     public static void sendNotifyDataChange() {
-        Query query = FirebaseUtil.getTokenId().whereEqualTo("userId",FirebaseAuth.getInstance().getUid());
+        Query query = FirebaseUtil.getTokenId().whereEqualTo("userId", FirebaseAuth.getInstance().getUid());
         query.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
                 if (querySnapshot != null && !querySnapshot.isEmpty()) {
                     DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
                     Token token = documentSnapshot.toObject(Token.class);
                     if (token != null) {
                         List<String> tokenList = token.getTokenList();
-                        for (String tokenString : tokenList){
-                            sendMessageNotificationtoCustomerTokenId(DATA_CHANGED_REQ_CODE, tokenString);
+                        for (String tokenString : tokenList) {
+                            sendMessageNotificationToCustomerTokenId(DATA_CHANGED_REQ_CODE, tokenString, null, null);
                         }
                     }
                 }
-            }
-            else {
-                Log.e("ERROR","Lỗi kết nối");
+            } else {
+                Log.e("ERROR", "Lỗi kết nối");
             }
         });
     }
 
-    public static void sendMessageNotificationtoCustomerTokenId(String requestCode,String tokenId) {
+    public static void sendMessageNotificationToCustomerTokenId(String requestCode, String tokenId, String title, String body) {
         try {
             JSONObject jsonObject = new JSONObject();
 
             JSONObject dataObj = new JSONObject();
             dataObj.put("requestCode", requestCode);
-            dataObj.put("title", "Đặt lịch khám thành công");
-            dataObj.put("body", "Bạn đã đặt lịch khám thành công tại Medihealth");
+            dataObj.put("title", title);
+            dataObj.put("body", body);
             jsonObject.put("data", dataObj);
             jsonObject.put("to", tokenId);
 
@@ -219,6 +239,7 @@ public class FirebaseUtil {
             e.printStackTrace();
         }
     }
+
     public static void callApi(JSONObject jsonObject) {
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -241,17 +262,6 @@ public class FirebaseUtil {
             }
         });
     }
-//    public static StorageReference  getCurrentProfilePicStorageRef(){
-//        return FirebaseStorage.getInstance().getReference().child("profile_pic")
-//                .child(FirebaseUtil.currentUserId());
-//    }
-
-//    public static StorageReference  getOtherProfilePicStorageRef(String otherUserId){
-//        return FirebaseStorage.getInstance().getReference().child("profile_pic")
-//                .child(otherUserId);
-//    }
-
-
 }
 
 

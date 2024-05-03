@@ -11,8 +11,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.medihealth.models.Appointment;
+import com.example.medihealth.models.AppointmentConfirm;
 import com.example.medihealth.models.AppointmentDTO;
+import com.example.medihealth.models.Drug;
 import com.example.medihealth.models.Employee;
+import com.example.medihealth.models.Relative;
 import com.example.medihealth.models.UserModel;
 
 
@@ -45,29 +48,115 @@ public class AndroidUtil {
         employee.setTokenId(intent.getStringExtra("tokenId"));
         return employee;
     }
-    public static void passAppointmentDTOAsIntent(Intent intent, AppointmentDTO model){
-        intent.putExtra("userName",model.getUserName());
-        intent.putExtra("bookDate",model.getBookDate());
-        intent.putExtra("appointmentDate",model.getAppointmentDate());
+    public static void passAppoitmentDTOModelAsIntent(Intent intent, AppointmentDTO model){
+        intent.putExtra("userId",model.getUserId());
+        intent.putExtra("relativePhoneNumber",model.getRelativePhoneNumber());
         intent.putExtra("specialist",model.getSpecialist());
         intent.putExtra("doctorId",model.getDoctorId());
-        intent.putExtra("doctorName",model.getDoctorName());
         intent.putExtra("time",model.getTime());
+        intent.putExtra("bookDate",model.getBookDate());
+        intent.putExtra("appointmentDate",model.getAppointmentDate());
         intent.putExtra("symptom",model.getSymptom());
-        intent.putExtra("stateAppointment",model.getStateAppointment());
     }
-    public static AppointmentDTO getAppointmentDTOFromIntent(Intent intent){
+    public static AppointmentDTO getAppointmentDTOModelFromIntent(Intent intent){
         AppointmentDTO appointmentDTO = new AppointmentDTO();
-        appointmentDTO.setUserName(intent.getStringExtra("userName"));
-        appointmentDTO.setBookDate(intent.getStringExtra("bookDate"));
-        appointmentDTO.setAppointmentDate(intent.getStringExtra("appointmentDate"));
+        appointmentDTO.setUserId(intent.getStringExtra("userId"));
+        appointmentDTO.setRelativePhoneNumber(intent.getStringExtra("relativePhoneNumber"));
         appointmentDTO.setSpecialist(intent.getStringExtra("specialist"));
         appointmentDTO.setDoctorId(intent.getStringExtra("doctorId"));
-        appointmentDTO.setDoctorName(intent.getStringExtra("doctorName"));
         appointmentDTO.setTime(intent.getStringExtra("time"));
+        appointmentDTO.setBookDate(intent.getStringExtra("bookDate"));
+        appointmentDTO.setAppointmentDate(intent.getStringExtra("appointmentDate"));
         appointmentDTO.setSymptom(intent.getStringExtra("symptom"));
-        appointmentDTO.setStateAppointment(intent.getIntExtra("stateAppointment",-1));
         return appointmentDTO;
+    }
+    public static void passAppoitmentConfirmModelAsIntent(Intent intent, AppointmentConfirm model){
+        intent.putExtra("personName",model.getPersonName());
+        intent.putExtra("relationship",model.getRelationship());
+        intent.putExtra("gender",model.getGender());
+        intent.putExtra("birth",model.getBirth());
+        intent.putExtra("specialist",model.getSpecialist());
+        intent.putExtra("doctorName",model.getDoctorName());
+        intent.putExtra("time",model.getTime());
+        intent.putExtra("appointmentDate",model.getAppointmentDate());
+        intent.putExtra("symptom",model.getSymptom());
+    }
+    public static AppointmentConfirm getAppointmentConfirmModelFromIntent(Intent intent){
+        AppointmentConfirm appointmentConfirm = new AppointmentConfirm();
+        appointmentConfirm.setPersonName(intent.getStringExtra("personName"));
+        appointmentConfirm.setRelationship(intent.getStringExtra("relationship"));
+        appointmentConfirm.setGender(intent.getStringExtra("gender"));
+        appointmentConfirm.setBirth(intent.getStringExtra("birth"));
+        appointmentConfirm.setSpecialist(intent.getStringExtra("specialist"));
+        appointmentConfirm.setDoctorName(intent.getStringExtra("doctorName"));
+        appointmentConfirm.setTime(intent.getStringExtra("time"));
+        appointmentConfirm.setAppointmentDate(intent.getStringExtra("appointmentDate"));
+        appointmentConfirm.setSymptom(intent.getStringExtra("symptom"));
+        return appointmentConfirm;
+    }
+    public static void passAccountAsIntent(Intent intent, UserModel model){
+        intent.putExtra("fullName",model.getFullName());
+        intent.putExtra("gender",model.getGender());
+        intent.putExtra("phoneNumber",model.getPhoneNumber());
+        intent.putExtra("address",model.getAddress());
+        intent.putExtra("birth",model.getBirth());
+        intent.putExtra("height",model.getHeight());
+        intent.putExtra("weight",model.getWeight());
+    }
+
+    public static UserModel getAccountFromIntent(Intent intent){
+        UserModel userModel = new UserModel();
+        userModel.setFullName(intent.getStringExtra("fullName"));
+        userModel.setGender(intent.getStringExtra("gender"));
+        userModel.setBirth(intent.getStringExtra("birth"));
+        userModel.setPhoneNumber(intent.getStringExtra("phoneNumber"));
+        userModel.setAddress(intent.getStringExtra("address"));
+        userModel.setHeight(intent.getIntExtra("height",160));
+        userModel.setWeight(intent.getIntExtra("weight",50));
+        return userModel;
+    }
+    public static void passRelativeModelAsIntent(Intent intent, Relative model){
+        intent.putExtra("fullName",model.getFullName());
+        intent.putExtra("gender",model.getGender());
+        intent.putExtra("phoneNumber",model.getPhoneNumber());
+        intent.putExtra("address",model.getAddress());
+        intent.putExtra("birth",model.getBirth());
+        intent.putExtra("height",model.getHeight());
+        intent.putExtra("weight",model.getWeight());
+        intent.putExtra("relationship",model.getRelationship());
+    }
+    public static Relative getRelativeModelFromIntent(Intent intent){
+        Relative relative = new Relative();
+        relative.setFullName(intent.getStringExtra("fullName"));
+        relative.setGender(intent.getStringExtra("gender"));
+        relative.setBirth(intent.getStringExtra("birth"));
+        relative.setPhoneNumber(intent.getStringExtra("phoneNumber"));
+        relative.setAddress(intent.getStringExtra("address"));
+        relative.setHeight(intent.getIntExtra("height",160));
+        relative.setWeight(intent.getIntExtra("weight",50));
+        relative.setRelationship(intent.getStringExtra("relationship"));
+        return relative;
+    }
+    public static void passDrugModelAsIntent(Intent intent, Drug model){
+        intent.putExtra("name",model.getName());
+        intent.putExtra("ingredients",model.getIngredients());
+        intent.putExtra("function",model.getFunction());
+        intent.putExtra("expiry",model.getExpiry());
+        intent.putExtra("sideEffects",model.getSideEffects());
+        intent.putExtra("contraindicated",model.getContraindicated());
+        intent.putExtra("interactions",model.getInteractions());
+    }
+
+    public static Drug getDrugModelFromIntent(Intent intent){
+        Drug drug = new Drug();
+        drug.setName(intent.getStringExtra("name"));
+        drug.setIngredients(intent.getStringExtra("ingredients"));
+        drug.setFunction(intent.getStringExtra("function"));
+        drug.setExpiry(intent.getStringExtra("expiry"));
+        drug.setSideEffects(intent.getStringExtra("sideEffects"));
+        drug.setContraindicated(intent.getStringExtra("contraindicated"));
+        drug.setInteractions(intent.getStringExtra("interactions"));
+        return drug;
     }
     public static void setProfilePic(Context context, Uri imageUri, ImageView imageView){
         Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(imageView);

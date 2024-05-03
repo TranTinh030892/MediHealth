@@ -66,10 +66,10 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
             android:layout_height="wrap_content">
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_user"
-                android:layout_width="57dp"
+                android:layout_width="53dp"
                 android:src="@drawable/profile"
                 android:padding="3dp"
-                android:layout_height="57dp"/>
+                android:layout_height="53dp"/>
             <RelativeLayout
                 android:id="@+id/form"
                 android:layout_toEndOf="@id/image_user"
@@ -136,7 +136,7 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                         android:layout_height="wrap_content"
                         android:text="Chọn ngày khám"
                         android:textColor="@color/text_Color"
-                        android:textSize="19sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -173,13 +173,12 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
 
                     <TextView
                         android:id="@+id/textSpecialist"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Chuyên khoa"
                         android:textColor="@color/text_Color"
-                        android:textSize="19sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
-
                     <TextView
                         android:id="@+id/specialist"
                         android:layout_width="match_parent"
@@ -188,7 +187,7 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                         android:layout_marginTop="15dp"
                         android:background="@drawable/edit_text_book"
                         android:gravity="center_vertical"
-                        android:text="Tất cả"
+                        android:text="Chưa xác định"
                         android:textColor="@color/text_Color"
                         android:paddingStart="8dp"
                         android:textSize="17sp" />
@@ -217,7 +216,7 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                         android:layout_height="wrap_content"
                         android:text="Bác sĩ"
                         android:textColor="@color/text_Color"
-                        android:textSize="19sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -251,11 +250,10 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                 <RelativeLayout
                     android:id="@+id/infor_detail_doctor"
                     android:layout_width="match_parent"
-                    android:layout_height="27dp"
+                    android:layout_height="25dp"
                     android:layout_below="@id/doctorForm"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/custom_button_google"
-                    android:backgroundTint="#DBDDEC">
+                    android:background="@drawable/custom_btn_detail_doctor">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -281,7 +279,7 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                         android:layout_height="wrap_content"
                         android:text="Giờ khám mong muốn"
                         android:textColor="@color/text_Color"
-                        android:textSize="19sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/listTime"
@@ -330,18 +328,140 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/block_person"
+                    android:layout_below="@id/countForm"
+                    android:layout_marginTop="18dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp">
+                    <TextView
+                        android:id="@+id/text_block_person"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Chọn người tới khám"
+                        android:textColor="@color/text_Color"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                    <RelativeLayout
+                        android:layout_below="@id/text_block_person"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <RelativeLayout
+                            android:id="@+id/block_curentUser"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content">
+                            <RelativeLayout
+                                android:id="@+id/form_currentUser"
+                                android:layout_marginTop="5dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/relative_image"/>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/tick"
+                                android:layout_marginLeft="40dp"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/tick"/>
+
+                            <TextView
+                                android:id="@+id/name"
+                                android:layout_below="@+id/form_currentUser"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="6dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="17dp"
+                                android:textColor="@color/text_Color"
+                                android:fontFamily="sans-serif-medium"/>
+
+                            <RelativeLayout
+                                android:layout_below="@id/name"
+                                android:layout_marginTop="6dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:id="@+id/btn_Detail_currentUser"
+                                    android:layout_width="45dp"
+                                    android:layout_height="wrap_content"
+                                    android:paddingStart="5dp"
+                                    android:paddingEnd="5dp"
+                                    android:paddingTop="1.5dp"
+                                    android:paddingBottom="1.5dp"
+                                    android:text="Tôi"
+                                    android:textSize="10.5sp"
+                                    android:textColor="@color/text_Color"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:background="@drawable/custom_button_google"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:clickable="true" />
+                            </RelativeLayout>
+                        </RelativeLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/listPerson"
+                            android:layout_toEndOf="@id/block_curentUser"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"/>
+
+                        <RelativeLayout
+                            android:id="@+id/block_add"
+                            android:layout_toEndOf="@id/listPerson"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content">
+                            <RelativeLayout
+                                android:id="@+id/form_add"
+                                android:padding="7dp"
+                                android:layout_marginTop="5dp"
+                                android:clickable="true"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/custom_add_relative"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/add_person"/>
+                            </RelativeLayout>
+                            <TextView
+                                android:id="@+id/text"
+                                android:layout_below="@+id/form_add"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="6dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Thêm"
+                                android:textSize="17dp"
+                                android:textColor="@color/text_Color"
+                                android:fontFamily="sans-serif-medium"/>
+                        </RelativeLayout>
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:id="@+id/symptomForm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/countForm"
-                    android:layout_marginTop="18dp">
+                    android:layout_below="@id/block_person"
+                    android:layout_marginTop="16dp">
                     <TextView
                         android:id="@+id/textSymptom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Triệu chứng"
                         android:textColor="@color/text_Color"
-                        android:textSize="19sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <EditText
@@ -358,6 +478,7 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
                         android:textColorHint="@color/text_Color"
                         android:hint="Nhập triệu chứng..." />
                 </RelativeLayout>
+
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
@@ -382,7 +503,7 @@ tools:context=".activities.appointment.Infor_Appoitment_Activity">
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đặt lịch"
+            android:text="Tiếp theo"
             android:textAllCaps="false"
             android:textSize="20sp"
             android:fontFamily="sans-serif-medium"

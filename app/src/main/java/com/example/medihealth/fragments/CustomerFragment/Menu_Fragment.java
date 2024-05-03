@@ -49,7 +49,6 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
     GoogleSignInClient googleSignInClient;
     CardView btnLogout;
     String currentUserId = "";
-
     public Menu_Fragment() {
         // Required empty public constructor
     }
@@ -63,7 +62,7 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View itemView = inflater.inflate(R.layout.fragment_menu, container, false);
+        View itemView =  inflater.inflate(R.layout.fragment_menu, container, false);
         currentUserId = FirebaseUtil.currentUserId();
         dialog = new Dialog(getContext());
         sharedPreferences = getContext().getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
@@ -75,9 +74,22 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
         // Khởi tạo GoogleSignInClient
         googleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
         initView(itemView);
+        setupUserImage();
         setInforUser();
         setOnclick();
         return itemView;
+    }
+
+    private void setupUserImage() {
+        String profileString = sharedPreferences.getString("profile", "empty");
+        if (!profileString.equals("empty")){
+            String[] array = profileString.split(";");
+            if (array.length > 0) {
+                Picasso.get().load(array[1]).into(imageAccount);
+            } else {
+                Log.e("ERROR", "profileString rỗng");
+            }
+        }
     }
 
     @Override
@@ -107,30 +119,28 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
 
     private void setbtnLogout() {
         FirebaseUser curentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (curentUser == null) {
+        if (curentUser == null){
             btnLogout.setVisibility(View.GONE);
         }
     }
-
     private void setInforUser() {
         FirebaseUtil.currentUserDetails().get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 UserModel userModel = documentSnapshot.toObject(UserModel.class);
                 userName.setText(userModel.getFullName());
-                userGenderBirth.setText(userModel.getBirth());
+                userGenderBirth.setText(userModel.getGender()+" - "+ userModel.getBirth());
             } else {
                 Log.e("ERROR", "User not found");
             }
         });
     }
-
     private void setOnclick() {
         btnLogout.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_logout) {
+        if (v.getId() == R.id.btn_logout){
             showDialogLoadingLogout(Gravity.CENTER);
             SyncService.logout(getContext());
             new Handler().postDelayed(new Runnable() {
@@ -147,10 +157,10 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_loading);
         Window window = dialog.getWindow();
-        if (window == null) {
+        if (window == null){
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
@@ -191,46 +201,45 @@ public class Menu_Fragment extends Fragment implements View.OnClickListener {
                 });
     }
 
-    private void removeAllSharedPreferences() {
+    private void removeAllSharedPreferences(){
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("profile", "empty");
+        editor.putString("profile","empty");
         editor.apply();
     }
-
     private void removeTokenId(String curentUserId, String tokenId) {
-        Query query = FirebaseUtil.getTokenId().whereEqualTo("userId", curentUserId);
+        Query query = FirebaseUtil.getTokenId().whereEqualTo("userId",curentUserId);
         query.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
+            if (task.isSuccessful()){
                 QuerySnapshot querySnapshot = task.getResult();
                 if (querySnapshot != null && !querySnapshot.isEmpty()) {
                     DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
                     Token token = documentSnapshot.toObject(Token.class);
                     if (token != null) {
                         List<String> tokenList = token.getTokenList();
-                        for (int i = 0; i < tokenList.size(); i++) {
-                            if (tokenList.get(i).equals(tokenId)) {
-                                tokenList.remove(i);
-                                break;
+                        for (int i = 0 ; i < tokenList.size() ; i++){
+                            if (tokenList.get(i).equals(tokenId)){
+                                tokenList.remove(i);break;
                             }
                         }
-                        updateTonken(documentSnapshot.getId(), tokenList);
+                        updateTonken(documentSnapshot.getId(),tokenList);
                     }
                 }
-            } else {
-                Log.e("ERROR", "Lỗi kết nối");
+            }
+            else {
+                Log.e("ERROR","Lỗi kết nối");
             }
         });
     }
 
     private void updateTonken(String documentSnapshot, List<String> tokenList) {
-        Token token = new Token(tokenList, currentUserId);
+        Token token = new Token(tokenList,currentUserId);
         FirebaseUtil.getTokenByDocument(documentSnapshot).set(token).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Log.d("SUCCESSFULL", "Update tokenList thành công");
-            } else Log.e("ERROR", "Lỗi kết nối");
+            if (task.isSuccessful()){
+                Log.d("SUCCESSFULL","Update tokenList thành công");
+            }
+            else Log.e("ERROR","Lỗi kết nối");
         });
     }
-
     public interface TokenUserFetchCallback {
         void onTokenUserFetchComplete();
     }
