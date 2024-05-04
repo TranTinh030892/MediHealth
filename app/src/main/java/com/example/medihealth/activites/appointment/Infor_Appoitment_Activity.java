@@ -364,7 +364,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
                 CustomToast.showToast(getApplicationContext(),"Chưa chọn bác sĩ",Toast.LENGTH_SHORT);
                 return;
             }
-            showInforDoctor(indexDoctorSelected, Gravity.CENTER);
+            getDetailDoctorAndPassIntent(indexDoctorSelected);
         }
         else if (v.getId() == R.id.enterBook){
             if (!validation()) return;
@@ -563,89 +563,18 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         String doctorName = adapterModel.getItem(indexDoctorSelected).getFullName();
         textViewName.setText(doctorName);
     }
-
-    private void showInforDoctor(int indexDoctorSelected, int center) {
+    private void getDetailDoctorAndPassIntent(int indexDoctorSelected) {
         Doctor doctor = null;
         if (adapterModel != null){
             doctor = adapterModel.getItem(indexDoctorSelected);
         }
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_dialog_infordoctor);
-        Window window = dialog.getWindow();
-        if (window == null){
-            return;
-        }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        WindowManager.LayoutParams windowAttributes = window.getAttributes();
-        windowAttributes.gravity = center;
-        window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
-            dialog.setCancelable(false);
-        }
-        else{
-            dialog.setCancelable(true);
-        }
-        ImageView imageDoctor,close;
-        TextView fullName, gender, specialist, price,degree,number_appointment,experience,
-                achievement,work;
-        imageDoctor = dialog.findViewById(R.id.block1_col1);
-        fullName = dialog.findViewById(R.id.fullName_doctor);
-        degree = dialog.findViewById(R.id.degree);
-        gender = dialog.findViewById(R.id.gender);
-        specialist = dialog.findViewById(R.id.specialist);
-        price = dialog.findViewById(R.id.price);
-        number_appointment = dialog.findViewById(R.id.number_appointment);
-        experience = dialog.findViewById(R.id.experience);
-        achievement = dialog.findViewById(R.id.achievement);
-        work = dialog.findViewById(R.id.work);
-        close = dialog.findViewById(R.id.close);
         if (doctor != null){
-            if (doctor.getGender().equals("Nam") || doctor.getGender().equals("")) {
-                imageDoctor.setImageResource(R.drawable.doctor);
-            } else {
-                imageDoctor.setImageResource(R.drawable.doctor2);
-            }
-            fullName.setText(doctor.getFullName());
-            degree.setText(doctor.getDegree());
-            gender.setText(doctor.getGender());
-            specialist.setText(doctor.getSpecialist());
-            price.setText(formatPrice(doctor.getPrice())+" đ");
-            experience.setText(doctor.getExperience());
-            if (!doctor.getAchievement().equals("")){
-                String formatAchievement = doctor.getAchievement().replace(". ", ".<br>");
-                achievement.setText(Html.fromHtml(formatAchievement));
-            }
-            else achievement.setText(doctor.getAchievement());
-
-            if (!doctor.getWork().equals("")){
-                String formatWork = doctor.getWork().replace(". ", ".<br>");
-                work.setText(Html.fromHtml(formatWork));
-            }
-            else work.setText(doctor.getWork());
-
-            Query query = FirebaseUtil.getAppointmentCollectionReference()
-                    .whereEqualTo("doctor.doctorId",doctor.getDoctorId());
-            query.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
-                    int number = task.getResult().size();
-                    number_appointment.setText(String.valueOf(number));
-                }
-                else {
-                    Log.e("ERROR","Lỗi kết nối");
-                }
-            });
+            Intent intent = new Intent(this, DoctorDetail.class);
+            AndroidUtil.passDoctorModelAsIntent(intent,doctor);
+            startActivity(intent);
         }
-        close = dialog.findViewById(R.id.close);
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
     }
+
     private void showDatePicker(int center) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -749,11 +678,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         setIndexSelectedSharedPreferences("indexDoctorSelected",0);
         setIndexSelectedSharedPreferences("indexTimeSelected",-1);
     }
-    private String formatPrice(int price){
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");
-        String formattedNumber = decimalFormat.format(price);
-        return formattedNumber;
-    }
+
     private void setBackgroundNotSelectedItem(RelativeLayout formRelative) {
         Drawable selectedBackground = ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_form_person_notselected);
         formRelative.setBackground(selectedBackground);

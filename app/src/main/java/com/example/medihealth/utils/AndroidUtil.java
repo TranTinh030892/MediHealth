@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.AppointmentConfirm;
 import com.example.medihealth.models.AppointmentDTO;
+import com.example.medihealth.models.Doctor;
 import com.example.medihealth.models.Drug;
 import com.example.medihealth.models.Employee;
 import com.example.medihealth.models.Relative;
@@ -20,10 +21,6 @@ import com.example.medihealth.models.UserModel;
 
 
 public class AndroidUtil {
-
-   public static  void showToast(Context context,String message){
-       Toast.makeText(context,message,Toast.LENGTH_LONG).show();
-    }
 
     public static void passUserModelAsIntent(Intent intent, UserModel model){
        intent.putExtra("username",model.getFullName());
@@ -96,27 +93,6 @@ public class AndroidUtil {
         appointmentConfirm.setSymptom(intent.getStringExtra("symptom"));
         return appointmentConfirm;
     }
-    public static void passAccountAsIntent(Intent intent, UserModel model){
-        intent.putExtra("fullName",model.getFullName());
-        intent.putExtra("gender",model.getGender());
-        intent.putExtra("phoneNumber",model.getPhoneNumber());
-        intent.putExtra("address",model.getAddress());
-        intent.putExtra("birth",model.getBirth());
-        intent.putExtra("height",model.getHeight());
-        intent.putExtra("weight",model.getWeight());
-    }
-
-    public static UserModel getAccountFromIntent(Intent intent){
-        UserModel userModel = new UserModel();
-        userModel.setFullName(intent.getStringExtra("fullName"));
-        userModel.setGender(intent.getStringExtra("gender"));
-        userModel.setBirth(intent.getStringExtra("birth"));
-        userModel.setPhoneNumber(intent.getStringExtra("phoneNumber"));
-        userModel.setAddress(intent.getStringExtra("address"));
-        userModel.setHeight(intent.getIntExtra("height",160));
-        userModel.setWeight(intent.getIntExtra("weight",50));
-        return userModel;
-    }
     public static void passRelativeModelAsIntent(Intent intent, Relative model){
         intent.putExtra("fullName",model.getFullName());
         intent.putExtra("gender",model.getGender());
@@ -162,9 +138,34 @@ public class AndroidUtil {
         drug.setInteractions(intent.getStringExtra("interactions"));
         return drug;
     }
-    public static void setProfilePic(Context context, Uri imageUri, ImageView imageView){
-        Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(imageView);
+    public static void passDoctorModelAsIntent(Intent intent, Doctor model){
+        intent.putExtra("doctorId",model.getDoctorId());
+        intent.putExtra("fullName",model.getFullName());
+        intent.putExtra("gender",model.getGender());
+        intent.putExtra("phoneNumber",model.getPhoneNumber());
+        intent.putExtra("degree",model.getDegree());
+        intent.putExtra("specialist",model.getSpecialist());
+        intent.putExtra("experience",model.getExperience());
+        intent.putExtra("achievement",model.getAchievement());
+        intent.putExtra("work",model.getWork());
+        intent.putExtra("price",model.getPrice());
     }
+
+    public static Doctor getDoctorModelFromIntent(Intent intent){
+        Doctor doctor = new Doctor();
+        doctor.setDoctorId(intent.getStringExtra("doctorId"));
+        doctor.setFullName(intent.getStringExtra("fullName"));
+        doctor.setGender(intent.getStringExtra("gender"));
+        doctor.setPhoneNumber(intent.getStringExtra("phoneNumber"));
+        doctor.setDegree(intent.getStringExtra("degree"));
+        doctor.setSpecialist(intent.getStringExtra("specialist"));
+        doctor.setExperience(intent.getStringExtra("experience"));
+        doctor.setAchievement(intent.getStringExtra("achievement"));
+        doctor.setWork(intent.getStringExtra("work"));
+        doctor.setPrice(intent.getIntExtra("price",100000));
+        return doctor;
+    }
+
     public static boolean isInternetAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {

@@ -149,7 +149,6 @@
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
-
     <RelativeLayout
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp"

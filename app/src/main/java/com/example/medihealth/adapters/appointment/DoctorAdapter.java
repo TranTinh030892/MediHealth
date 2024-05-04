@@ -39,7 +39,7 @@ public class DoctorAdapter extends FirestoreRecyclerAdapter<Doctor,DoctorAdapter
     protected void onBindViewHolder(@NonNull DoctorViewHolder holder, @SuppressLint("RecyclerView") int position, @NonNull Doctor model) {
         holder.fullName.setText(model.getFullName());
         if (model.getGender().equals("Nam") || model.getGender().equals("")) {
-            holder.imageDoctor.setImageResource(R.drawable.doctor);
+            holder.imageDoctor.setImageResource(R.drawable.doctor4);
         } else {
             holder.imageDoctor.setImageResource(R.drawable.doctor2);
         }

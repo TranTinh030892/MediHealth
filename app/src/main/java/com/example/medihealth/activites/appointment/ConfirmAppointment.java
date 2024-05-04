@@ -1,6 +1,7 @@
 package com.example.medihealth.activites.appointment;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -42,7 +43,7 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
     SharedPreferences sharedPreferences;
     TextView personName,personGenderAndBirth,personPhone,relationship,specialist,doctorName,
             bookDate,symptom,reminderDate,reminderTime,time,date;
-    Switch btnRemider;
+    SwitchCompat btnRemider;
     ImageView imageAccount;
     RelativeLayout btnBack,change,btnBook;
     AppointmentDTO appointmentDTO;

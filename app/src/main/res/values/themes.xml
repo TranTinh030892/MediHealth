@@ -11,7 +11,7 @@
         <item name="colorSecondaryVariant">@color/my_secondary</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">#006ba1</item>
+        <item name="android:statusBarColor">@color/mainColor</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/off_white</item>
         <item name="android:scrollViewStyle">@style/DefaultScrollView</item>

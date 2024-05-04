@@ -573,15 +573,25 @@
                         android:textColor="@color/text_Color"
                         android:textSize="14sp"
                         android:text="Bật/Tắt nhắc hẹn" />
-
-                    <Switch
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/notificationSwitch"
-                        android:layout_width="70dp"
-                        android:layout_height="45dp"
+                        android:layout_width="40dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
                         android:checked="true"
-                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                        app:track="@drawable/custom_track"
+                        android:thumb="@drawable/custom_thumb"
+                        android:layout_height="50dp"/>
+<!--                    <Switch-->
+<!--                        android:id="@+id/notificationSwitch"-->
+<!--                        android:layout_width="70dp"-->
+<!--                        android:layout_height="45dp"-->
+<!--                        android:layout_alignParentEnd="true"-->
+<!--                        android:layout_centerVertical="true"-->
+<!--                        android:checked="true"-->
+<!--                        tools:ignore="UseSwitchCompatOrMaterialXml" />-->
                 </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
