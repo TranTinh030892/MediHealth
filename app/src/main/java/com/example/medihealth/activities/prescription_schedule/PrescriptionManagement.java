@@ -175,7 +175,7 @@ public class PrescriptionManagement extends AppCompatActivity {
                     prescriptionAdapter.notifyDataSetChanged();
                 }
                 SyncService.sync(PrescriptionManagement.this);
-                FirebaseUtil.sendNotifyDataChange();
+                FirebaseUtil.sendNotifyDataChanged();
                 Log.i("ACTIVE_PRESCRIPTION", response.body().getMessage());
             }
 

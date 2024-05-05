@@ -187,7 +187,7 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
                     ).show();
                     Log.i("EDIT_SCHEDULES", response.body().getMessage());
                     SyncService.sync(EditSchedulesActivity.this);
-                    FirebaseUtil.sendNotifyDataChange();
+                    FirebaseUtil.sendNotifyDataChanged();
                     backToViewDetail();
                 } else {
                     Toast.makeText(

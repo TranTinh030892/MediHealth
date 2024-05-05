@@ -303,7 +303,7 @@ public class PrescriptionDetailManagement extends AppCompatActivity {
                             Toast.LENGTH_SHORT
                     ).show();
                     SyncService.sync(PrescriptionDetailManagement.this);
-                    FirebaseUtil.sendNotifyDataChange();
+                    FirebaseUtil.sendNotifyDataChanged();
                     // Back to prescription management
                     finish();
                 } else {

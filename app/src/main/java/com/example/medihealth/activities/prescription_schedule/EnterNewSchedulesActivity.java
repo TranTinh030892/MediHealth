@@ -196,7 +196,7 @@ public class EnterNewSchedulesActivity extends AppCompatActivity implements Item
                             Toast.LENGTH_SHORT
                     ).show();
                     SyncService.sync(EnterNewSchedulesActivity.this);
-                    FirebaseUtil.sendNotifyDataChange();
+                    FirebaseUtil.sendNotifyDataChanged();
                 } else {
                     Toast.makeText(
                             EnterNewSchedulesActivity.this,

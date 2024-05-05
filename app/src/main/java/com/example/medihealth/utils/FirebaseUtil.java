@@ -202,7 +202,7 @@ public class FirebaseUtil {
         });
     }
 
-    public static void sendNotifyDataChange() {
+    public static void sendNotifyDataChanged() {
         Query query = FirebaseUtil.getTokenId().whereEqualTo("userId", FirebaseAuth.getInstance().getUid());
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
