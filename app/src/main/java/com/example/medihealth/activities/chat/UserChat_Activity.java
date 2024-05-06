@@ -1,4 +1,4 @@
-package com.example.medihealth.activites.chat;
+package com.example.medihealth.activities.chat;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

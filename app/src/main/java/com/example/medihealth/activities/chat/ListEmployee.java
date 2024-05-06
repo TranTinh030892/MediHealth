@@ -1,4 +1,4 @@
-package com.example.medihealth.activites.chat;
+package com.example.medihealth.activities.chat;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;

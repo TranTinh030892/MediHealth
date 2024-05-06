@@ -1,4 +1,4 @@
-package com.example.medihealth.activites.appointment;
+package com.example.medihealth.activities.appointment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -16,7 +16,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -25,14 +24,13 @@ import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activites.MainActivity;
+import com.example.medihealth.activities.MainActivity;
 import com.example.medihealth.trang.profile.activity.AddRelative;
 import com.example.medihealth.adapters.appointment.DoctorAdapter;
 import com.example.medihealth.adapters.appointment.RelativeAdapter;
@@ -51,7 +49,6 @@ import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;

@@ -25,7 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activites.MainActivity;
+import com.example.medihealth.activities.MainActivity;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;

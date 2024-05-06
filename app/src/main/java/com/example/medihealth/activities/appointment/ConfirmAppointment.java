@@ -1,4 +1,4 @@
-package com.example.medihealth.activites.appointment;
+package com.example.medihealth.activities.appointment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -19,12 +19,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activites.MainActivity;
+import com.example.medihealth.activities.MainActivity;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.AppointmentConfirm;
 import com.example.medihealth.models.AppointmentDTO;

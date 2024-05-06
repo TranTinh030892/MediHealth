@@ -22,7 +22,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activites.MainActivity;
+import com.example.medihealth.activities.MainActivity;
 import com.example.medihealth.models.Token;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.FirebaseUtil;

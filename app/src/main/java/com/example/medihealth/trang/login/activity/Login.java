@@ -26,8 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activites.MainActivity;
-import com.example.medihealth.activites.chat.Employee_MainActivity;
+import com.example.medihealth.activities.MainActivity;
+import com.example.medihealth.activities.chat.Employee_MainActivity;
 import com.example.medihealth.trang.profile.activity.Profile;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Employee;

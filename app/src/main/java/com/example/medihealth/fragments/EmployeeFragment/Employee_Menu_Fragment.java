@@ -26,7 +26,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activites.MainActivity;
+import com.example.medihealth.activities.MainActivity;
 import com.example.medihealth.models.Token;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EBEEF8"
-    tools:context=".activites.chat.ListEmployee">
+    tools:context=".activities.chat.ListEmployee">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
