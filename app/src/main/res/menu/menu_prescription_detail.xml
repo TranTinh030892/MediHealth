@@ -10,6 +10,9 @@
         android:id="@+id/i_edit_schedule"
         android:title="Sửa lịch thông báo" />
     <item
+        android:id="@+id/i_share"
+        android:title="Chia sẻ" />
+    <item
         android:id="@+id/i_delete"
         android:title="Xóa" />
 </menu>

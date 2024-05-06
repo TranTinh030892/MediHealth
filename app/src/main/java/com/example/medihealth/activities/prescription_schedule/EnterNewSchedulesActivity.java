@@ -63,9 +63,9 @@ public class EnterNewSchedulesActivity extends AppCompatActivity implements Item
         rootView = findViewById(R.id.root_view);
 
         // Custom toolbar
-        tvToolbar = findViewById(R.id.tv_toolbar);
+        tvToolbar = findViewById(R.id.tv_title);
         tvToolbar.setText("Tạo thông báo");
-        btnBackToolbar = findViewById(R.id.btn_back_toolbar);
+        btnBackToolbar = findViewById(R.id.btn_back);
         btnBackToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,13 +143,19 @@ public class EnterNewSchedulesActivity extends AppCompatActivity implements Item
             return;
         }
         prescription = (Prescription) bundle.getSerializable("prescription");
+        if (prescription.getSchedules() != null) {
+            schedules.addAll(prescription.getSchedules());
+        }
     }
 
     private void showDialogEnterPrescriptionTitle() {
         CustomDialog dialog = new CustomDialog(this);
         dialog.setTitle("Xác nhận lưu đơn thuốc");
         dialog.setHint("Tên đơn thuốc");
-
+        if (!prescription.getTitle().isEmpty()) {
+            dialog.setContent(prescription.getTitle());
+        }
+        
         dialog.setNegativeButton("Hủy", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,7 +202,7 @@ public class EnterNewSchedulesActivity extends AppCompatActivity implements Item
                             Toast.LENGTH_SHORT
                     ).show();
                     SyncService.sync(EnterNewSchedulesActivity.this);
-                    FirebaseUtil.sendNotifyDataChanged();
+                    FirebaseUtil.sendNotifyDataChange();
                 } else {
                     Toast.makeText(
                             EnterNewSchedulesActivity.this,

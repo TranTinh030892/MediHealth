@@ -61,9 +61,9 @@ public class DrugUserManagement extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drug_user_management);
-        tvToolbar = findViewById(R.id.tv_toolbar);
+        tvToolbar = findViewById(R.id.tv_title);
         tvToolbar.setText("Người dùng thuốc");
-        btnBackToolbar = findViewById(R.id.btn_back_toolbar);
+        btnBackToolbar = findViewById(R.id.btn_back);
         btnBackToolbar.setOnClickListener((v) -> {
             finish();
         });

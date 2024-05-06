@@ -61,7 +61,7 @@ public class EditPrescriptionItemsActivity extends AppCompatActivity implements 
 
         rootView = findViewById(R.id.root_view);
 
-        btnBack = findViewById(R.id.btn_back_toolbar);
+        btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +69,7 @@ public class EditPrescriptionItemsActivity extends AppCompatActivity implements 
             }
         });
 
-        tvToolbarTitle = findViewById(R.id.tv_toolbar);
+        tvToolbarTitle = findViewById(R.id.tv_title);
         tvToolbarTitle.setText("Chỉnh sửa đơn thuốc");
 
         etName = findViewById(R.id.et_name);

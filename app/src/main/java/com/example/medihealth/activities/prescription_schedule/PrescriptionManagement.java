@@ -34,6 +34,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,7 +51,7 @@ import retrofit2.Response;
 public class PrescriptionManagement extends AppCompatActivity {
 
     TextView tvToolbar;
-    ImageView btnBackToolbar;
+    ImageView btnBackToolbar, btnQRScan;
     FloatingActionButton fabCreatePrescription;
     RecyclerView rcvListPrescription;
     List<Prescription> prescriptions = new ArrayList<>();
@@ -67,14 +69,18 @@ public class PrescriptionManagement extends AppCompatActivity {
         loadData();
 
         // Custom toolbar
-        tvToolbar = findViewById(R.id.tv_toolbar);
+        tvToolbar = findViewById(R.id.tv_title);
         tvToolbar.setText("Danh sách đơn thuốc");
-        btnBackToolbar = findViewById(R.id.btn_back_toolbar);
+        btnBackToolbar = findViewById(R.id.btn_back);
         btnBackToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                finish();
             }
+        });
+        btnQRScan = findViewById(R.id.btn_scan);
+        btnQRScan.setOnClickListener((view) -> {
+            openScanner();
         });
 
         srlRefresh = findViewById(R.id.srl_refresh);
@@ -87,13 +93,7 @@ public class PrescriptionManagement extends AppCompatActivity {
         fabCreatePrescription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PrescriptionManagement.this, EnterNewPrescriptionItemsActivity.class);
-                Prescription prescription = new Prescription();
-                prescription.setDrugUser(drugUser);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("prescription", prescription);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                createNewPrescription(new Prescription());
             }
         });
 
@@ -141,6 +141,58 @@ public class PrescriptionManagement extends AppCompatActivity {
         rcvListPrescription.setAdapter(prescriptionAdapter);
     }
 
+    private void createNewPrescription(Prescription prescription) {
+        prescription.setId(null);
+        prescription.setDrugUser(drugUser);
+        if (prescription.getPrescriptionItems() != null) {
+            prescription.getPrescriptionItems().forEach(
+                    (item) -> item.setId(null)
+            );
+        }
+        if (prescription.getSchedules() != null) {
+            prescription.getSchedules().forEach(
+                    (schedule) -> schedule.setId(null)
+            );
+        }
+
+        Intent intent = new Intent(PrescriptionManagement.this, EnterNewPrescriptionItemsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("prescription", prescription);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Nhận kết quả từ IntentIntegrator
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                // Nếu không có kết quả
+                Toast.makeText(this, "Không tìm thấy mã QR", Toast.LENGTH_SHORT).show();
+            } else {
+                String qrCodeContent = result.getContents();
+                Log.i("GET_DATA_SHARED", "ID: " + qrCodeContent);
+                try {
+                    Long id = Long.parseLong(qrCodeContent.trim());
+                    getPrescriptionShared(id);
+                } catch (NumberFormatException e) {
+                    Log.e("GET_DATA_SHARED", "invalid id provided");
+                }
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void openScanner() {
+        // Khởi tạo IntentIntegrator để quét mã QR
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setOrientationLocked(false); // Cho phép quét cả hai hướng
+        integrator.initiateScan(); // Bắt đầu quét
+    }
+
     private void showDefaultView() {
         rcvListPrescription.setVisibility(View.GONE);
         loadingView.setVisibility(View.GONE);
@@ -175,7 +227,7 @@ public class PrescriptionManagement extends AppCompatActivity {
                     prescriptionAdapter.notifyDataSetChanged();
                 }
                 SyncService.sync(PrescriptionManagement.this);
-                FirebaseUtil.sendNotifyDataChanged();
+                FirebaseUtil.sendNotifyDataChange();
                 Log.i("ACTIVE_PRESCRIPTION", response.body().getMessage());
             }
 
@@ -235,6 +287,38 @@ public class PrescriptionManagement extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseObject> call, Throwable t) {
                 Log.e("GET_PRESCRIPTIONS", Objects.requireNonNull(t.getMessage()));
+            }
+        });
+    }
+
+    private void getPrescriptionShared(Long id) {
+        PrescriptionService service = RetrofitClient.createService(PrescriptionService.class);
+        service.getById(id).enqueue(new Callback<ResponseObject>() {
+            @Override
+            public void onResponse(Call<ResponseObject> call, Response<ResponseObject> response) {
+                ResponseObject responseObject = response.body();
+                if (response.isSuccessful()) {
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
+                            .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                            .create();
+                    Prescription result = gson.fromJson(
+                            new Gson().toJson(responseObject.getData()),
+                            new TypeToken<Prescription>() {
+                            }.getType()
+                    );
+                    createNewPrescription(result);
+                }
+                else {
+                    Toast.makeText(PrescriptionManagement.this, responseObject.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                Log.i("GET_DATA_SHARED", responseObject.getMessage());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseObject> call, Throwable t) {
+                Log.e("GET_DATA_SHARED", Objects.requireNonNull(t.getMessage()));
             }
         });
     }

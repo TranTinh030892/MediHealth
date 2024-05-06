@@ -47,9 +47,9 @@ public class EnterNewPrescriptionItemsActivity extends AppCompatActivity impleme
         rootView = findViewById(R.id.root_view);
 
         // Custom toolbar
-        tvToolbar = findViewById(R.id.tv_toolbar);
+        tvToolbar = findViewById(R.id.tv_title);
         tvToolbar.setText("Thêm đơn thuốc");
-        btnBackToolbar = findViewById(R.id.btn_back_toolbar);
+        btnBackToolbar = findViewById(R.id.btn_back);
         btnBackToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +107,9 @@ public class EnterNewPrescriptionItemsActivity extends AppCompatActivity impleme
             return;
         }
         prescription = (Prescription) bundle.getSerializable("prescription");
+        if (prescription.getPrescriptionItems() != null) {
+            prescriptionItems.addAll(prescription.getPrescriptionItems());
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

@@ -3,6 +3,7 @@ package com.example.medihealth.activities.prescription_schedule;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -30,6 +31,7 @@ import com.example.medihealth.retrofitcustom.LocalDateTimeAdapter;
 import com.example.medihealth.retrofitcustom.LocalTimeAdapter;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
 import com.example.medihealth.utils.FirebaseUtil;
+import com.example.medihealth.utils.QRCodeGenerator;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -182,10 +184,19 @@ public class PrescriptionDetailManagement extends AppCompatActivity {
                     showAlertDialogDelete();
                     return true;
                 }
+                if (item.getItemId() == R.id.i_share) {
+                    showDialogQRCode();
+                }
                 return false;
             }
         });
         menu.show();
+    }
+
+    private void showDialogQRCode() {
+        Bitmap qrcode = QRCodeGenerator.generateQRCode(String.valueOf(prescription.getId()), 400, 400);
+        QRCodeDialog dialog = new QRCodeDialog(this, qrcode);
+        dialog.show();
     }
 
     private void editPrescriptionItems() {
@@ -303,7 +314,7 @@ public class PrescriptionDetailManagement extends AppCompatActivity {
                             Toast.LENGTH_SHORT
                     ).show();
                     SyncService.sync(PrescriptionDetailManagement.this);
-                    FirebaseUtil.sendNotifyDataChanged();
+                    FirebaseUtil.sendNotifyDataChange();
                     // Back to prescription management
                     finish();
                 } else {

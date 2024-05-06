@@ -63,9 +63,9 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
         rootView = findViewById(R.id.root_view);
 
         // Custom toolbar
-        tvToolbarTitle = findViewById(R.id.tv_toolbar);
+        tvToolbarTitle = findViewById(R.id.tv_title);
         tvToolbarTitle.setText("Chỉnh sửa thời gian thông báo");
-        btnBackToolbar = findViewById(R.id.btn_back_toolbar);
+        btnBackToolbar = findViewById(R.id.btn_back);
         btnBackToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,7 +187,7 @@ public class EditSchedulesActivity extends AppCompatActivity implements ItemTouc
                     ).show();
                     Log.i("EDIT_SCHEDULES", response.body().getMessage());
                     SyncService.sync(EditSchedulesActivity.this);
-                    FirebaseUtil.sendNotifyDataChanged();
+                    FirebaseUtil.sendNotifyDataChange();
                     backToViewDetail();
                 } else {
                     Toast.makeText(
