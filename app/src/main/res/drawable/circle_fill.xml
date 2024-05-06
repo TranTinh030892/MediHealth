@@ -6,6 +6,6 @@
 
     <path
         android:fillColor="@color/calender_color"
-        android:pathData="M12,2C7.58,2 4,5.58 4,10s3.58,8 8,8 8,-3.58 8,-8 -3.58,-8 -8,-8z"/>
+        android:pathData="M12,2C7.58,2 4,5.58 4,10s3.58,8 8,8 8,-3.58 8,-8 -3.58,-8 -8,-8z" />
 
 </vector>

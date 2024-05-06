@@ -1,12 +1,12 @@
 package com.example.medihealth.activities.chat;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
 import com.example.medihealth.adapters.chat.EmployeeAdapter;
@@ -19,6 +19,7 @@ public class ListEmployee extends AppCompatActivity {
     ImageButton backButton;
     RecyclerView recyclerView;
     EmployeeAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +38,12 @@ public class ListEmployee extends AppCompatActivity {
         backButton = findViewById(R.id.back_btn);
         recyclerView = findViewById(R.id.recycler_view_listUser);
     }
+
     private void setupRecyclerView() {
         Query query = FirebaseUtil.allEmployeeCollectionReference();
         FirestoreRecyclerOptions<Employee> options = new FirestoreRecyclerOptions.Builder<Employee>()
-                .setQuery(query,Employee.class).build();
-        adapter = new EmployeeAdapter(options,getApplicationContext());
+                .setQuery(query, Employee.class).build();
+        adapter = new EmployeeAdapter(options, getApplicationContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         adapter.startListening();

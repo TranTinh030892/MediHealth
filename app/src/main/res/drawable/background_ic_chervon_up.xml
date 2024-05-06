@@ -5,16 +5,17 @@
             <solid android:color="@color/white" />
         </shape>
     </item>
-    <item android:gravity="center_vertical|right" android:right="8dp">
-        <vector
-            android:width="24dp"
+    <item
+        android:gravity="center_vertical|right"
+        android:right="8dp">
+        <vector android:width="24dp"
             android:height="24dp"
             android:viewportWidth="24.0"
             android:viewportHeight="24.0"
             xmlns:android="http://schemas.android.com/apk/res/android">
             <path
                 android:fillColor="#000000"
-                android:pathData="M12,8l-6,6 1.41,1.41L12,10.83l4.59,4.58L18,14z"/>
+                android:pathData="M12,8l-6,6 1.41,1.41L12,10.83l4.59,4.58L18,14z" />
         </vector>
     </item>
 </layer-list>

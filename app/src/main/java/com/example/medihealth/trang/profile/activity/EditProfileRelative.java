@@ -1,9 +1,6 @@
-package com.example.medihealth.activities.profile;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.medihealth.trang.profile.activity;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -19,8 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.medihealth.R;
-import com.example.medihealth.activities.MainActivity;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Relative;
 import com.example.medihealth.utils.AndroidUtil;
@@ -30,14 +28,15 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class EditProfileRelative extends AppCompatActivity implements View.OnClickListener{
-    ImageButton btnBack,btnEdit,iconDelete;
-    EditText fullName, phoneNumber, address, height, weight,relationship;
+public class EditProfileRelative extends AppCompatActivity implements View.OnClickListener {
+    ImageButton btnBack, btnEdit, iconDelete;
+    EditText fullName, phoneNumber, address, height, weight, relationship;
     RadioButton male, female;
-    TextView birth,btnRelationship;
-    RelativeLayout btnSave,btnDelete;
+    TextView birth, btnRelationship;
+    RelativeLayout btnSave, btnDelete;
     Relative relative;
     String relativeDocumentId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +65,7 @@ public class EditProfileRelative extends AppCompatActivity implements View.OnCli
         iconDelete = findViewById(R.id.icon_delete);
         btnRelationship = findViewById(R.id.btnRelationship);
     }
+
     private void setOnlick() {
         btnBack.setOnClickListener(this);
         btnEdit.setOnClickListener(this);
@@ -74,40 +74,41 @@ public class EditProfileRelative extends AppCompatActivity implements View.OnCli
         btnDelete.setOnClickListener(this);
         iconDelete.setOnClickListener(this);
     }
+
     private void setupRelativeDetail(Relative relative) {
         btnRelationship.setText(relative.getRelationship());
         fullName.setText(relative.getFullName());
         phoneNumber.setText(relative.getPhoneNumber());
         address.setText(relative.getAddress());
         birth.setText(relative.getBirth());
-        if (relative.getGender().equals("Nam")){
+        if (relative.getGender().equals("Nam")) {
             male.setChecked(true);
-        }
-        else female.setChecked(true);
+        } else female.setChecked(true);
         height.setText(String.valueOf(relative.getHeight()));
         weight.setText(String.valueOf(relative.getWeight()));
         relationship.setText(relative.getRelationship());
     }
+
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.back_btn){
+        if (v.getId() == R.id.back_btn) {
             finish();
         }
-        if (v.getId() == R.id.btn_edit){
+        if (v.getId() == R.id.btn_edit) {
             getDocument();
             setupView(true);
         }
-        if (v.getId() == R.id.enterBook){
+        if (v.getId() == R.id.enterBook) {
             setupView(false);
             saveDetailRelative();
         }
-        if (v.getId() == R.id.icon_delete){
+        if (v.getId() == R.id.icon_delete) {
             setupView(false);
         }
-        if (v.getId() == R.id.birth_user){
+        if (v.getId() == R.id.birth_user) {
             showDialogCalendar(Gravity.CENTER);
         }
-        if (v.getId() == R.id.delete){
+        if (v.getId() == R.id.delete) {
             showDialogConfirm(Gravity.CENTER);
         }
     }
@@ -117,18 +118,17 @@ public class EditProfileRelative extends AppCompatActivity implements View.OnCli
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_notice_login_logout);
         Window window = dialog.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
         window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
+        if (Gravity.BOTTOM == center) {
             dialog.setCancelable(false);
-        }
-        else{
+        } else {
             dialog.setCancelable(true);
         }
 
@@ -159,12 +159,11 @@ public class EditProfileRelative extends AppCompatActivity implements View.OnCli
 
     private void deleteRelative() {
         FirebaseUtil.getRelativeCollectionReference().document(relativeDocumentId).delete().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                CustomToast.showToast(getApplicationContext(),"Xóa thành công",Toast.LENGTH_SHORT);
+            if (task.isSuccessful()) {
+                CustomToast.showToast(getApplicationContext(), "Xóa thành công", Toast.LENGTH_SHORT);
                 finish();
-            }
-            else{
-                CustomToast.showToast(getApplicationContext(),"Xóa không thành công",Toast.LENGTH_SHORT);
+            } else {
+                CustomToast.showToast(getApplicationContext(), "Xóa không thành công", Toast.LENGTH_SHORT);
             }
         });
     }
@@ -174,18 +173,17 @@ public class EditProfileRelative extends AppCompatActivity implements View.OnCli
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_datepicker);
         Window window = dialog.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
         window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
+        if (Gravity.BOTTOM == center) {
             dialog.setCancelable(false);
-        }
-        else{
+        } else {
             dialog.setCancelable(true);
         }
         DatePicker datePicker;
@@ -217,15 +215,15 @@ public class EditProfileRelative extends AppCompatActivity implements View.OnCli
         int monthOfYear = datePicker.getMonth();
         int year = datePicker.getYear();
         String dayOfMonthStr = String.valueOf(dayOfMonth),
-                monthOfYearStr = String.valueOf(monthOfYear+1);
+                monthOfYearStr = String.valueOf(monthOfYear + 1);
         if (dayOfMonth < 10) dayOfMonthStr = "0" + dayOfMonth;
-        if (monthOfYear + 1 < 10) monthOfYearStr = "0" + (monthOfYear+1);
+        if (monthOfYear + 1 < 10) monthOfYearStr = "0" + (monthOfYear + 1);
         String selectedDate = dayOfMonthStr + "/" + monthOfYearStr + "/" + year;
         birth.setText(selectedDate);
     }
 
     private void getDocument() {
-        Query query = FirebaseUtil.getRelativeCollectionReference().whereEqualTo("phoneNumber",phoneNumber.getText().toString());
+        Query query = FirebaseUtil.getRelativeCollectionReference().whereEqualTo("phoneNumber", phoneNumber.getText().toString());
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -252,8 +250,8 @@ public class EditProfileRelative extends AppCompatActivity implements View.OnCli
         String weightStr = weight.getText().toString();
         String relationshipStr = relationship.getText().toString();
         if (name.isEmpty() || gender.isEmpty() || phone.isEmpty() ||
-                addressUser.isEmpty() || birthUser.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty()|| relationshipStr.isEmpty()) {
-            CustomToast.showToast(getApplicationContext(),"Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT);
+                addressUser.isEmpty() || birthUser.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty() || relationshipStr.isEmpty()) {
+            CustomToast.showToast(getApplicationContext(), "Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT);
             return;
         }
 
@@ -261,36 +259,42 @@ public class EditProfileRelative extends AppCompatActivity implements View.OnCli
         int userWeight = Integer.parseInt(weightStr);
 
         if (userHeight <= 0) {
-            CustomToast.showToast(getApplicationContext(),"Chiều cao không hợp lệ",Toast.LENGTH_SHORT);
+            CustomToast.showToast(getApplicationContext(), "Chiều cao không hợp lệ", Toast.LENGTH_SHORT);
             return;
         }
 
         if (userWeight <= 0) {
-            CustomToast.showToast(getApplicationContext(),"Cân nặng không hợp lệ",Toast.LENGTH_SHORT);
+            CustomToast.showToast(getApplicationContext(), "Cân nặng không hợp lệ", Toast.LENGTH_SHORT);
             return;
         }
         String currentUserId = FirebaseUtil.currentUserId();
         Relative relative = new Relative(name, gender, phone, addressUser, birthUser, userHeight, userWeight, relationshipStr, currentUserId);
         FirebaseUtil.getRelativeCollectionReference().document(relativeDocumentId).set(relative).addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                CustomToast.showToast(getApplicationContext(),"Lưu thành công",Toast.LENGTH_SHORT);
+            if (task.isSuccessful()) {
+                CustomToast.showToast(getApplicationContext(), "Lưu thành công", Toast.LENGTH_SHORT);
                 setupRelativeDetail(relative);
-            }
-            else{
-                CustomToast.showToast(getApplicationContext(),"Lưu không thành công",Toast.LENGTH_SHORT);
+            } else {
+                CustomToast.showToast(getApplicationContext(), "Lưu không thành công", Toast.LENGTH_SHORT);
             }
         });
     }
+
     private void setupView(boolean b) {
-        fullName.setEnabled(b); phoneNumber.setEnabled(b);address.setEnabled(b);birth.setEnabled(b);
-        height.setEnabled(b);weight.setEnabled(b);male.setEnabled(b);female.setEnabled(b);relationship.setEnabled(b);
-        if (b){
+        fullName.setEnabled(b);
+        phoneNumber.setEnabled(b);
+        address.setEnabled(b);
+        birth.setEnabled(b);
+        height.setEnabled(b);
+        weight.setEnabled(b);
+        male.setEnabled(b);
+        female.setEnabled(b);
+        relationship.setEnabled(b);
+        if (b) {
             btnDelete.setVisibility(View.GONE);
             btnEdit.setVisibility(View.GONE);
             btnSave.setVisibility(View.VISIBLE);
             iconDelete.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             btnDelete.setVisibility(View.VISIBLE);
             btnEdit.setVisibility(View.VISIBLE);
             btnSave.setVisibility(View.GONE);

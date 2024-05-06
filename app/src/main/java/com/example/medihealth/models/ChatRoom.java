@@ -10,6 +10,7 @@ public class ChatRoom {
     Timestamp lastMessageTimestamp;
     String lastMessageSenderId;
     String lastMessage;
+
     public ChatRoom() {
     }
 

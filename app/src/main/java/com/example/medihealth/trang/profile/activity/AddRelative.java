@@ -1,4 +1,4 @@
-package com.example.medihealth.activities.profile;
+package com.example.medihealth.trang.profile.activity;
 
 import android.app.Dialog;
 import android.graphics.Color;

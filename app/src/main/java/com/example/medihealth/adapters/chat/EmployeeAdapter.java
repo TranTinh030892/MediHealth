@@ -18,9 +18,10 @@ import com.example.medihealth.utils.AndroidUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-public class EmployeeAdapter extends FirestoreRecyclerAdapter<Employee,EmployeeAdapter.EmployeeViewHolder> {
+public class EmployeeAdapter extends FirestoreRecyclerAdapter<Employee, EmployeeAdapter.EmployeeViewHolder> {
     Context context;
-    public EmployeeAdapter(@NonNull FirestoreRecyclerOptions<Employee> options,Context context) {
+
+    public EmployeeAdapter(@NonNull FirestoreRecyclerOptions<Employee> options, Context context) {
         super(options);
         this.context = context;
     }
@@ -32,7 +33,7 @@ public class EmployeeAdapter extends FirestoreRecyclerAdapter<Employee,EmployeeA
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UserChat_Activity.class);
-                AndroidUtil.passEmployeeModelAsIntent(intent,model);
+                AndroidUtil.passEmployeeModelAsIntent(intent, model);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
@@ -47,13 +48,14 @@ public class EmployeeAdapter extends FirestoreRecyclerAdapter<Employee,EmployeeA
     @NonNull
     @Override
     public EmployeeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.infor_employee,parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.infor_employee, parent, false);
         return new EmployeeViewHolder(itemView);
     }
 
-    public static class EmployeeViewHolder extends RecyclerView.ViewHolder{
+    public static class EmployeeViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView fullName;
+
         public EmployeeViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.picture_employee);

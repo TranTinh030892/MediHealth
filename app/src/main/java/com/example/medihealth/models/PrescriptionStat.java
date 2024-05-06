@@ -1,6 +1,5 @@
 package com.example.medihealth.models;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class PrescriptionStat extends Prescription {

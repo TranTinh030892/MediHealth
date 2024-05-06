@@ -14,7 +14,7 @@ import com.example.medihealth.models.PrescriptionStat;
 
 import java.util.List;
 
-public class ScheduleStatMonthApdapter extends RecyclerView.Adapter<ScheduleStatMonthApdapter.ScheduleStatMonthViewHolder>{
+public class ScheduleStatMonthApdapter extends RecyclerView.Adapter<ScheduleStatMonthApdapter.ScheduleStatMonthViewHolder> {
 
     private List<PrescriptionStat> prescriptionStatList;
 
@@ -33,10 +33,13 @@ public class ScheduleStatMonthApdapter extends RecyclerView.Adapter<ScheduleStat
     public void onBindViewHolder(@NonNull ScheduleStatMonthViewHolder holder, int position) {
         PrescriptionStat prescriptionStat = prescriptionStatList.get(position);
         holder.txtTitle.setText(prescriptionStat.getTitle());
-        holder.txtProcess.setText(String.format("%.0f", prescriptionStat.getProcess())+"%");
-        if(prescriptionStat.getProcess() <= 80) holder.txtProcess.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_cancel));
-        else if(prescriptionStat.getProcess() >= 96) holder.txtProcess.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_confirm));
-        else holder.txtProcess.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_yelow));
+        holder.txtProcess.setText(String.format("%.0f", prescriptionStat.getProcess()) + "%");
+        if (prescriptionStat.getProcess() <= 80)
+            holder.txtProcess.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_cancel));
+        else if (prescriptionStat.getProcess() >= 96)
+            holder.txtProcess.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_confirm));
+        else
+            holder.txtProcess.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_yelow));
     }
 
     @Override
@@ -45,8 +48,9 @@ public class ScheduleStatMonthApdapter extends RecyclerView.Adapter<ScheduleStat
     }
 
 
-    public static class ScheduleStatMonthViewHolder extends RecyclerView.ViewHolder{
+    public static class ScheduleStatMonthViewHolder extends RecyclerView.ViewHolder {
         TextView txtTitle, txtProcess;
+
         public ScheduleStatMonthViewHolder(@NonNull View itemView) {
             super(itemView);
             txtTitle = itemView.findViewById(R.id.txtTitle);

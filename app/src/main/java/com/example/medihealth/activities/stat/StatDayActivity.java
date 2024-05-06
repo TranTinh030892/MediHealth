@@ -20,11 +20,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
 import com.example.medihealth.adapters.stat.StatDayApdapter;
+import com.example.medihealth.apiservices.DrugUserService;
+import com.example.medihealth.apiservices.PrescriptionStatService;
 import com.example.medihealth.models.DrugUser;
 import com.example.medihealth.models.Prescription;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
-import com.example.medihealth.apiservices.DrugUserService;
-import com.example.medihealth.apiservices.PrescriptionStatService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -76,7 +76,7 @@ public class StatDayActivity extends AppCompatActivity {
         drugUserService.getDrugUserofUser(account.getUid()).enqueue(new Callback<List<DrugUser>>() {
             @Override
             public void onResponse(Call<List<DrugUser>> call, Response<List<DrugUser>> response) {
-                if(response.isSuccessful() && response.body() != null && !response.body().isEmpty()){
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     Log.d("API_Response", "Data received from API: " + response.body().toString());
 
                     drugUserList.addAll(response.body());
@@ -86,7 +86,7 @@ public class StatDayActivity extends AppCompatActivity {
                     editTextSelectDU.setText(drugUserList.get(0).toString());
                     selectedItemPosition = 0;
                     callAPItoGetPrescriptionStatDay();
-                }else {
+                } else {
                     Log.e("API_Error", "Response body is empty or null");
                 }
             }
@@ -107,7 +107,7 @@ public class StatDayActivity extends AppCompatActivity {
                 listView.setAdapter(adapter);
 
                 int itemHeight = (int) getResources().getDisplayMetrics().density * 68;
-                int maxHeight = itemHeight * 4 ;
+                int maxHeight = itemHeight * 4;
                 ViewGroup.LayoutParams params = listView.getLayoutParams();
                 params.height = maxHeight;
                 listView.setLayoutParams(params);
@@ -147,7 +147,7 @@ public class StatDayActivity extends AppCompatActivity {
             }
         });
 
-        if(duid != null){
+        if (duid != null) {
             //Default call API to Get PrescriptionStat and show
             callAPItoGetPrescriptionStatDay();
         }
@@ -166,16 +166,16 @@ public class StatDayActivity extends AppCompatActivity {
         statDayRecyclerView.setAdapter(statDayApdapter);
     }
 
-    private void callAPItoGetPrescriptionStatDay(){
+    private void callAPItoGetPrescriptionStatDay() {
         prescriptions = new ArrayList<>();
         PrescriptionStatService prescriptionStatService = RetrofitClient.createService(PrescriptionStatService.class);
         prescriptionStatService.getPrescriptionStatDay(duid, date).enqueue(new Callback<List<Prescription>>() {
             @Override
             public void onResponse(Call<List<Prescription>> call, Response<List<Prescription>> response) {
-                if(response.isSuccessful() && !response.body().isEmpty() && response.body() != null){
+                if (response.isSuccessful() && !response.body().isEmpty() && response.body() != null) {
                     Log.d("API_Response", "Data received from API: " + response.body().toString());
                     prescriptions.addAll(response.body());
-                }else {
+                } else {
                     Log.e("API_Error", "Response body is null");
                 }
                 //Update StatDayRecyclerView
@@ -190,11 +190,11 @@ public class StatDayActivity extends AppCompatActivity {
     }
 
 
-    private String getDayCurrent(){
+    private String getDayCurrent() {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        return (dayOfMonth > 9 ? dayOfMonth : ("0"+dayOfMonth)) + "/" + (month > 8 ? (month + 1):("0"+(month+1))) + "/" + year;
+        return (dayOfMonth > 9 ? dayOfMonth : ("0" + dayOfMonth)) + "/" + (month > 8 ? (month + 1) : ("0" + (month + 1))) + "/" + year;
     }
 
     private void showDatePickerDialog() {
@@ -207,7 +207,7 @@ public class StatDayActivity extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String selectedDate = (dayOfMonth > 9 ? dayOfMonth : ("0"+dayOfMonth)) + "/" + (month > 8 ? (month + 1):("0"+(month+1)))  + "/" + year;
+                        String selectedDate = (dayOfMonth > 9 ? dayOfMonth : ("0" + dayOfMonth)) + "/" + (month > 8 ? (month + 1) : ("0" + (month + 1))) + "/" + year;
                         editTextDate.setText(selectedDate);
                         date = LocalDate.of(year, month + 1, dayOfMonth);
                         //Call API to PrescriptionStat and show

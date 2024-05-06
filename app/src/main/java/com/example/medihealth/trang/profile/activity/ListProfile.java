@@ -1,9 +1,4 @@
-package com.example.medihealth.activities.profile;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+package com.example.medihealth.trang.profile.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,27 +9,31 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
-import com.example.medihealth.adapters.profile.RelativeAdapter;
-import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Relative;
 import com.example.medihealth.models.UserModel;
+import com.example.medihealth.trang.profile.adapter.RelativeAdapter;
 import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
 
-public class ListProfile extends AppCompatActivity implements View.OnClickListener{
+public class ListProfile extends AppCompatActivity implements View.OnClickListener {
     SharedPreferences sharedPreferences;
     ImageButton btnBack;
-    ImageView btnAdd,accountImage;
+    ImageView btnAdd, accountImage;
     CardView account;
-    TextView accountFullname,accountBirth,accountPhoneNumber;
+    TextView accountFullname, accountBirth, accountPhoneNumber;
     RecyclerView listRelative;
     RelativeAdapter relativeAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,30 +56,32 @@ public class ListProfile extends AppCompatActivity implements View.OnClickListen
         accountPhoneNumber = findViewById(R.id.phoneNumber);
         listRelative = findViewById(R.id.list_profile);
     }
+
     private void setOnclick() {
         btnBack.setOnClickListener(this);
         btnAdd.setOnClickListener(this);
         account.setOnClickListener(this);
     }
+
     private void setupAccountImage() {
         String profileString = sharedPreferences.getString("profile", "empty");
-        if (!profileString.equals("empty")){
+        if (!profileString.equals("empty")) {
             String[] array = profileString.split(";");
             if (array.length > 0) {
-                Log.e("CHECK",array[1]);
+                Log.e("CHECK", array[1]);
                 Picasso.get().load(array[1]).into(accountImage);
             } else {
                 Log.e("ERROR", "profileString rỗng");
             }
         }
     }
+
     private void getInforAccount() {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 UserModel userModel = task.getResult().toObject(UserModel.class);
                 setupViewAccount(userModel);
-            }
-            else {
+            } else {
                 Log.e("ERROR", "Lỗi kết nối");
             }
         });
@@ -88,13 +89,14 @@ public class ListProfile extends AppCompatActivity implements View.OnClickListen
 
     private void setupViewAccount(UserModel userModel) {
         accountFullname.setText(userModel.getFullName());
-        accountBirth.setText("Ngày sinh: "+userModel.getBirth());
-        accountPhoneNumber.setText("Điện thoại: "+userModel.getPhoneNumber());
+        accountBirth.setText("Ngày sinh: " + userModel.getBirth());
+        accountPhoneNumber.setText("Điện thoại: " + userModel.getPhoneNumber());
     }
+
     private void getListRelative() {
         String currentUserId = FirebaseUtil.currentUserId();
         Query query = FirebaseUtil.getRelativeCollectionReference()
-                .whereEqualTo("userId",currentUserId);
+                .whereEqualTo("userId", currentUserId);
         FirestoreRecyclerOptions<Relative> options = new FirestoreRecyclerOptions.Builder<Relative>()
                 .setQuery(query, Relative.class).build();
         setupRecyclerView(options);
@@ -106,7 +108,7 @@ public class ListProfile extends AppCompatActivity implements View.OnClickListen
             public void onClickItem(int positon) {
                 Relative relative = relativeAdapter.getItem(positon);
                 Intent intent = new Intent(ListProfile.this, EditProfileRelative.class);
-                AndroidUtil.passRelativeModelAsIntent(intent,relative);
+                AndroidUtil.passRelativeModelAsIntent(intent, relative);
                 startActivity(intent);
             }
 
@@ -115,21 +117,21 @@ public class ListProfile extends AppCompatActivity implements View.OnClickListen
 
             }
         });
-        listRelative.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
+        listRelative.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         listRelative.setAdapter(relativeAdapter);
         relativeAdapter.startListening();
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.user){
+        if (v.getId() == R.id.user) {
             Intent intent = new Intent(this, EditProfileUser.class);
             startActivity(intent);
         }
-        if (v.getId() == R.id.back_btn){
+        if (v.getId() == R.id.back_btn) {
             finish();
         }
-        if (v.getId() == R.id.btn_add){
+        if (v.getId() == R.id.btn_add) {
             Intent intent = new Intent(this, AddRelative.class);
             startActivity(intent);
         }

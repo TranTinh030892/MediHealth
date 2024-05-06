@@ -8,9 +8,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medihealth.R;
+import com.example.medihealth.apiservices.ConfirmNotificationService;
 import com.example.medihealth.models.Schedule;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
-import com.example.medihealth.apiservices.ConfirmNotificationService;
 import com.example.medihealth.utils.show_schedule_today.ResponseMessage;
 
 import retrofit2.Call;
@@ -20,21 +20,22 @@ import retrofit2.Response;
 public class ConfirmScheduleActivity extends AppCompatActivity {
 
     private Schedule schedule;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_schedule);
 
         schedule = (Schedule) getIntent().getSerializableExtra("schedule");
-        if(schedule != null){
+        if (schedule != null) {
             ConfirmNotificationService confirmNotificationService = RetrofitClient.createService(ConfirmNotificationService.class);
             confirmNotificationService.saveConfirmNotification_Confirm(schedule.getId(), schedule.getTime()).enqueue(new Callback<ResponseMessage>() {
                 @Override
                 public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
-                    if(response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         Toast.makeText(ConfirmScheduleActivity.this, "Successfully", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(ConfirmScheduleActivity.this, ScheduleTodayActivity.class));
-                    }else{
+                    } else {
                         Toast.makeText(ConfirmScheduleActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(ConfirmScheduleActivity.this, ScheduleTodayDetailActivity.class);
                         intent.putExtra("schedule", schedule);

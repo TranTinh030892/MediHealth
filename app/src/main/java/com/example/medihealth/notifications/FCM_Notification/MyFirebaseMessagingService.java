@@ -29,6 +29,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     SharedPreferences sharedPreferences;
     private static int notificationId = 1;
     private UserModel userModel;
+
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -44,20 +45,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 SyncService.sync(this);
                 return;
             }
-            if(requestCode.equals("employee")){
-                if (isCloseNotice.equals("Yes")){
+            if (requestCode.equals("employee")) {
+                if (isCloseNotice.equals("Yes")) {
                     return;
                 }
                 FirebaseFirestore.getInstance().collection("users").document(userId).get()
                         .addOnCompleteListener(task -> {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 userModel = task.getResult().toObject(UserModel.class);
-                                showNotificationChat(title, body,userModel);
+                                showNotificationChat(title, body, userModel);
                             }
                         });
-            }
-            else{
-                showCustomerNotification(title,body);
+            } else {
+                showCustomerNotification(title, body);
             }
         }
     }
@@ -73,7 +73,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("requestCode", 113);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         int notificationId = generateNotificationId();
 
@@ -107,13 +107,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, EmployeeChat_Activity.class);
         AndroidUtil.passUserModelAsIntent(intent, user);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
 
         Intent dismissIntent = new Intent(this, NotificationDismissReceiver.class);
         int notificationId = generateNotificationId();
         dismissIntent.putExtra("notificationId", notificationId);
-        PendingIntent dismissPendingIntent = PendingIntent.getBroadcast(this, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT| PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent dismissPendingIntent = PendingIntent.getBroadcast(this, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, MyApplicationFCM.CHANNEL_ID)
                 .setContentTitle(title)

@@ -8,12 +8,13 @@ public class Drug {
     private String sideEffects;
     private String contraindicated;
     private String interactions;
+    private String image;
 
     public Drug() {
     }
 
-    public Drug(String name, String ingredients, String function, String expiry, String sideEffects,
-                String contraindicated, String interactions) {
+    public Drug(String name, String ingredients, String function, String expiry,
+                String sideEffects, String contraindicated, String interactions, String image) {
         this.name = name;
         this.ingredients = ingredients;
         this.function = function;
@@ -21,6 +22,7 @@ public class Drug {
         this.sideEffects = sideEffects;
         this.contraindicated = contraindicated;
         this.interactions = interactions;
+        this.image = image;
     }
 
     public String getName() {
@@ -77,5 +79,13 @@ public class Drug {
 
     public void setInteractions(String interactions) {
         this.interactions = interactions;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

@@ -40,7 +40,7 @@ public class PrescriptionItemApdater extends RecyclerView.Adapter<PrescriptionIt
         return prescriptionItemList.size();
     }
 
-    public static class PrescriptionItemViewHolder extends RecyclerView.ViewHolder{
+    public static class PrescriptionItemViewHolder extends RecyclerView.ViewHolder {
         TextView txtDrugName, txtNote;
 
         public PrescriptionItemViewHolder(@NonNull View itemView) {

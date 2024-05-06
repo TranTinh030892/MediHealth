@@ -13,9 +13,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medihealth.R;
+import com.example.medihealth.apiservices.ConfirmNotificationService;
 import com.example.medihealth.models.Schedule;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
-import com.example.medihealth.apiservices.ConfirmNotificationService;
 import com.example.medihealth.utils.show_schedule_today.ResponseMessage;
 
 import retrofit2.Call;
@@ -49,7 +49,7 @@ public class SkipScheduleActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0) {
                         btnSend.setBackgroundResource(R.drawable.button_background_active);
                         btnSend.setTextColor(getResources().getColor(R.color.white));
-                    }else{
+                    } else {
                         btnSend.setBackgroundResource(R.drawable.button_background_notactive);
                         btnSend.setTextColor(getResources().getColor(R.color.black));
                     }

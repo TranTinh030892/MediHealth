@@ -5,5 +5,5 @@
         android:color="#FFFFA000" /> <!-- Đặt màu và độ dày cho stroke -->
     <!-- Màu nền tùy chọn cho ViewHolder khi được click -->
     <solid android:color="#00FFFFFF" />
-    <corners android:radius="10dp"/>
+    <corners android:radius="10dp" />
 </shape>

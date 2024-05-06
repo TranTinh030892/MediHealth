@@ -1,18 +1,16 @@
 package com.example.medihealth.activities.chat;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
 import com.example.medihealth.adapters.chat.ChatRecyclerAdapter;
@@ -32,13 +30,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class UserChat_Activity extends AppCompatActivity implements View.OnClickListener {
     Employee employee;
-    String chatroomId ;
+    String chatroomId;
     ChatRoom chatRoom;
     TextView textViewName;
     EditText editTextChat;
@@ -58,6 +55,7 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
         getOrCreateChatroomModel();
         setupChatRecyclerView();
     }
+
     private void initView() {
         textViewName = findViewById(R.id.fullName_Chat);
         editTextChat = findViewById(R.id.chat_message_input);
@@ -66,16 +64,18 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
         btnBack = findViewById(R.id.btnBack);
         recyclerView = findViewById(R.id.chat_recycler_view);
     }
+
     private void setOnclick() {
         btnBack.setOnClickListener(this);
         btnSend.setOnClickListener(this);
     }
+
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btnBack){
+        if (v.getId() == R.id.btnBack) {
             finish();
         }
-        if (v.getId() == R.id.message_send_btn){
+        if (v.getId() == R.id.message_send_btn) {
             String message = editTextChat.getText().toString().trim();
             if (message.isEmpty())
                 return;
@@ -83,9 +83,11 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
             sendMessage(message);
         }
     }
+
     private void setInforEmployee() {
         textViewName.setText(employee.getFullName());
     }
+
     private void getOrCreateChatroomModel() {
         FirebaseUtil.getChatroomReference(chatroomId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -103,6 +105,7 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
             }
         });
     }
+
     private void setupChatRecyclerView() {
         Query query = FirebaseUtil.getChatroomMessageReference(chatroomId)
                 .orderBy("timestamp", Query.Direction.DESCENDING);
@@ -124,6 +127,7 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
             }
         });
     }
+
     private void sendMessage(String message) {
         chatRoom.setLastMessageTimestamp(Timestamp.now());
         chatRoom.setLastMessageSenderId(FirebaseUtil.currentUserId());
@@ -147,14 +151,13 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
     private void checkStateEmployee(String message) {
         FirebaseFirestore.getInstance().collection("state").document(employee.getUserId()).get()
                 .addOnCompleteListener(task1 -> {
-                    if(task1.isSuccessful()){
+                    if (task1.isSuccessful()) {
                         boolean state = task1.getResult().getBoolean("isState");
-                        if (!state){
+                        if (!state) {
                             sendMessagetoAllTokenId(message);
                         }
-                    }
-                    else {
-                        Log.e("ERROR","ERROR");
+                    } else {
+                        Log.e("ERROR", "ERROR");
                     }
                 });
     }
@@ -193,23 +196,22 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
     }
 
     private void sendMessagetoAllTokenId(String message) {
-        Query query = FirebaseUtil.getTokenId().whereEqualTo("userId",employee.getUserId());
+        Query query = FirebaseUtil.getTokenId().whereEqualTo("userId", employee.getUserId());
         query.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
                 if (querySnapshot != null && !querySnapshot.isEmpty()) {
                     DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
                     Token token = documentSnapshot.toObject(Token.class);
                     if (token != null) {
                         List<String> tokenList = token.getTokenList();
-                        for (String tokenString : tokenList){
-                            FirebaseUtil.sendMessageNotificationtoEmployeeTokenId("employee",message,tokenString);
+                        for (String tokenString : tokenList) {
+                            FirebaseUtil.sendMessageNotificationtoEmployeeTokenId("employee", message, tokenString);
                         }
                     }
                 }
-            }
-            else {
-                Log.e("ERROR","Lỗi kết nối");
+            } else {
+                Log.e("ERROR", "Lỗi kết nối");
             }
         });
     }

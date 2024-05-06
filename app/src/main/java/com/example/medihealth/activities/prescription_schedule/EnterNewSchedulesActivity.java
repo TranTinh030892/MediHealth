@@ -29,7 +29,6 @@ import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -155,7 +154,7 @@ public class EnterNewSchedulesActivity extends AppCompatActivity implements Item
         if (!prescription.getTitle().isEmpty()) {
             dialog.setContent(prescription.getTitle());
         }
-        
+
         dialog.setNegativeButton("Hủy", new View.OnClickListener() {
             @Override
             public void onClick(View v) {

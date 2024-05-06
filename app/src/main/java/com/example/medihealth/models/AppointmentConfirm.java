@@ -3,6 +3,7 @@ package com.example.medihealth.models;
 public class AppointmentConfirm {
     String personName;
     String relationship;
+    String phoneNumber;
     String gender;
     String birth;
     String specialist;
@@ -14,10 +15,11 @@ public class AppointmentConfirm {
     public AppointmentConfirm() {
     }
 
-    public AppointmentConfirm(String personName, String relationship, String gender,
-                              String birth, String specialist, String doctorName, String time, String appointmentDate, String symptom) {
+    public AppointmentConfirm(String personName, String relationship, String phoneNumber,
+                              String gender, String birth, String specialist, String doctorName, String time, String appointmentDate, String symptom) {
         this.personName = personName;
         this.relationship = relationship;
+        this.phoneNumber = phoneNumber;
         this.gender = gender;
         this.birth = birth;
         this.specialist = specialist;
@@ -41,6 +43,14 @@ public class AppointmentConfirm {
 
     public void setRelationship(String relationship) {
         this.relationship = relationship;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getGender() {

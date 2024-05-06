@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.profile.Profile">
+    tools:context=".trang.profile.activity.Profile">
+
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
@@ -14,6 +15,7 @@
         android:paddingBottom="10dp"
         android:paddingStart="7dp"
         android:layout_height="wrap_content">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,7 +24,7 @@
             android:textSize="20sp"
             android:fontFamily="sans-serif-medium"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true" />
 
         <ImageButton
             android:layout_width="32dp"
@@ -31,7 +33,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:backgroundTint="@color/white"
             android:layout_centerVertical="true"
-            android:id="@+id/back_btn"/>
+            android:id="@+id/back_btn" />
     </RelativeLayout>
 
     <ScrollView
@@ -39,6 +41,7 @@
         android:layout_below="@id/top_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:id="@+id/body"
             android:paddingStart="15dp"
@@ -46,6 +49,7 @@
             android:background="#FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <RelativeLayout
                 android:id="@+id/block_one"
                 android:paddingStart="15dp"
@@ -53,25 +57,28 @@
                 android:paddingBottom="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/image_account"
                     android:layout_centerHorizontal="true"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/profile"/>
+                    android:src="@drawable/profile" />
+
                 <RelativeLayout
                     android:layout_below="@id/image_account"
                     android:layout_marginTop="6dp"
                     android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:id="@+id/name_account"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:textColor="@color/text_Color"
-                        android:textSize="16dp"/>
+                        android:textSize="16dp" />
 
                 </RelativeLayout>
             </RelativeLayout>
@@ -81,10 +88,12 @@
                 android:layout_below="@id/block_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <RelativeLayout
                     android:id="@+id/top_block_two"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:id="@+id/title_name"
                         android:layout_width="wrap_content"
@@ -92,15 +101,17 @@
                         android:text="Họ và tên"
                         android:textColor="@color/text_Color"
                         android:textSize="17dp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3dp"
                         android:text="*"
                         android:textColor="@color/Red"
-                        android:layout_toEndOf="@id/title_name"/>
+                        android:layout_toEndOf="@id/title_name" />
                 </RelativeLayout>
+
                 <EditText
                     android:id="@+id/fullName_user"
                     android:layout_below="@id/top_block_two"
@@ -110,7 +121,7 @@
                     android:textColor="@color/text_Color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/custom_edittext_profile"/>
+                    android:background="@drawable/custom_edittext_profile" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -119,10 +130,12 @@
                 android:layout_marginTop="25dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <RelativeLayout
                     android:id="@+id/top_block_three"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:id="@+id/title_phone"
                         android:layout_width="wrap_content"
@@ -130,15 +143,17 @@
                         android:text="Số điện thoại"
                         android:textColor="@color/text_Color"
                         android:textSize="17dp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3dp"
                         android:text="*"
                         android:textColor="@color/Red"
-                        android:layout_toEndOf="@id/title_phone"/>
+                        android:layout_toEndOf="@id/title_phone" />
                 </RelativeLayout>
+
                 <EditText
                     android:id="@+id/phoneNumber_user"
                     android:layout_below="@id/top_block_three"
@@ -148,7 +163,7 @@
                     android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/custom_edittext_profile"/>
+                    android:background="@drawable/custom_edittext_profile" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -157,10 +172,12 @@
                 android:layout_marginTop="25dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <RelativeLayout
                     android:id="@+id/top_block_four"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:id="@+id/title_address"
                         android:layout_width="wrap_content"
@@ -168,15 +185,17 @@
                         android:text="Địa chỉ"
                         android:textColor="@color/text_Color"
                         android:textSize="17dp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3dp"
                         android:text="*"
                         android:textColor="@color/Red"
-                        android:layout_toEndOf="@id/title_address"/>
+                        android:layout_toEndOf="@id/title_address" />
                 </RelativeLayout>
+
                 <EditText
                     android:id="@+id/address_user"
                     android:layout_below="@id/top_block_four"
@@ -186,7 +205,7 @@
                     android:textColor="@color/text_Color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/custom_edittext_profile"/>
+                    android:background="@drawable/custom_edittext_profile" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -195,10 +214,12 @@
                 android:layout_marginTop="25dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <RelativeLayout
                     android:id="@+id/top_block_five"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:id="@+id/title_birth"
                         android:layout_width="wrap_content"
@@ -206,23 +227,27 @@
                         android:text="Ngày sinh"
                         android:textColor="@color/text_Color"
                         android:textSize="17dp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3dp"
                         android:text="*"
                         android:textColor="@color/Red"
-                        android:layout_toEndOf="@id/title_birth"/>
+                        android:layout_toEndOf="@id/title_birth" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_below="@id/top_block_five"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <RelativeLayout
                         android:id="@+id/col_one"
                         android:layout_width="180dp"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:id="@+id/birth_user"
                             android:paddingStart="10dp"
@@ -232,7 +257,8 @@
                             android:textColor="@color/text_Color"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/custom_edittext_profile"/>
+                            android:background="@drawable/custom_edittext_profile" />
+
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
@@ -253,17 +279,19 @@
                         android:layout_marginLeft="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <RadioButton
                             android:id="@+id/male"
                             android:text="Nam"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
+
                         <RadioButton
                             android:id="@+id/female"
                             android:text="Nữ"
                             android:layout_marginLeft="40dp"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
                     </RadioGroup>
                 </RelativeLayout>
             </RelativeLayout>
@@ -279,10 +307,12 @@
                     android:id="@+id/block_six_col_one"
                     android:layout_width="180dp"
                     android:layout_height="wrap_content">
+
                     <RelativeLayout
                         android:id="@+id/top_block_six_col_one"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:id="@+id/title_height"
                             android:layout_width="wrap_content"
@@ -290,15 +320,17 @@
                             android:text="Chiều cao"
                             android:textColor="@color/text_Color"
                             android:textSize="17dp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="3dp"
                             android:text="*"
                             android:textColor="@color/Red"
-                            android:layout_toEndOf="@id/title_height"/>
+                            android:layout_toEndOf="@id/title_height" />
                     </RelativeLayout>
+
                     <EditText
                         android:id="@+id/height_user"
                         android:layout_below="@id/top_block_six_col_one"
@@ -308,7 +340,7 @@
                         android:textColor="@color/text_Color"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/custom_edittext_profile"/>
+                        android:background="@drawable/custom_edittext_profile" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -317,10 +349,12 @@
                     android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <RelativeLayout
                         android:id="@+id/top_block_six_col_two"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:id="@+id/title_weight"
                             android:layout_width="wrap_content"
@@ -328,15 +362,17 @@
                             android:text="Cân nặng"
                             android:textColor="@color/text_Color"
                             android:textSize="17dp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="3dp"
                             android:text="*"
                             android:textColor="@color/Red"
-                            android:layout_toEndOf="@id/title_weight"/>
+                            android:layout_toEndOf="@id/title_weight" />
                     </RelativeLayout>
+
                     <EditText
                         android:id="@+id/weight_user"
                         android:layout_below="@id/top_block_six_col_two"
@@ -346,7 +382,7 @@
                         android:singleLine="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/custom_edittext_profile"/>
+                        android:background="@drawable/custom_edittext_profile" />
                 </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
@@ -359,6 +395,7 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="77dp">
+
         <RelativeLayout
             android:id="@+id/enterBook"
             android:background="@drawable/custom_button"
@@ -368,6 +405,7 @@
             android:layout_marginRight="15dp"
             android:layout_width="match_parent"
             android:layout_height="48dp">
+
             <TextView
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
@@ -377,7 +415,7 @@
                 android:textAllCaps="false"
                 android:textSize="20sp"
                 android:fontFamily="sans-serif-medium"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

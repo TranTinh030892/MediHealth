@@ -1,7 +1,6 @@
 package com.example.medihealth.activities.prescription_schedule;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;

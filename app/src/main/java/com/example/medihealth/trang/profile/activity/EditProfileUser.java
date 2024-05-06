@@ -1,7 +1,4 @@
-package com.example.medihealth.activities.profile;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
+package com.example.medihealth.trang.profile.activity;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -23,6 +20,9 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activities.MainActivity;

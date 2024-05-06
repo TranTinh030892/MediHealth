@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.Search.SearchDrugActivity">
+    tools:context=".trang.search.activity.SearchDrugActivity">
+
     <RelativeLayout
         android:id="@+id/top_layout"
         android:background="@drawable/custom_top_layout_appointment"
         android:layout_width="match_parent"
         android:layout_height="75dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,7 +21,8 @@
             android:fontFamily="sans-serif-medium"
             android:textSize="20dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="5dp" />
+
         <ImageButton
             android:layout_width="32dp"
             android:layout_height="25dp"
@@ -28,9 +31,9 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="@color/white"
             android:layout_marginTop="6dp"
-            android:id="@+id/back_btn"/>
+            android:id="@+id/back_btn" />
     </RelativeLayout>
-<!--    #EDEDED-->
+    <!--    #EDEDED-->
     <androidx.cardview.widget.CardView
         android:id="@+id/block_menu"
         app:cardCornerRadius="20dp"
@@ -40,9 +43,11 @@
         android:padding="3.5dp"
         android:layout_width="375dp"
         android:layout_height="50dp">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <EditText
                 android:id="@+id/search"
                 android:background="@drawable/edit_text_book"
@@ -50,13 +55,15 @@
                 android:hint="Nhập tên thuốc, hoạt chất hoặc cơ sở"
                 android:backgroundTint="#EDEDED"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
+
             <ImageView
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/search_drug"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="13dp"/>
+                android:layout_marginStart="13dp" />
+
             <ImageView
                 android:id="@+id/icon_close"
                 android:visibility="gone"
@@ -65,18 +72,20 @@
                 android:background="@drawable/icon_close"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="13dp"/>
+                android:layout_marginEnd="13dp" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
     //
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/block_menu">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_drug"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
     </RelativeLayout>
 
 </RelativeLayout>

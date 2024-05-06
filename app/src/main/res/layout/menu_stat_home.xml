@@ -14,7 +14,7 @@
         android:paddingBottom="12dp"
         android:paddingLeft="10dp"
         android:text="Thống kê theo ngày"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/menu_item_2"
@@ -25,7 +25,7 @@
         android:paddingBottom="12dp"
         android:paddingLeft="10dp"
         android:text="Thống kê theo tuần"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/menu_item_3"
@@ -36,7 +36,7 @@
         android:paddingBottom="12dp"
         android:paddingLeft="10dp"
         android:text="Thống kê theo tháng"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black" />
 
 
 </LinearLayout>

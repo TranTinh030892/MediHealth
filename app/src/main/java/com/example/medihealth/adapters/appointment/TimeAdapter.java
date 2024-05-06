@@ -17,14 +17,14 @@ import com.example.medihealth.R;
 
 import java.util.List;
 
-public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeViewHolder>{
+public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeViewHolder> {
     Context context;
-    private List<String>timeList;
+    private List<String> timeList;
     private int selectedPosition = RecyclerView.NO_POSITION;
     private TimeAdapter.ITimeViewHolder iViewHolder;
-    SharedPreferences sharedPreferences ;
+    SharedPreferences sharedPreferences;
 
-    public TimeAdapter(Context context,List<String> timeList, ITimeViewHolder iViewHolder) {
+    public TimeAdapter(Context context, List<String> timeList, ITimeViewHolder iViewHolder) {
         this.context = context;
         this.timeList = timeList;
         this.iViewHolder = iViewHolder;
@@ -47,7 +47,7 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeViewHolder
     public void onBindViewHolder(@NonNull TimeViewHolder holder, @SuppressLint("RecyclerView") int position) {
         String timeStr = timeList.get(position);
         holder.textTime.setText(timeStr);
-        int selectedPosition = sharedPreferences.getInt("indexTimeSelected",-1);
+        int selectedPosition = sharedPreferences.getInt("indexTimeSelected", -1);
         if (position == selectedPosition) {
             setBackgroundItem(holder);
         } else {
@@ -64,35 +64,42 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeViewHolder
             }
         });
     }
+
     public void clearData() {
         if (timeList != null) {
             timeList.clear();
         }
     }
+
     @Override
     public int getItemCount() {
         return timeList.size();
     }
 
-    public static class TimeViewHolder extends RecyclerView.ViewHolder{
+    public static class TimeViewHolder extends RecyclerView.ViewHolder {
         TextView textTime;
+
         public TimeViewHolder(@NonNull View itemView) {
             super(itemView);
             textTime = itemView.findViewById(R.id.time);
         }
     }
-    public interface ITimeViewHolder{
+
+    public interface ITimeViewHolder {
         void onClickItem(int positon);
     }
+
     private void setBackgroundItem(TimeViewHolder holder) {
         Drawable selectedBackground = ContextCompat.getDrawable(context, R.drawable.custom_form_time_selected);
         holder.itemView.setBackground(selectedBackground);
     }
+
     private void setBackgroundNotSelectedItem(TimeViewHolder holder) {
         Drawable selectedBackground = ContextCompat.getDrawable(context, R.drawable.custom_form_time_notselected);
         holder.itemView.setBackground(selectedBackground);
     }
-    private void setIndexSelectedSharedPreferences(String key, int value){
+
+    private void setIndexSelectedSharedPreferences(String key, int value) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(key, value);
         editor.apply();

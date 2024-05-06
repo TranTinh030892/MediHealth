@@ -14,7 +14,7 @@ import com.example.medihealth.models.Prescription;
 
 import java.util.List;
 
-public class StatDayApdapter extends RecyclerView.Adapter<StatDayApdapter.StatDayViewHolder>{
+public class StatDayApdapter extends RecyclerView.Adapter<StatDayApdapter.StatDayViewHolder> {
 
     private List<Prescription> prescriptionList;
 
@@ -43,10 +43,11 @@ public class StatDayApdapter extends RecyclerView.Adapter<StatDayApdapter.StatDa
         return this.prescriptionList.size();
     }
 
-    public static class StatDayViewHolder extends RecyclerView.ViewHolder{
+    public static class StatDayViewHolder extends RecyclerView.ViewHolder {
         TextView txtTitle;
         RecyclerView listConfirmRecyclerView;
-        public StatDayViewHolder(@NonNull View itemView){
+
+        public StatDayViewHolder(@NonNull View itemView) {
             super(itemView);
             txtTitle = itemView.findViewById(R.id.txtTitle);
             listConfirmRecyclerView = itemView.findViewById(R.id.listConfirmRecyclerView);

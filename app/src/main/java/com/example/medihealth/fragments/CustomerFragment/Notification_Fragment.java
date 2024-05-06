@@ -29,6 +29,7 @@ import com.google.firebase.firestore.Query;
 public class Notification_Fragment extends Fragment {
     RecyclerView recyclerView;
     NotificationAdapter notificationAdapter;
+
     public Notification_Fragment() {
         // Required empty public constructor
     }
@@ -42,7 +43,7 @@ public class Notification_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View itemView =  inflater.inflate(R.layout.fragment_notification, container, false);
+        View itemView = inflater.inflate(R.layout.fragment_notification, container, false);
         initView(itemView);
         setupNotificationsRecyclerView(FirebaseUtil.currentUserId());
         return itemView;
@@ -51,16 +52,17 @@ public class Notification_Fragment extends Fragment {
     private void initView(View itemView) {
         recyclerView = itemView.findViewById(R.id.listNotifications);
     }
+
     private void setupNotificationsRecyclerView(String currentId) {
         Query query = FirebaseUtil.getNotificationsCollectionReference()
-                .whereEqualTo("userId",currentId);
+                .whereEqualTo("userId", currentId);
         FirestoreRecyclerOptions<NotificationModel> options = new FirestoreRecyclerOptions.Builder<NotificationModel>()
-                .setQuery(query,NotificationModel.class).build();
+                .setQuery(query, NotificationModel.class).build();
         notificationAdapter = new NotificationAdapter(options, getContext(), new NotificationAdapter.INotificationViewHolder() {
             @Override
             public void onClickItem(int positon, DocumentSnapshot documentSnapshot) {
-                showDialogInforNotification(Gravity.CENTER,positon,documentSnapshot);
-                updateStateSeenNotification(positon,documentSnapshot);
+                showDialogInforNotification(Gravity.CENTER, positon, documentSnapshot);
+                updateStateSeenNotification(positon, documentSnapshot);
             }
 
             @Override
@@ -72,12 +74,13 @@ public class Notification_Fragment extends Fragment {
         recyclerView.setAdapter(notificationAdapter);
         notificationAdapter.startListening();
     }
-    private void showDialogInforNotification(int center,int positon, DocumentSnapshot documentSnapshot) {
+
+    private void showDialogInforNotification(int center, int positon, DocumentSnapshot documentSnapshot) {
         final Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_detail_notification);
         Window window = dialog.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -85,18 +88,18 @@ public class Notification_Fragment extends Fragment {
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
         window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
+        if (Gravity.BOTTOM == center) {
             dialog.setCancelable(false);
-        }
-        else{
+        } else {
             dialog.setCancelable(true);
-        };
+        }
+        ;
 
         ImageView closeDialog;
         TextView textBody;
         closeDialog = dialog.findViewById(R.id.icon_close);
         textBody = dialog.findViewById(R.id.notification_body);
-        setupTextBody(textBody,positon);
+        setupTextBody(textBody, positon);
         closeDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,7 +110,7 @@ public class Notification_Fragment extends Fragment {
     }
 
     private void setupTextBody(TextView textBody, int positon) {
-        if (notificationAdapter != null){
+        if (notificationAdapter != null) {
             NotificationModel notificationModel = notificationAdapter.getItem(positon);
             String content = notificationModel.getBody();
             textBody.setText(content);
@@ -119,11 +122,10 @@ public class Notification_Fragment extends Fragment {
         notificationModel.setSeen(true);
         FirebaseUtil.getNotificationDetailsById(documentSnapshot.getId()).set(notificationModel)
                 .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        Log.e("SUCCESSFULL","Đã xem một notification");
-                    }
-                    else {
-                        Log.e("ERROR","Lỗi kết nối mạng");
+                    if (task.isSuccessful()) {
+                        Log.e("SUCCESSFULL", "Đã xem một notification");
+                    } else {
+                        Log.e("ERROR", "Lỗi kết nối mạng");
                     }
                 });
     }

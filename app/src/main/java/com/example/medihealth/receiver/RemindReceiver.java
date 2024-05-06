@@ -5,14 +5,12 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activities.prescription_schedule.PrescriptionDetailManagement;
 import com.example.medihealth.activities.prescription_schedule.RemindScheduler;
 import com.example.medihealth.activities.show_schedule_totay.ScheduleTodayDetailActivity;
 import com.example.medihealth.apiservices.ScheduleService;

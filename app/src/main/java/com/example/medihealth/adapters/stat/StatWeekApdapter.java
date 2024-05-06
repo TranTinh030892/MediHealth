@@ -1,6 +1,5 @@
 package com.example.medihealth.adapters.stat;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +18,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatWeekApdapter extends RecyclerView.Adapter<StatWeekApdapter.StatWeekViewHolder>{
+public class StatWeekApdapter extends RecyclerView.Adapter<StatWeekApdapter.StatWeekViewHolder> {
 
     private List<Prescription> prescriptionList;
     private LocalDate day;
 
-    public StatWeekApdapter(List<Prescription> prescriptionList, LocalDate day){
+    public StatWeekApdapter(List<Prescription> prescriptionList, LocalDate day) {
         this.prescriptionList = prescriptionList;
         this.day = day;
     }
@@ -42,47 +41,53 @@ public class StatWeekApdapter extends RecyclerView.Adapter<StatWeekApdapter.Stat
         holder.txtTitle.setText(prescription.getTitle());
         List<Schedule> scheduleList = prescription.getSchedules();
         List<Boolean> checkSchedule = new ArrayList<>();
-        if(scheduleList.stream().allMatch(schedule -> schedule.getConfirmNotifications().isEmpty())){
-            for(int i = 0; i < scheduleList.size(); i++) checkSchedule.add(true);
-        }else{
-            for(int i = 0; i < scheduleList.size(); i++) checkSchedule.add(false);
+        if (scheduleList.stream().allMatch(schedule -> schedule.getConfirmNotifications().isEmpty())) {
+            for (int i = 0; i < scheduleList.size(); i++) checkSchedule.add(true);
+        } else {
+            for (int i = 0; i < scheduleList.size(); i++) checkSchedule.add(false);
         }
 
         LocalDate localDay = day;
         //T2
         holder.t2RecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         ScheduleofStatWeekApdapter apdapterT2 = new ScheduleofStatWeekApdapter(filterSchedule(scheduleList, localDay), checkSchedule);
-        if(!verifyCheckSchedule(checkSchedule)) checkSchedule = resultCheck(scheduleList, localDay);
+        if (!verifyCheckSchedule(checkSchedule))
+            checkSchedule = resultCheck(scheduleList, localDay);
         localDay = localDay.plusDays(1);
         holder.t2RecyclerView.setAdapter(apdapterT2);
         //T3
         holder.t3RecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         ScheduleofStatWeekApdapter apdapterT3 = new ScheduleofStatWeekApdapter(filterSchedule(scheduleList, localDay), checkSchedule);
-        if(!verifyCheckSchedule(checkSchedule)) checkSchedule = resultCheck(scheduleList, localDay);
+        if (!verifyCheckSchedule(checkSchedule))
+            checkSchedule = resultCheck(scheduleList, localDay);
         localDay = localDay.plusDays(1);
         holder.t3RecyclerView.setAdapter(apdapterT3);
         //T4
         holder.t4RecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         ScheduleofStatWeekApdapter apdapterT4 = new ScheduleofStatWeekApdapter(filterSchedule(scheduleList, localDay), checkSchedule);
-        if(!verifyCheckSchedule(checkSchedule)) checkSchedule = resultCheck(scheduleList, localDay);
+        if (!verifyCheckSchedule(checkSchedule))
+            checkSchedule = resultCheck(scheduleList, localDay);
         localDay = localDay.plusDays(1);
         holder.t4RecyclerView.setAdapter(apdapterT4);
         //T5
         holder.t5RecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         ScheduleofStatWeekApdapter apdapterT5 = new ScheduleofStatWeekApdapter(filterSchedule(scheduleList, localDay), checkSchedule);
-        if(!verifyCheckSchedule(checkSchedule)) checkSchedule = resultCheck(scheduleList, localDay);
+        if (!verifyCheckSchedule(checkSchedule))
+            checkSchedule = resultCheck(scheduleList, localDay);
         localDay = localDay.plusDays(1);
         holder.t5RecyclerView.setAdapter(apdapterT5);
         //T6
         holder.t6RecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         ScheduleofStatWeekApdapter apdapterT6 = new ScheduleofStatWeekApdapter(filterSchedule(scheduleList, localDay), checkSchedule);
-        if(!verifyCheckSchedule(checkSchedule)) checkSchedule = resultCheck(scheduleList, localDay);
+        if (!verifyCheckSchedule(checkSchedule))
+            checkSchedule = resultCheck(scheduleList, localDay);
         localDay = localDay.plusDays(1);
         holder.t6RecyclerView.setAdapter(apdapterT6);
         //T7
         holder.t7RecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         ScheduleofStatWeekApdapter apdapterT7 = new ScheduleofStatWeekApdapter(filterSchedule(scheduleList, localDay), checkSchedule);
-        if(!verifyCheckSchedule(checkSchedule)) checkSchedule = resultCheck(scheduleList, localDay);
+        if (!verifyCheckSchedule(checkSchedule))
+            checkSchedule = resultCheck(scheduleList, localDay);
         localDay = localDay.plusDays(1);
         holder.t7RecyclerView.setAdapter(apdapterT7);
         //CN
@@ -96,12 +101,12 @@ public class StatWeekApdapter extends RecyclerView.Adapter<StatWeekApdapter.Stat
         return this.prescriptionList.size();
     }
 
-    private List<Schedule> filterSchedule(List<Schedule> scheduleList, LocalDate date){
+    private List<Schedule> filterSchedule(List<Schedule> scheduleList, LocalDate date) {
         List<Schedule> filteredSchedule = new ArrayList<>();
         for (Schedule schedule : scheduleList) {
             List<ConfirmNotification> confirmNotifications = schedule.getConfirmNotifications();
             List<ConfirmNotification> filteredConfirmNotifications = new ArrayList<>();
-            if(confirmNotifications != null && !confirmNotifications.isEmpty()){
+            if (confirmNotifications != null && !confirmNotifications.isEmpty()) {
                 for (ConfirmNotification confirmNotification : confirmNotifications) {
                     if (confirmNotification.getDate().isEqual(date)) {
                         filteredConfirmNotifications.add(confirmNotification);
@@ -116,12 +121,12 @@ public class StatWeekApdapter extends RecyclerView.Adapter<StatWeekApdapter.Stat
         return filteredSchedule;
     }
 
-    private List<Boolean> resultCheck(List<Schedule> scheduleList, LocalDate date){
+    private List<Boolean> resultCheck(List<Schedule> scheduleList, LocalDate date) {
         List<Boolean> rs = new ArrayList<>();
         boolean check = false;
         for (Schedule schedule : scheduleList) {
             List<ConfirmNotification> confirmNotifications = schedule.getConfirmNotifications();
-            if(confirmNotifications != null && !confirmNotifications.isEmpty()){
+            if (confirmNotifications != null && !confirmNotifications.isEmpty()) {
                 for (ConfirmNotification confirmNotification : confirmNotifications) {
                     if (confirmNotification.getDate().isEqual(date)) {
                         check = true;
@@ -129,23 +134,24 @@ public class StatWeekApdapter extends RecyclerView.Adapter<StatWeekApdapter.Stat
                     }
                 }
             }
-            if(check) rs.add(true);
+            if (check) rs.add(true);
             else rs.add(false);
         }
         return rs;
     }
 
-    private Boolean verifyCheckSchedule(List<Boolean> checkSchedule){
-        for(boolean cs : checkSchedule){
-            if(!cs) return false;
+    private Boolean verifyCheckSchedule(List<Boolean> checkSchedule) {
+        for (boolean cs : checkSchedule) {
+            if (!cs) return false;
         }
         return true;
     }
 
-    public static class StatWeekViewHolder extends RecyclerView.ViewHolder{
+    public static class StatWeekViewHolder extends RecyclerView.ViewHolder {
         TextView txtTitle;
         RecyclerView t2RecyclerView, t3RecyclerView, t4RecyclerView, t5RecyclerView, t6RecyclerView, t7RecyclerView, cnRecyclerView;
-        public StatWeekViewHolder(@NonNull View itemView){
+
+        public StatWeekViewHolder(@NonNull View itemView) {
             super(itemView);
             txtTitle = itemView.findViewById(R.id.txtTitle);
             t2RecyclerView = itemView.findViewById(R.id.t2RecyclerView);

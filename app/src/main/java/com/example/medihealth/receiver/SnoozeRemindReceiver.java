@@ -8,7 +8,6 @@ import android.util.Log;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.medihealth.activities.prescription_schedule.RemindScheduler;
-import com.example.medihealth.models.Schedule;
 
 public class SnoozeRemindReceiver extends BroadcastReceiver {
     @Override

@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.medihealth.R;
 import com.example.medihealth.activities.MainActivity;
 import com.example.medihealth.adapters.show_schedule_today.ScheduleApdapter;
+import com.example.medihealth.apiservices.ScheduleService;
 import com.example.medihealth.models.Schedule;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
-import com.example.medihealth.apiservices.ScheduleService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -26,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ScheduleTodayActivity extends AppCompatActivity{
+public class ScheduleTodayActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private RecyclerView scheRecyclerView;
     private ScheduleApdapter adapter;
@@ -43,9 +43,9 @@ public class ScheduleTodayActivity extends AppCompatActivity{
         imgBack = findViewById(R.id.image_back);
         scheRecyclerView = findViewById(R.id.scheRecyclerView);
         scheRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ScheduleApdapter(scheduleList, new ScheduleApdapter.OnItemClickListener(){
+        adapter = new ScheduleApdapter(scheduleList, new ScheduleApdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Schedule schedule){
+            public void onItemClick(Schedule schedule) {
                 Intent intent = new Intent(ScheduleTodayActivity.this, ScheduleTodayDetailActivity.class);
                 intent.putExtra("schedule", schedule);
                 startActivity(intent);
@@ -57,12 +57,12 @@ public class ScheduleTodayActivity extends AppCompatActivity{
         scheduleService.getScheduleToday(account.getUid()).enqueue(new Callback<List<Schedule>>() {
             @Override
             public void onResponse(Call<List<Schedule>> call, Response<List<Schedule>> response) {
-                if(response.isSuccessful() && response.body() != null && !response.body().isEmpty()){
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     scheduleList.addAll(response.body());
                     adapter.notifyDataSetChanged();
 
                     Log.d("API_Response", "Data received from API: " + response.body().toString());
-                }else{
+                } else {
                     Log.e("API_Error", "Response body is empty or null");
                 }
             }

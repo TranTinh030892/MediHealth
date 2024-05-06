@@ -9,6 +9,7 @@ public class ChatMessage {
 
     public ChatMessage() {
     }
+
     public ChatMessage(String message, String senderId, Timestamp timestamp) {
         this.message = message;
         this.senderId = senderId;

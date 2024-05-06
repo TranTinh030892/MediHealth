@@ -1,10 +1,5 @@
 package com.example.medihealth.activities.chat;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +10,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
 import com.example.medihealth.adapters.chat.ChatRecyclerAdapter;
@@ -41,10 +41,11 @@ public class EmployeeChat_Activity extends AppCompatActivity implements View.OnC
     ImageView image_user;
     TextView textViewName;
     EditText editTextChat;
-    ImageButton btnSend,btnBack;
+    ImageButton btnSend, btnBack;
     UserModel userModel;
     ChatRecyclerAdapter adapter;
     RecyclerView recyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +53,7 @@ public class EmployeeChat_Activity extends AppCompatActivity implements View.OnC
         initReference();
         initOnclick();
         userModel = AndroidUtil.getUserModelFromIntent(getIntent());
-        chatroomId = FirebaseUtil.getChatroomId(FirebaseUtil.currentUserId(),userModel.getUserId());
+        chatroomId = FirebaseUtil.getChatroomId(FirebaseUtil.currentUserId(), userModel.getUserId());
         setInforUser();
         getOrCreateChatroomModel();
         setupChatRecyclerView();
@@ -68,9 +69,9 @@ public class EmployeeChat_Activity extends AppCompatActivity implements View.OnC
                 .orderBy("timestamp", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<ChatMessage> options = new FirestoreRecyclerOptions.Builder<ChatMessage>()
-                .setQuery(query,ChatMessage.class).build();
+                .setQuery(query, ChatMessage.class).build();
 
-        adapter = new ChatRecyclerAdapter(options,getApplicationContext());
+        adapter = new ChatRecyclerAdapter(options, getApplicationContext());
         LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext());
         manager.setReverseLayout(true);
         recyclerView.setLayoutManager(manager);
@@ -87,12 +88,12 @@ public class EmployeeChat_Activity extends AppCompatActivity implements View.OnC
 
     private void getOrCreateChatroomModel() {
         FirebaseUtil.getChatroomReference(chatroomId).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
+            if (task.isSuccessful()) {
                 chatRoom = task.getResult().toObject(ChatRoom.class);
-                if(chatRoom==null){
+                if (chatRoom == null) {
                     chatRoom = new ChatRoom(
                             chatroomId,
-                            Arrays.asList(FirebaseUtil.currentUserId(),userModel.getUserId()),
+                            Arrays.asList(FirebaseUtil.currentUserId(), userModel.getUserId()),
                             Timestamp.now(),
                             ""
                     );
@@ -103,22 +104,22 @@ public class EmployeeChat_Activity extends AppCompatActivity implements View.OnC
     }
 
     private void setInforUser() {
-        textViewName.setText(String.format( userModel.getFullName()));
+        textViewName.setText(String.format(userModel.getFullName()));
         SharedPreferences sharedPreferences;
         sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         String profileString = sharedPreferences.getString("profile", "empty");
-        if (!profileString.equals("empty")){
+        if (!profileString.equals("empty")) {
             String[] array = profileString.split(";");
             if (array.length > 0) {
                 Picasso.get().load(array[1]).into(image_user);
             } else {
                 Log.e("ERROR", "profileString rỗng");
             }
-        }
-        else {
+        } else {
             image_user.setImageResource(R.drawable.profile);
         }
     }
+
     private void initReference() {
         image_user = findViewById(R.id.image_chat);
         textViewName = findViewById(R.id.fullName_Chat);
@@ -131,13 +132,13 @@ public class EmployeeChat_Activity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.message_send_btn){
+        if (v.getId() == R.id.message_send_btn) {
             String message = editTextChat.getText().toString().trim();
-            if(message.isEmpty())
+            if (message.isEmpty())
                 return;
             sendMessage(message);
         }
-        if (v.getId() == R.id.btnBack){
+        if (v.getId() == R.id.btnBack) {
             Intent intent = new Intent(EmployeeChat_Activity.this, Employee_MainActivity.class);
             startActivity(intent);
         }
@@ -149,12 +150,12 @@ public class EmployeeChat_Activity extends AppCompatActivity implements View.OnC
         chatRoom.setLastMessage(message);
         FirebaseUtil.getChatroomReference(chatroomId).set(chatRoom);
 
-        ChatMessage chatMessageModel = new ChatMessage(message,FirebaseUtil.currentUserId(),Timestamp.now());
+        ChatMessage chatMessageModel = new ChatMessage(message, FirebaseUtil.currentUserId(), Timestamp.now());
         FirebaseUtil.getChatroomMessageReference(chatroomId).add(chatMessageModel)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             editTextChat.setText("");
                         }
                     }

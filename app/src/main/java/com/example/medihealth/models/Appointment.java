@@ -11,11 +11,15 @@ public class Appointment {
     private String symptom;
     private int stateAppointment;
 
+    private String reminderTime;
+    private String reminderDate;
+    private boolean reminder;
+
     public Appointment() {
     }
 
-    public Appointment(UserModel userModel,String bookDate, String appointmentDate, String specialist, Doctor doctor, String time,
-                       String symptom, int stateAppointment) {
+    public Appointment(UserModel userModel, String bookDate, String appointmentDate, String specialist,
+                       Doctor doctor, String time, String symptom, int stateAppointment, String reminderTime, String reminderDate, boolean isReminder) {
         this.userModel = userModel;
         this.bookDate = bookDate;
         this.appointmentDate = appointmentDate;
@@ -24,10 +28,13 @@ public class Appointment {
         this.time = time;
         this.symptom = symptom;
         this.stateAppointment = stateAppointment;
+        this.reminderTime = reminderTime;
+        this.reminderDate = reminderDate;
+        this.reminder = isReminder;
     }
 
-    public Appointment(Relative relative, String bookDate, String appointmentDate, String specialist,
-                       Doctor doctor, String time, String symptom, int stateAppointment) {
+    public Appointment(Relative relative, String bookDate, String appointmentDate, String specialist, Doctor doctor, String time, String symptom, int stateAppointment,
+                       String reminderTime, String reminderDate, boolean isReminder) {
         this.relative = relative;
         this.bookDate = bookDate;
         this.appointmentDate = appointmentDate;
@@ -36,6 +43,9 @@ public class Appointment {
         this.time = time;
         this.symptom = symptom;
         this.stateAppointment = stateAppointment;
+        this.reminderTime = reminderTime;
+        this.reminderDate = reminderDate;
+        this.reminder = isReminder;
     }
 
     public UserModel getUserModel() {
@@ -44,6 +54,14 @@ public class Appointment {
 
     public void setUserModel(UserModel userModel) {
         this.userModel = userModel;
+    }
+
+    public Relative getRelative() {
+        return relative;
+    }
+
+    public void setRelative(Relative relative) {
+        this.relative = relative;
     }
 
     public String getBookDate() {
@@ -102,11 +120,27 @@ public class Appointment {
         this.stateAppointment = stateAppointment;
     }
 
-    public Relative getRelative() {
-        return relative;
+    public String getReminderTime() {
+        return reminderTime;
     }
 
-    public void setRelative(Relative relative) {
-        this.relative = relative;
+    public void setReminderTime(String reminderTime) {
+        this.reminderTime = reminderTime;
+    }
+
+    public String getReminderDate() {
+        return reminderDate;
+    }
+
+    public void setReminderDate(String reminderDate) {
+        this.reminderDate = reminderDate;
+    }
+
+    public boolean getReminder() {
+        return reminder;
+    }
+
+    public void setReminder(boolean reminder) {
+        this.reminder = reminder;
     }
 }

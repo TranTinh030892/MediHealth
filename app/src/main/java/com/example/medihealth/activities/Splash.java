@@ -13,8 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activities.chat.Employee_MainActivity;
-import com.example.medihealth.activities.profile.Profile;
 import com.example.medihealth.models.UserModel;
+import com.example.medihealth.trang.login.activity.Login;
+import com.example.medihealth.trang.profile.activity.Profile;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -45,7 +46,10 @@ public class Splash extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    checkProfile(user.getUid());
+                    String email = user.getEmail();
+                    if (email.contains("nhanvien")) {
+                        checkRole(user.getUid());
+                    } else checkProfile(user.getUid());
                 }
             }, 2000);
         }

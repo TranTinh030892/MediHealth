@@ -3,7 +3,6 @@ package com.example.medihealth.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 

@@ -1,9 +1,5 @@
 package com.example.medihealth.activities.chat;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +7,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.example.medihealth.R;
 import com.example.medihealth.fragments.EmployeeFragment.Employee_Appointment_Fragment;
@@ -23,6 +23,7 @@ public class Employee_MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     private BottomNavigationView bottomNavigationView, noticeBg;
     TextView noticeNumber;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +33,7 @@ public class Employee_MainActivity extends AppCompatActivity {
         setBotomNavigation();
         showNoticeBg();
     }
+
     private void setLoadingFormUserSharedPreferences() {
         sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -44,18 +46,19 @@ public class Employee_MainActivity extends AppCompatActivity {
         noticeBg = findViewById(R.id.notice);
         noticeNumber = findViewById(R.id.notice_Number);
     }
+
     private void setBotomNavigation() {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment selectedFragment = null;
-                if(item.getItemId() == R.id.item_chat){
+                if (item.getItemId() == R.id.item_chat) {
                     selectedFragment = new Employee_Chat_Fragment();
                 }
-                if(item.getItemId() == R.id.item_appointment){
+                if (item.getItemId() == R.id.item_appointment) {
                     selectedFragment = new Employee_Appointment_Fragment();
                 }
-                if(item.getItemId() == R.id.item_menu){
+                if (item.getItemId() == R.id.item_menu) {
                     selectedFragment = new Employee_Menu_Fragment();
                 }
                 if (selectedFragment != null) {
@@ -67,6 +70,7 @@ public class Employee_MainActivity extends AppCompatActivity {
 
         bottomNavigationView.setSelectedItemId(R.id.item_chat);
     }
+
     private void showNoticeBg() {
         FirebaseUtil.getAppointmentCollectionReference()
                 .whereEqualTo("stateAppointment", 0)
@@ -81,12 +85,10 @@ public class Employee_MainActivity extends AppCompatActivity {
                         if (totalCount > 0) {
                             noticeBg.setVisibility(View.VISIBLE);
                             noticeNumber.setText(String.valueOf(totalCount));
-                        }
-                        else {
+                        } else {
                             noticeBg.setVisibility(View.GONE);
                         }
-                    }
-                    else {
+                    } else {
                         Log.e("TotalCount", "QuerySnapshot is null");
                     }
                 });

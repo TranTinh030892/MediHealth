@@ -1,11 +1,5 @@
 package com.example.medihealth.activities.appointment;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -16,7 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -25,15 +18,19 @@ import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.medihealth.R;
 import com.example.medihealth.activities.MainActivity;
-import com.example.medihealth.activities.profile.AddRelative;
 import com.example.medihealth.adapters.appointment.DoctorAdapter;
 import com.example.medihealth.adapters.appointment.RelativeAdapter;
 import com.example.medihealth.adapters.appointment.TimeAdapter;
@@ -44,16 +41,14 @@ import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Doctor;
 import com.example.medihealth.models.Relative;
 import com.example.medihealth.models.UserModel;
+import com.example.medihealth.trang.profile.activity.AddRelative;
 import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Filter;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.squareup.picasso.Picasso;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -61,12 +56,10 @@ import java.util.List;
 public class Infor_Appoitment_Activity extends AppCompatActivity implements View.OnClickListener {
     private EditText editTextSymptom;
     private ImageButton btnDateDialog, btnSpecialist, btnBack;
-    private ImageView imageAccount;
-    RelativeLayout  btnInforDoctor, btnEnter,blockLoadTimeList, blockNotify,formCurrentUser,tick,
-    btnAdd;
+    RelativeLayout btnInforDoctor, btnEnter, blockLoadTimeList, blockNotify, formCurrentUser, tick,
+            btnAdd;
     ProgressBar progressBarLoadDoctors;
-    private TextView editTextDate, editTextSpecialist, textViewName,fullNameUser,
-            birthUser,btnDetailCurrentUser,nameCurrentUser;
+    private TextView editTextDate, editTextSpecialist, textViewName, btnDetailCurrentUser, nameCurrentUser;
     RecyclerView recyclerView, recyclerViewTime, recyclerViewRelative;
     DoctorAdapter adapterModel;
     TimeAdapter timeAdapter;
@@ -81,11 +74,10 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     protected void onStart() {
         super.onStart();
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 userModel = task.getResult().toObject(UserModel.class);
-            }
-            else {
-                Log.e("ERROR","Lỗi kết nối mạng");
+            } else {
+                Log.e("ERROR", "Lỗi kết nối mạng");
             }
         });
     }
@@ -96,24 +88,10 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         setContentView(R.layout.activity_infor_appointment);
         sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         initReference();
-        setupUserImage();
-        setInforUser();
         getDataDoctors();
         getDataRelative();
         setViewFormCurrentUser();
         setOnclick();
-    }
-
-    private void setupUserImage() {
-        String profileString = sharedPreferences.getString("profile", "empty");
-        if (!profileString.equals("empty")){
-            String[] array = profileString.split(";");
-            if (array.length > 0) {
-                Picasso.get().load(array[1]).into(imageAccount);
-            } else {
-                Log.e("ERROR", "profileString rỗng");
-            }
-        }
     }
 
     private void setUpListTime(int indexDoctorSelected, String date) {
@@ -130,11 +108,21 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             List<String> timeList = new ArrayList<>();
-                            timeList.add("07:30");timeList.add("08:00");timeList.add("08:30");
-                            timeList.add("09:00");timeList.add("09:30");timeList.add("10:00");
-                            timeList.add("10:30");timeList.add("11:00");timeList.add("13:30");
-                            timeList.add("14:00");timeList.add("14:30");timeList.add("15:00");
-                            timeList.add("15:30");timeList.add("16:00");timeList.add("16:30");
+                            timeList.add("07:30");
+                            timeList.add("08:00");
+                            timeList.add("08:30");
+                            timeList.add("09:00");
+                            timeList.add("09:30");
+                            timeList.add("10:00");
+                            timeList.add("10:30");
+                            timeList.add("11:00");
+                            timeList.add("13:30");
+                            timeList.add("14:00");
+                            timeList.add("14:30");
+                            timeList.add("15:00");
+                            timeList.add("15:30");
+                            timeList.add("16:00");
+                            timeList.add("16:30");
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Appointment appointment = document.toObject(Appointment.class);
                                 timeList.remove(appointment.getTime());
@@ -167,18 +155,6 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         recyclerViewTime.setAdapter(timeAdapter);
     }
 
-    private void setInforUser() {
-        FirebaseUtil.currentUserDetails().get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                UserModel userModel = documentSnapshot.toObject(UserModel.class);
-                fullNameUser.setText(userModel.getFullName());
-                birthUser.setText(userModel.getGender()+" - "+ userModel.getBirth());
-            } else {
-                Log.e("ERROR", "User not found");
-            }
-        });
-    }
-
     private void getDataDoctors() {
         progressBarLoadDoctors.setVisibility(View.VISIBLE);
         new Handler().postDelayed(new Runnable() {
@@ -194,27 +170,27 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     private void setListDoctors() {
         String specialistInput = editTextSpecialist.getText().toString().trim();
         Query query = null;
-        if(specialistInput.equals("Chưa xác định")){
+        if (specialistInput.equals("Chưa xác định")) {
             query = FirebaseUtil.allDoctorCollectionReference();
-        }
-        else {
+        } else {
             query = FirebaseUtil.allDoctorCollectionReference().where(Filter.or(
-                    Filter.equalTo("specialist","Chưa xác định"),
-                    Filter.equalTo("specialist",specialistInput)
+                    Filter.equalTo("specialist", "Chưa xác định"),
+                    Filter.equalTo("specialist", specialistInput)
             ));
         }
 
         FirestoreRecyclerOptions<Doctor> options = new FirestoreRecyclerOptions.Builder<Doctor>()
-                .setQuery(query,Doctor.class).build();
+                .setQuery(query, Doctor.class).build();
         adapterModel = new DoctorAdapter(options, getApplicationContext(), new DoctorAdapter.IDoctorViewHolder() {
             @Override
             public void onClickItem(int positon) {
-                if (positon == indexDoctorSelected)return;
+                if (positon == indexDoctorSelected) return;
                 indexDoctorSelected = positon;
                 setTextNameDoctor(indexDoctorSelected);
                 refreshOnclickDoctorOrDate();
                 showTimeList();
             }
+
             @Override
             public void onDataLoaded(int size) {
                 setTextNameDoctor(indexDoctorSelected);
@@ -222,7 +198,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
                 showTimeList();
             }
         });
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         recyclerView.setAdapter(adapterModel);
         adapterModel.startListening();
     }
@@ -230,27 +206,27 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     private void setListDoctorsWithStateOnReSume() {
         String specialistInput = editTextSpecialist.getText().toString().trim();
         Query query = null;
-        if(specialistInput.equals("Chưa xác định")){
+        if (specialistInput.equals("Chưa xác định")) {
             query = FirebaseUtil.allDoctorCollectionReference();
-        }
-        else {
+        } else {
             query = FirebaseUtil.allDoctorCollectionReference().where(Filter.or(
-                    Filter.equalTo("specialist","Chưa xác định"),
-                    Filter.equalTo("specialist",specialistInput)
+                    Filter.equalTo("specialist", "Chưa xác định"),
+                    Filter.equalTo("specialist", specialistInput)
             ));
         }
 
         FirestoreRecyclerOptions<Doctor> options = new FirestoreRecyclerOptions.Builder<Doctor>()
-                .setQuery(query,Doctor.class).build();
+                .setQuery(query, Doctor.class).build();
         adapterModel = new DoctorAdapter(options, getApplicationContext(), new DoctorAdapter.IDoctorViewHolder() {
             @Override
             public void onClickItem(int positon) {
-                if (positon == indexDoctorSelected)return;
+                if (positon == indexDoctorSelected) return;
                 indexDoctorSelected = positon;
                 setTextNameDoctor(indexDoctorSelected);
                 refreshOnclickDoctorOrDate();
                 showTimeList();
             }
+
             @Override
             public void onDataLoaded(int size) {
                 setTextNameDoctor(indexDoctorSelected);
@@ -258,7 +234,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
                 showTimeListWithStateOnReSume();
             }
         });
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         recyclerView.setAdapter(adapterModel);
         adapterModel.startListening();
     }
@@ -271,7 +247,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         setUpListTime(indexDoctorSelected, editTextDate.getText().toString());
     }
 
-    private void showTimeList(){
+    private void showTimeList() {
         if (timeAdapter != null) {
             timeAdapter.clearData();
             adapterModel.notifyDataSetChanged();
@@ -286,16 +262,16 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
             }
         }, 700);
     }
+
     private void setViewFormCurrentUser() {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 UserModel currentUser = task.getResult().toObject(UserModel.class);
-                if (currentUser != null){
+                if (currentUser != null) {
                     nameCurrentUser.setText(getNameFromFullName(currentUser.getFullName()));
                 }
-            }
-            else {
-                Log.e("ERROR","Lỗi kết nối");
+            } else {
+                Log.e("ERROR", "Lỗi kết nối");
             }
         });
         setBackgroundItem(formCurrentUser);
@@ -304,10 +280,10 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     private void getDataRelative() {
         String currentUserId = FirebaseUtil.currentUserId();
         Query query = FirebaseUtil.getRelativeCollectionReference()
-                .whereEqualTo("userId",currentUserId);
+                .whereEqualTo("userId", currentUserId);
 
         FirestoreRecyclerOptions<Relative> options = new FirestoreRecyclerOptions.Builder<Relative>()
-                .setQuery(query,Relative.class).build();
+                .setQuery(query, Relative.class).build();
         relativeAdapter = new RelativeAdapter(options, getApplicationContext(), new RelativeAdapter.IRelativeViewHolder() {
             @Override
             public void onClickItem(int positon) {
@@ -315,15 +291,17 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
                 tick.setVisibility(View.GONE);
                 indexPersonSelected = positon;
             }
+
             @Override
             public void onDataLoaded(int size) {
 
             }
         });
-        recyclerViewRelative.setLayoutManager(new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false));
+        recyclerViewRelative.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         recyclerViewRelative.setAdapter(relativeAdapter);
         relativeAdapter.startListening();
     }
+
     private void setOnclick() {
         editTextDate.setOnClickListener(this);
         editTextSpecialist.setOnClickListener(this);
@@ -340,9 +318,6 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
 
     @SuppressLint("SetTextI18n")
     private void initReference() {
-        fullNameUser = findViewById(R.id.fullName_user);
-        birthUser = findViewById(R.id.birth_user);
-        imageAccount = findViewById(R.id.image_user);
         editTextDate = findViewById(R.id.date);
         editTextDate.setText(getCurrentDate());
         editTextSpecialist = findViewById(R.id.specialist);
@@ -372,44 +347,38 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
-        String monthStr = String.valueOf(month),dayStr = String.valueOf(day);
+        String monthStr = String.valueOf(month), dayStr = String.valueOf(day);
 
-        if (month+1 < 10) monthStr = "0" + (month + 1);
+        if (month + 1 < 10) monthStr = "0" + (month + 1);
         if (day < 10) dayStr = "0" + day;
-        String result = dayStr+"/"+monthStr+"/"+year;
+        String result = dayStr + "/" + monthStr + "/" + year;
         return result;
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.date || v.getId() == R.id.btnDateDialog){
+        if (v.getId() == R.id.date || v.getId() == R.id.btnDateDialog) {
             showDatePicker(Gravity.CENTER);
-        }
-        else if (v.getId() == R.id.specialist || v.getId() == R.id.btnSpecialist){
+        } else if (v.getId() == R.id.specialist || v.getId() == R.id.btnSpecialist) {
             showDialogSpecialist(Gravity.CENTER);
-        }
-        else if (v.getId() == R.id.back_btn){
+        } else if (v.getId() == R.id.back_btn) {
             Intent intent = new Intent(Infor_Appoitment_Activity.this, MainActivity.class);
             startActivity(intent);
-        }
-        else if(v.getId() == R.id.infor_detail_doctor){
-            if (indexDoctorSelected == -1){
-                CustomToast.showToast(getApplicationContext(),"Chưa chọn bác sĩ",Toast.LENGTH_SHORT);
+        } else if (v.getId() == R.id.infor_detail_doctor) {
+            if (indexDoctorSelected == -1) {
+                CustomToast.showToast(getApplicationContext(), "Chưa chọn bác sĩ", Toast.LENGTH_SHORT);
                 return;
             }
-            showInforDoctor(indexDoctorSelected, Gravity.CENTER);
-        }
-        else if (v.getId() == R.id.enterBook){
+            getDetailDoctorAndPassIntent(indexDoctorSelected);
+        } else if (v.getId() == R.id.enterBook) {
             if (!validation()) return;
             passAppointmentAsIntent();
-        }
-        else if (v.getId() == R.id.form_currentUser){
+        } else if (v.getId() == R.id.form_currentUser) {
             setBackgroundItem(formCurrentUser);
             tick.setVisibility(View.VISIBLE);
             relativeAdapter.clearBackgroundItems();
             indexPersonSelected = -1;
-        }
-        else if (v.getId() == R.id.form_add){
+        } else if (v.getId() == R.id.form_add) {
             Intent intent = new Intent(this, AddRelative.class);
             startActivity(intent);
         }
@@ -420,36 +389,48 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.activity_specialist);
         Window window = dialog.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
         window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
+        if (Gravity.BOTTOM == center) {
             dialog.setCancelable(false);
-        }
-        else{
+        } else {
             dialog.setCancelable(true);
         }
 
-        RelativeLayout btnSpecialistAll,btnSpecialist2,btnSpecialist3, btnSpecialist4, btnSpecialist5,
-                btnSpecialist6,btnSpecialist7,btnSpecialist8 ;
-        TextView textSpecialistAll,textSpecialist2,textSpecialist3,textSpecialist4,textSpecialist5,
-                textSpecialist6,textSpecialist7,textSpecialist8;
-        btnSpecialistAll = dialog.findViewById(R.id.specialist_all);btnSpecialist2 = dialog.findViewById(R.id.specialist2);
-        btnSpecialist3 = dialog.findViewById(R.id.specialist3);btnSpecialist4 = dialog.findViewById(R.id.specialist4);
-        btnSpecialist5 = dialog.findViewById(R.id.specialist5);btnSpecialist6 = dialog.findViewById(R.id.specialist6);
-        btnSpecialist7 = dialog.findViewById(R.id.specialist7);btnSpecialist8 = dialog.findViewById(R.id.specialist8);
-        textSpecialistAll = dialog.findViewById(R.id.text_specialistALl);textSpecialist2 = dialog.findViewById(R.id.text_specialist2);
-        textSpecialist3 = dialog.findViewById(R.id.text_specialist3);textSpecialist4 = dialog.findViewById(R.id.text_specialist4);
-        textSpecialist5 = dialog.findViewById(R.id.text_specialist5);textSpecialist6 = dialog.findViewById(R.id.text_specialist6);
-        textSpecialist7 = dialog.findViewById(R.id.text_specialist7);textSpecialist8 = dialog.findViewById(R.id.text_specialist8);
-        btnSpecialistAll.setOnClickListener(this);btnSpecialist2.setOnClickListener(this);btnSpecialist3.setOnClickListener(this);
-        btnSpecialist4.setOnClickListener(this);btnSpecialist5.setOnClickListener(this);btnSpecialist6.setOnClickListener(this);
-        btnSpecialist7.setOnClickListener(this);btnSpecialist8.setOnClickListener(this);
+        RelativeLayout btnSpecialistAll, btnSpecialist2, btnSpecialist3, btnSpecialist4, btnSpecialist5,
+                btnSpecialist6, btnSpecialist7, btnSpecialist8;
+        TextView textSpecialistAll, textSpecialist2, textSpecialist3, textSpecialist4, textSpecialist5,
+                textSpecialist6, textSpecialist7, textSpecialist8;
+        btnSpecialistAll = dialog.findViewById(R.id.specialist_all);
+        btnSpecialist2 = dialog.findViewById(R.id.specialist2);
+        btnSpecialist3 = dialog.findViewById(R.id.specialist3);
+        btnSpecialist4 = dialog.findViewById(R.id.specialist4);
+        btnSpecialist5 = dialog.findViewById(R.id.specialist5);
+        btnSpecialist6 = dialog.findViewById(R.id.specialist6);
+        btnSpecialist7 = dialog.findViewById(R.id.specialist7);
+        btnSpecialist8 = dialog.findViewById(R.id.specialist8);
+        textSpecialistAll = dialog.findViewById(R.id.text_specialistALl);
+        textSpecialist2 = dialog.findViewById(R.id.text_specialist2);
+        textSpecialist3 = dialog.findViewById(R.id.text_specialist3);
+        textSpecialist4 = dialog.findViewById(R.id.text_specialist4);
+        textSpecialist5 = dialog.findViewById(R.id.text_specialist5);
+        textSpecialist6 = dialog.findViewById(R.id.text_specialist6);
+        textSpecialist7 = dialog.findViewById(R.id.text_specialist7);
+        textSpecialist8 = dialog.findViewById(R.id.text_specialist8);
+        btnSpecialistAll.setOnClickListener(this);
+        btnSpecialist2.setOnClickListener(this);
+        btnSpecialist3.setOnClickListener(this);
+        btnSpecialist4.setOnClickListener(this);
+        btnSpecialist5.setOnClickListener(this);
+        btnSpecialist6.setOnClickListener(this);
+        btnSpecialist7.setOnClickListener(this);
+        btnSpecialist8.setOnClickListener(this);
         btnSpecialistAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -527,41 +508,39 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
 
     private void passAppointmentAsIntent() {
         Doctor doctor = null;
-        if (adapterModel != null){
+        if (adapterModel != null) {
             doctor = adapterModel.getItem(indexDoctorSelected);
-        }
-        else CustomToast.showToast(getApplicationContext(),"ERROR",Toast.LENGTH_SHORT);
-        if (doctor != null){
+        } else CustomToast.showToast(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT);
+        if (doctor != null) {
             AppointmentDTO appointmentDTO = null;
             AppointmentConfirm appointmentConfirm = null;
             Relative relative = null;
-            if (indexPersonSelected == -1){
-                appointmentDTO = new AppointmentDTO(userModel.getUserId(),null,doctor.getDoctorId(),
-                        editTextSpecialist.getText().toString(),timeSelected,getCurrentDate(),
-                        editTextDate.getText().toString(),editTextSymptom.getText().toString());
-                appointmentConfirm = new AppointmentConfirm(userModel.getFullName(),"Tôi",userModel.getGender(),
-                        userModel.getBirth(),editTextSpecialist.getText().toString(),doctor.getFullName(),
-                        timeSelected,editTextDate.getText().toString(),editTextSymptom.getText().toString());
-            }
-            else {
-                if (relativeAdapter != null){
+            if (indexPersonSelected == -1) {
+                appointmentDTO = new AppointmentDTO(userModel.getUserId(), null, doctor.getDoctorId(),
+                        editTextSpecialist.getText().toString(), timeSelected, getCurrentDate(),
+                        editTextDate.getText().toString(), editTextSymptom.getText().toString());
+                appointmentConfirm = new AppointmentConfirm(userModel.getFullName(), "Tôi", userModel.getPhoneNumber(), userModel.getGender(),
+                        userModel.getBirth(), editTextSpecialist.getText().toString(), doctor.getFullName(),
+                        timeSelected, editTextDate.getText().toString(), editTextSymptom.getText().toString());
+            } else {
+                if (relativeAdapter != null) {
                     relative = relativeAdapter.getItem(indexPersonSelected);
                 }
-                if (relative != null){
-                    appointmentDTO = new AppointmentDTO(null,relative.getPhoneNumber(),doctor.getDoctorId(),
-                            editTextSpecialist.getText().toString(),timeSelected,getCurrentDate(),
-                            editTextDate.getText().toString(),editTextSymptom.getText().toString());
-                    appointmentConfirm = new AppointmentConfirm(relative.getFullName(),relative.getRelationship(),relative.getGender(),
-                            relative.getBirth(),editTextSpecialist.getText().toString(),doctor.getFullName(),
-                            timeSelected,editTextDate.getText().toString(),editTextSymptom.getText().toString());
+                if (relative != null) {
+                    appointmentDTO = new AppointmentDTO(null, relative.getPhoneNumber(), doctor.getDoctorId(),
+                            editTextSpecialist.getText().toString(), timeSelected, getCurrentDate(),
+                            editTextDate.getText().toString(), editTextSymptom.getText().toString());
+                    appointmentConfirm = new AppointmentConfirm(relative.getFullName(), relative.getRelationship(), relative.getPhoneNumber(), relative.getGender(),
+                            relative.getBirth(), editTextSpecialist.getText().toString(), doctor.getFullName(),
+                            timeSelected, editTextDate.getText().toString(), editTextSymptom.getText().toString());
                 } else {
                     appointmentDTO = null;
                 }
             }
-            if (appointmentDTO != null){
+            if (appointmentDTO != null) {
                 Intent intent = new Intent(getApplicationContext(), ConfirmAppointment.class);
-                AndroidUtil.passAppoitmentDTOModelAsIntent(intent,appointmentDTO);
-                AndroidUtil.passAppoitmentConfirmModelAsIntent(intent,appointmentConfirm);
+                AndroidUtil.passAppoitmentDTOModelAsIntent(intent, appointmentDTO);
+                AndroidUtil.passAppoitmentConfirmModelAsIntent(intent, appointmentConfirm);
                 startActivity(intent);
 //                FirebaseFirestore.getInstance().collection("appointment").add(appointment).addOnCompleteListener(task -> {
 //                    if (task.isSuccessful()){
@@ -574,22 +553,22 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
 //                    }
 //                });
             }
-        }
-        else CustomToast.showToast(getApplicationContext(),"ERROR",Toast.LENGTH_SHORT);
+        } else CustomToast.showToast(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT);
     }
 
     private boolean validation() {
-        if (timeSelected.equals("")){
-            CustomToast.showToast(getApplicationContext(),"Chọn giờ khám",Toast.LENGTH_SHORT);
+        if (timeSelected.equals("")) {
+            CustomToast.showToast(getApplicationContext(), "Chọn giờ khám", Toast.LENGTH_SHORT);
             return false;
         }
-        if (editTextSymptom.getText().toString().trim().equals("")){
-            CustomToast.showToast(getApplicationContext(),"Nhập triệu chứng",Toast.LENGTH_SHORT);
+        if (editTextSymptom.getText().toString().trim().equals("")) {
+            CustomToast.showToast(getApplicationContext(), "Nhập triệu chứng", Toast.LENGTH_SHORT);
             return false;
         }
         return true;
     }
-    private void setTextNameDoctor(int indexDoctorSelected){
+
+    private void setTextNameDoctor(int indexDoctorSelected) {
         if (adapterModel == null || adapterModel.getItemCount() == 0) {
             return;
         }
@@ -597,105 +576,34 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         textViewName.setText(doctorName);
     }
 
-    private void showInforDoctor(int indexDoctorSelected, int center) {
+    private void getDetailDoctorAndPassIntent(int indexDoctorSelected) {
         Doctor doctor = null;
-        if (adapterModel != null){
+        if (adapterModel != null) {
             doctor = adapterModel.getItem(indexDoctorSelected);
         }
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_dialog_infordoctor);
-        Window window = dialog.getWindow();
-        if (window == null){
-            return;
+        if (doctor != null) {
+            Intent intent = new Intent(this, DoctorDetail.class);
+            AndroidUtil.passDoctorModelAsIntent(intent, doctor);
+            startActivity(intent);
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        WindowManager.LayoutParams windowAttributes = window.getAttributes();
-        windowAttributes.gravity = center;
-        window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
-            dialog.setCancelable(false);
-        }
-        else{
-            dialog.setCancelable(true);
-        }
-        ImageView imageDoctor,close;
-        TextView fullName, gender, specialist, price,degree,number_appointment,experience,
-                achievement,work;
-        imageDoctor = dialog.findViewById(R.id.block1_col1);
-        fullName = dialog.findViewById(R.id.fullName_doctor);
-        degree = dialog.findViewById(R.id.degree);
-        gender = dialog.findViewById(R.id.gender);
-        specialist = dialog.findViewById(R.id.specialist);
-        price = dialog.findViewById(R.id.price);
-        number_appointment = dialog.findViewById(R.id.number_appointment);
-        experience = dialog.findViewById(R.id.experience);
-        achievement = dialog.findViewById(R.id.achievement);
-        work = dialog.findViewById(R.id.work);
-        close = dialog.findViewById(R.id.close);
-        if (doctor != null){
-            if (doctor.getGender().equals("Nam") || doctor.getGender().equals("")) {
-                imageDoctor.setImageResource(R.drawable.doctor);
-            } else {
-                imageDoctor.setImageResource(R.drawable.doctor2);
-            }
-            fullName.setText(doctor.getFullName());
-            degree.setText(doctor.getDegree());
-            gender.setText(doctor.getGender());
-            specialist.setText(doctor.getSpecialist());
-            price.setText(formatPrice(doctor.getPrice())+" đ");
-            experience.setText(doctor.getExperience());
-            if (!doctor.getAchievement().equals("")){
-                String formatAchievement = doctor.getAchievement().replace(". ", ".<br>");
-                achievement.setText(Html.fromHtml(formatAchievement));
-            }
-            else achievement.setText(doctor.getAchievement());
-
-            if (!doctor.getWork().equals("")){
-                String formatWork = doctor.getWork().replace(". ", ".<br>");
-                work.setText(Html.fromHtml(formatWork));
-            }
-            else work.setText(doctor.getWork());
-
-            Query query = FirebaseUtil.getAppointmentCollectionReference()
-                    .whereEqualTo("doctor.doctorId",doctor.getDoctorId());
-            query.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
-                    int number = task.getResult().size();
-                    number_appointment.setText(String.valueOf(number));
-                }
-                else {
-                    Log.e("ERROR","Lỗi kết nối");
-                }
-            });
-        }
-        close = dialog.findViewById(R.id.close);
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
     }
+
     private void showDatePicker(int center) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_datepicker);
         Window window = dialog.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
         window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
+        if (Gravity.BOTTOM == center) {
             dialog.setCancelable(false);
-        }
-        else{
+        } else {
             dialog.setCancelable(true);
         }
         DatePicker datePicker;
@@ -727,17 +635,17 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         int monthOfYear = datePicker.getMonth();
         int year = datePicker.getYear();
         String dayOfMonthStr = String.valueOf(dayOfMonth),
-                monthOfYearStr = String.valueOf(monthOfYear+1);
+                monthOfYearStr = String.valueOf(monthOfYear + 1);
         if (dayOfMonth < 10) dayOfMonthStr = "0" + dayOfMonth;
-        if (monthOfYear+1 < 10) monthOfYearStr = "0" + (monthOfYear+1);
+        if (monthOfYear + 1 < 10) monthOfYearStr = "0" + (monthOfYear + 1);
         String selectedDate = dayOfMonthStr + "/" + monthOfYearStr + "/" + year;
-        if (reverseDateString(selectedDate).compareTo(reverseDateString(getCurrentDate())) < 0){
-            CustomToast.showToast(getApplicationContext(),"Ngày không hợp lệ",Toast.LENGTH_SHORT);
+        if (reverseDateString(selectedDate).compareTo(reverseDateString(getCurrentDate())) < 0) {
+            CustomToast.showToast(getApplicationContext(), "Ngày không hợp lệ", Toast.LENGTH_SHORT);
             return;
         }
-        if (selectedDate.equals(editTextDate.getText().toString()))return;
+        if (selectedDate.equals(editTextDate.getText().toString())) return;
         editTextDate.setText(selectedDate);
-        setIndexSelectedSharedPreferences("indexTimeSelected",-1);
+        setIndexSelectedSharedPreferences("indexTimeSelected", -1);
         refreshOnclickDoctorOrDate();
         showTimeList();
     }
@@ -745,17 +653,19 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     @Override
     protected void onStop() {
         super.onStop();
-        if(adapterModel!=null)
+        if (adapterModel != null)
             adapterModel.stopListening();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-        if (adapterModel != null){
+        if (adapterModel != null) {
             setListDoctorsWithStateOnReSume();
         }
     }
-    private void setIndexSelectedSharedPreferences(String key, int value){
+
+    private void setIndexSelectedSharedPreferences(String key, int value) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(key, value);
         editor.apply();
@@ -765,13 +675,14 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         String[] parts = dateString.split("/");
         return parts[2] + "/" + parts[1] + "/" + parts[0];
     }
-    private void refreshOnclickDoctorOrDate(){
+
+    private void refreshOnclickDoctorOrDate() {
         blockNotify.setVisibility(View.GONE);
         timeSelected = "";
-        setIndexSelectedSharedPreferences("indexTimeSelected",-1);
+        setIndexSelectedSharedPreferences("indexTimeSelected", -1);
     }
 
-    private void refreshOnclickSpecialist(){
+    private void refreshOnclickSpecialist() {
         recyclerView.setVisibility(View.GONE);
         blockNotify.setVisibility(View.INVISIBLE);
         recyclerViewTime.setVisibility(View.INVISIBLE);
@@ -779,14 +690,10 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         indexDoctorSelected = 0;
         timeSelected = "";
         textViewName.setText("");
-        setIndexSelectedSharedPreferences("indexDoctorSelected",0);
-        setIndexSelectedSharedPreferences("indexTimeSelected",-1);
+        setIndexSelectedSharedPreferences("indexDoctorSelected", 0);
+        setIndexSelectedSharedPreferences("indexTimeSelected", -1);
     }
-    private String formatPrice(int price){
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");
-        String formattedNumber = decimalFormat.format(price);
-        return formattedNumber;
-    }
+
     private void setBackgroundNotSelectedItem(RelativeLayout formRelative) {
         Drawable selectedBackground = ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_form_person_notselected);
         formRelative.setBackground(selectedBackground);
@@ -796,8 +703,9 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         Drawable selectedBackground = ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_form_person_selected);
         formRelative.setBackground(selectedBackground);
     }
-    private String getNameFromFullName(String fullName){
-        String[]str = fullName.split(" ");
-        return str[str.length-1];
+
+    private String getNameFromFullName(String fullName) {
+        String[] str = fullName.split(" ");
+        return str[str.length - 1];
     }
 }

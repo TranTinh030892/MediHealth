@@ -31,6 +31,7 @@ public class Appointment_Fragment extends Fragment implements View.OnClickListen
     RecyclerView recyclerView;
     Customer_AppoitnmentAdapter appoitnmentAdapter;
     ProgressBar progressBar;
+
     public Appointment_Fragment() {
     }
 
@@ -42,7 +43,7 @@ public class Appointment_Fragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View itemView =  inflater.inflate(R.layout.fragment_book_appointment, container, false);
+        View itemView = inflater.inflate(R.layout.fragment_book_appointment, container, false);
         initView(itemView);
         setOnclick();
         setBackgroudButton(true);
@@ -54,7 +55,7 @@ public class Appointment_Fragment extends Fragment implements View.OnClickListen
                 setupAppointmentRecyclerView(FirebaseUtil.currentUserId());
             }
         }, 1000);
-        return  itemView;
+        return itemView;
     }
 
     private void initView(View itemView) {
@@ -65,56 +66,60 @@ public class Appointment_Fragment extends Fragment implements View.OnClickListen
         recyclerView = itemView.findViewById(R.id.list_Appointment);
         progressBar = itemView.findViewById(R.id.loading);
     }
+
     private void setOnclick() {
         btnAppointment.setOnClickListener(this);
         btnHistory.setOnClickListener(this);
     }
+
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_appointment){
+        if (v.getId() == R.id.btn_appointment) {
             setBackgroudButton(true);
             setupAppointmentRecyclerView(FirebaseUtil.currentUserId());
         }
-        if (v.getId() == R.id.btn_history){
+        if (v.getId() == R.id.btn_history) {
             setBackgroudButton(false);
             setupHistoryRecyclerView(FirebaseUtil.currentUserId());
         }
     }
+
     private void setupAppointmentRecyclerView(String currentId) {
         Query query = FirebaseUtil.getAppointmentCollectionReference().where(Filter.or(
-                Filter.equalTo("userModel.userId",currentId),
-                Filter.equalTo("relative.userId",currentId)
+                Filter.equalTo("userModel.userId", currentId),
+                Filter.equalTo("relative.userId", currentId)
         ));
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
-                .setQuery(query,Appointment.class).build();
-        appoitnmentAdapter = new Customer_AppoitnmentAdapter(options,getContext());
+                .setQuery(query, Appointment.class).build();
+        appoitnmentAdapter = new Customer_AppoitnmentAdapter(options, getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(appoitnmentAdapter);
         appoitnmentAdapter.startListening();
     }
+
     private void setupHistoryRecyclerView(String currentId) {
         Query query = FirebaseUtil.getAppointmentCollectionReference()
-                .whereEqualTo("userModel.userId",currentId)
+                .whereEqualTo("userModel.userId", currentId)
                 .whereIn("stateAppointment", Arrays.asList(-1, 2));
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
-                .setQuery(query,Appointment.class).build();
-        appoitnmentAdapter = new Customer_AppoitnmentAdapter(options,getContext());
+                .setQuery(query, Appointment.class).build();
+        appoitnmentAdapter = new Customer_AppoitnmentAdapter(options, getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(appoitnmentAdapter);
         appoitnmentAdapter.startListening();
     }
-    private void setBackgroudButton(boolean b){
+
+    private void setBackgroudButton(boolean b) {
         int colorOfButtonSelected = ContextCompat.getColor(requireContext(), R.color.color_background_menu_appointment);
         int colorOfButtonNotSelected = ContextCompat.getColor(requireContext(), R.color.white);
         int colorOfTextSelected = ContextCompat.getColor(requireContext(), R.color.text_Color);
         int colorOfTextNotSelected = ContextCompat.getColor(requireContext(), R.color.light_gray);
-        if (b){
+        if (b) {
             btnAppointment.setBackgroundTintList(ColorStateList.valueOf(colorOfButtonSelected));
             textApointment.setTextColor(colorOfTextSelected);
             btnHistory.setBackgroundTintList(ColorStateList.valueOf(colorOfButtonNotSelected));
             textHistory.setTextColor(colorOfTextNotSelected);
-        }
-        else {
+        } else {
             btnHistory.setBackgroundTintList(ColorStateList.valueOf(colorOfButtonSelected));
             textApointment.setTextColor(colorOfTextNotSelected);
             btnAppointment.setBackgroundTintList(ColorStateList.valueOf(colorOfButtonNotSelected));

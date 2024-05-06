@@ -6,25 +6,30 @@
     app:cardCornerRadius="5dp"
     app:cardElevation="2dp"
     android:foreground="?android:attr/selectableItemBackground">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/drug"/>
+                android:src="@drawable/drug" />
+
             <RelativeLayout
                 android:id="@+id/detail"
                 android:paddingStart="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_toEndOf="@+id/image">
+
                 <TextView
                     android:id="@+id/name"
                     android:layout_width="match_parent"
@@ -32,7 +37,8 @@
                     android:text="Paracetamol"
                     android:textColor="@color/black"
                     android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/text1"
                     android:layout_marginTop="10dp"
@@ -42,7 +48,8 @@
                     android:text="Bào chế:         Viên nén"
                     android:fontFamily="sans-serif-medium"
                     android:textColor="@color/text_Color"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
+
                 <TextView
                     android:id="@+id/text2"
                     android:layout_marginTop="10dp"
@@ -52,7 +59,8 @@
                     android:text="Hoạt chất:      "
                     android:fontFamily="sans-serif-medium"
                     android:textColor="@color/text_Color"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
+
                 <TextView
                     android:id="@+id/text3"
                     android:layout_marginTop="10dp"
@@ -62,14 +70,15 @@
                     android:text="Số ĐK:             GC-"
                     android:fontFamily="sans-serif-medium"
                     android:textColor="@color/text_Color"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
             </RelativeLayout>
         </RelativeLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#E0E6FA"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
 

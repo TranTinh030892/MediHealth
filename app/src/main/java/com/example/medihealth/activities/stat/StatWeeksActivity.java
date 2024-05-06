@@ -18,11 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
 import com.example.medihealth.adapters.stat.StatWeekApdapter;
+import com.example.medihealth.apiservices.DrugUserService;
+import com.example.medihealth.apiservices.PrescriptionStatService;
 import com.example.medihealth.models.DrugUser;
 import com.example.medihealth.models.Prescription;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
-import com.example.medihealth.apiservices.DrugUserService;
-import com.example.medihealth.apiservices.PrescriptionStatService;
 import com.example.medihealth.utils.stat.WeekInfo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -75,8 +75,8 @@ public class StatWeeksActivity extends AppCompatActivity {
         startWeek = currentWeek.getStartDate();
         endWeek = currentWeek.getEndDate();
         weekInfoList = generateWeekList();
-        for(int i = 0; i < weekInfoList.size(); i++){
-            if(weekInfoList.get(i).getStartDate().equals(currentWeek.getStartDate())){
+        for (int i = 0; i < weekInfoList.size(); i++) {
+            if (weekInfoList.get(i).getStartDate().equals(currentWeek.getStartDate())) {
                 selectedItemPositionWeek = i;
                 break;
             }
@@ -87,7 +87,7 @@ public class StatWeeksActivity extends AppCompatActivity {
         drugUserService.getDrugUserofUser(account.getUid()).enqueue(new Callback<List<DrugUser>>() {
             @Override
             public void onResponse(Call<List<DrugUser>> call, Response<List<DrugUser>> response) {
-                if(response.isSuccessful() && response.body() != null && !response.body().isEmpty()){
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     Log.d("API_Response", "Data received from API: " + response.body().toString());
 
                     drugUserList.addAll(response.body());
@@ -97,7 +97,7 @@ public class StatWeeksActivity extends AppCompatActivity {
                     editTextSelectDU.setText(drugUserList.get(0).toString());
                     selectedItemPositionDU = 0;
                     callAPItoGetPrescriptionStatWeek();
-                }else {
+                } else {
                     Log.e("API_Error", "Response body is empty or null");
                 }
             }
@@ -119,7 +119,7 @@ public class StatWeeksActivity extends AppCompatActivity {
                 listView.setAdapter(adapter);
 
                 int itemHeight = (int) getResources().getDisplayMetrics().density * 68;
-                int maxHeight = itemHeight * 4 ;
+                int maxHeight = itemHeight * 4;
                 ViewGroup.LayoutParams params = listView.getLayoutParams();
                 params.height = maxHeight;
                 listView.setLayoutParams(params);
@@ -162,7 +162,7 @@ public class StatWeeksActivity extends AppCompatActivity {
                 listView.setAdapter(adapter);
 
                 int itemHeight = (int) getResources().getDisplayMetrics().density * 68;
-                int maxHeight = itemHeight * 4 ;
+                int maxHeight = itemHeight * 4;
                 ViewGroup.LayoutParams params = listView.getLayoutParams();
                 params.height = maxHeight;
                 listView.setLayoutParams(params);
@@ -195,7 +195,7 @@ public class StatWeeksActivity extends AppCompatActivity {
             }
         });
 
-        if(duid != null){
+        if (duid != null) {
             //Default call API to Get PrescriptionStat and show
             callAPItoGetPrescriptionStatWeek();
         }
@@ -213,16 +213,17 @@ public class StatWeeksActivity extends AppCompatActivity {
         statWeekApdapter = new StatWeekApdapter(prescriptions, startWeek);
         statWeekRecyclerView.setAdapter(statWeekApdapter);
     }
-    private void callAPItoGetPrescriptionStatWeek(){
+
+    private void callAPItoGetPrescriptionStatWeek() {
         prescriptions = new ArrayList<>();
         PrescriptionStatService prescriptionStatService = RetrofitClient.createService(PrescriptionStatService.class);
         prescriptionStatService.getPrescriptionStatWeek(duid, startWeek, endWeek).enqueue(new Callback<List<Prescription>>() {
             @Override
             public void onResponse(Call<List<Prescription>> call, Response<List<Prescription>> response) {
-                if(response.isSuccessful() && !response.body().isEmpty() && response.body() != null){
+                if (response.isSuccessful() && !response.body().isEmpty() && response.body() != null) {
                     Log.d("API_Response", "Data received from API: " + response.body().toString());
                     prescriptions.addAll(response.body());
-                }else {
+                } else {
                     Log.e("API_Error", "Response body is null");
                 }
                 //Update StatWeekRecyclerView
@@ -235,6 +236,7 @@ public class StatWeeksActivity extends AppCompatActivity {
             }
         });
     }
+
     private WeekInfo getCurrentWeek() {
         LocalDate currentDate = LocalDate.now();
         LocalDate startDate = currentDate.with(DayOfWeek.MONDAY);
@@ -244,6 +246,7 @@ public class StatWeeksActivity extends AppCompatActivity {
         String weekLabel = "Từ " + startDate.format(formatter) + " đến " + endDate.format(formatter);
         return new WeekInfo(weekLabel, startDate, endDate);
     }
+
     private List<WeekInfo> generateWeekList() {
         List<WeekInfo> weeks = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());

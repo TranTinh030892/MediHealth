@@ -40,10 +40,10 @@ public class ScheduleTodayDetailActivity extends AppCompatActivity {
 
         schedule = (Schedule) getIntent().getSerializableExtra("schedule");
 
-        if(schedule != null){
+        if (schedule != null) {
             displayScheduleDetails();
             checkTime();
-        }else{
+        } else {
             txtPrescriptionName.setText("Không có lịch");
         }
 
@@ -57,10 +57,10 @@ public class ScheduleTodayDetailActivity extends AppCompatActivity {
 
         schedule = (Schedule) getIntent().getSerializableExtra("schedule");
 
-        if(schedule != null){
+        if (schedule != null) {
             displayScheduleDetails();
             checkTime();
-        }else{
+        } else {
             txtPrescriptionName.setText("Không có lịch");
         }
     }

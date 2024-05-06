@@ -18,11 +18,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class ScheduleApdapter extends RecyclerView.Adapter<ScheduleApdapter.ScheduleViewHolder>{
+public class ScheduleApdapter extends RecyclerView.Adapter<ScheduleApdapter.ScheduleViewHolder> {
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onItemClick(Schedule schedule);
     }
+
     private List<Schedule> scheduleList;
     private OnItemClickListener listener;
 
@@ -33,25 +34,25 @@ public class ScheduleApdapter extends RecyclerView.Adapter<ScheduleApdapter.Sche
 
     @NonNull
     @Override
-    public ScheduleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+    public ScheduleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_schedule, parent, false);
         return new ScheduleViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ScheduleViewHolder holder, int position){
+    public void onBindViewHolder(@NonNull ScheduleViewHolder holder, int position) {
         Schedule schedule = scheduleList.get(position);
         holder.txtTitle.setText(schedule.getPrescription().getTitle());
-        holder.txtDrugUser.setText("Người uống: "+schedule.getPrescription().getDrugUser().getName());
+        holder.txtDrugUser.setText("Người uống: " + schedule.getPrescription().getDrugUser().getName());
         LocalTime time = schedule.getTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         holder.txtSchedule.setText(time.format(formatter));
         LocalTime currentTime = LocalTime.now();
-        if(time.isBefore(currentTime)){
+        if (time.isBefore(currentTime)) {
             holder.txtSchedule.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_cancel));
             holder.txtTitle.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_cancel));
             holder.txtDrugUser.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_cancel));
-        }else{
+        } else {
             holder.txtSchedule.setTextColor(Color.BLACK);
             holder.txtTitle.setTextColor(Color.BLACK);
             holder.txtDrugUser.setTextColor(Color.BLACK);
@@ -60,7 +61,7 @@ public class ScheduleApdapter extends RecyclerView.Adapter<ScheduleApdapter.Sche
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(listener != null){
+                if (listener != null) {
                     listener.onItemClick(schedule);
                 }
             }
@@ -68,11 +69,11 @@ public class ScheduleApdapter extends RecyclerView.Adapter<ScheduleApdapter.Sche
     }
 
     @Override
-    public int getItemCount(){
-        return  scheduleList.size();
+    public int getItemCount() {
+        return scheduleList.size();
     }
 
-    public static class ScheduleViewHolder extends  RecyclerView.ViewHolder{
+    public static class ScheduleViewHolder extends RecyclerView.ViewHolder {
         TextView txtTitle, txtSchedule, txtDrugUser;
 
         public ScheduleViewHolder(@NonNull View itemView) {

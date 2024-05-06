@@ -4,18 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#DBE1F1"
-    tools:context=".activities.Login">
+    tools:context=".trang.login.activity.Login">
+
     <RelativeLayout
         android:background="@color/mainColor"
         android:layout_width="match_parent"
         android:layout_height="250dp">
+
         <ImageView
             android:id="@+id/logo"
             android:layout_width="100dp"
             android:layout_height="90dp"
             android:layout_marginTop="50dp"
             android:src="@drawable/sign"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true" />
+
         <TextView
             android:layout_below="@+id/logo"
             android:layout_width="wrap_content"
@@ -24,14 +27,14 @@
             android:text="Medihealth"
             android:fontFamily="sans-serif-medium"
             android:textSize="18sp"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_marginTop="207dp"
         android:background="@drawable/custom_top_layout_home"
-        android:layout_height="80dp"/>
+        android:layout_height="80dp" />
 
     <RelativeLayout
         android:layout_width="350dp"
@@ -40,11 +43,13 @@
         android:layout_marginTop="215dp"
         android:layout_centerHorizontal="true"
         android:padding="10dp">
+
         <RelativeLayout
             android:id="@+id/bock_username"
             android:padding="15dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <EditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
@@ -55,14 +60,16 @@
                 android:drawablePadding="15dp"
                 android:textStyle="normal"
                 android:textSize="15sp"
-                android:hint="Email/Tên đăng nhập"/>
+                android:hint="Email/Tên đăng nhập" />
+
             <View
                 android:id="@+id/g1"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="7dp"
                 android:background="#D8D8D8"
-                android:layout_below="@id/email"/>
+                android:layout_below="@id/email" />
+
             <EditText
                 android:id="@+id/password"
                 android:inputType="textPassword"
@@ -76,20 +83,22 @@
                 android:drawablePadding="15dp"
                 android:textStyle="normal"
                 android:textSize="15sp"
-                android:hint="Mật khẩu"/>
+                android:hint="Mật khẩu" />
+
             <View
                 android:id="@+id/g2"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="7dp"
                 android:background="#D8D8D8"
-                android:layout_below="@id/password"/>
+                android:layout_below="@id/password" />
 
             <RelativeLayout
                 android:id="@+id/block_btn_login"
                 android:layout_below="@+id/g2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
                 <Button
                     android:id="@+id/btn_login_enable"
                     android:layout_width="match_parent"
@@ -101,6 +110,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
+
                 <Button
                     android:id="@+id/btn_login_disabled"
                     android:clickable="false"
@@ -114,6 +124,7 @@
                     android:textColor="#AEAEAE"
                     android:textSize="18sp" />
             </RelativeLayout>
+
             <TextView
                 android:id="@+id/text_or"
                 android:layout_below="@+id/block_btn_login"
@@ -121,13 +132,15 @@
                 android:layout_marginTop="27dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="HOẶC"/>
+                android:text="HOẶC" />
+
             <RelativeLayout
                 android:id="@+id/btn_login_google"
                 android:layout_below="@id/text_or"
                 android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="40dp">
+
                 <TextView
                     android:id="@+id/login_google"
                     android:layout_width="match_parent"
@@ -138,13 +151,14 @@
                     android:text="Đăng nhập với Google"
                     android:gravity="center_vertical|center_horizontal"
                     android:clickable="true"
-                    android:background="@drawable/custom_button_google"/>
+                    android:background="@drawable/custom_button_google" />
+
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginLeft="12dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/google"/>
+                    android:src="@drawable/google" />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
@@ -154,16 +168,19 @@
         android:layout_marginBottom="50dp"
         android:layout_width="match_parent"
         android:layout_height="40dp">
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true">
+
             <TextView
                 android:id="@+id/text_question"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bạn chưa có tài khoản?"/>
+                android:text="Bạn chưa có tài khoản?" />
+
             <TextView
                 android:id="@+id/register"
                 android:layout_toEndOf="@id/text_question"
@@ -171,7 +188,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/mainColor"
-                android:text="Đăng ký"/>
+                android:text="Đăng ký" />
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

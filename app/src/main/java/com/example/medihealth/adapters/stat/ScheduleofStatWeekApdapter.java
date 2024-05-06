@@ -13,7 +13,7 @@ import com.example.medihealth.models.Schedule;
 
 import java.util.List;
 
-public class ScheduleofStatWeekApdapter extends RecyclerView.Adapter<ScheduleofStatWeekApdapter.ScheduleofStatWeekHolder>{
+public class ScheduleofStatWeekApdapter extends RecyclerView.Adapter<ScheduleofStatWeekApdapter.ScheduleofStatWeekHolder> {
 
     private List<Schedule> scheduleList;
     private List<Boolean> checkSchedule;
@@ -35,16 +35,16 @@ public class ScheduleofStatWeekApdapter extends RecyclerView.Adapter<ScheduleofS
     @Override
     public void onBindViewHolder(@NonNull ScheduleofStatWeekHolder holder, int position) {
         Schedule schedule = scheduleList.get(position);
-        if(schedule.getConfirmNotifications().isEmpty()){
-            if(checkSchedule.get(position) || check){
+        if (schedule.getConfirmNotifications().isEmpty()) {
+            if (checkSchedule.get(position) || check) {
                 holder.imageView.setImageResource(R.drawable.circle_check_fill);
-            }else{
+            } else {
                 holder.imageView.setImageResource(R.drawable.circle_fill);
             }
-        }else if(schedule.getConfirmNotifications().get(0).isCheck()){
+        } else if (schedule.getConfirmNotifications().get(0).isCheck()) {
             check = true;
             holder.imageView.setImageResource(R.drawable.circle_checked_fill);
-        }else{
+        } else {
             check = true;
             holder.imageView.setImageResource(R.drawable.circle_x_fill);
         }
@@ -55,9 +55,10 @@ public class ScheduleofStatWeekApdapter extends RecyclerView.Adapter<ScheduleofS
         return this.scheduleList.size();
     }
 
-    public static class ScheduleofStatWeekHolder extends RecyclerView.ViewHolder{
+    public static class ScheduleofStatWeekHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        public ScheduleofStatWeekHolder(@NonNull View itemView){
+
+        public ScheduleofStatWeekHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
         }

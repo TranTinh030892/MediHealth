@@ -8,10 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,6 +20,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import com.example.medihealth.R;
 import com.example.medihealth.activities.MainActivity;
@@ -49,9 +48,11 @@ public class Employee_Menu_Fragment extends Fragment implements View.OnClickList
     ImageView iconMenu;
     TextView titleMenu, fullNameEmployee, birthUser;
     String currentUserId = "";
+
     public Employee_Menu_Fragment() {
         // Required empty public constructor
     }
+
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,7 +78,7 @@ public class Employee_Menu_Fragment extends Fragment implements View.OnClickList
 
     private void setInforEmployee() {
         String inforFormEmployee = sharedPreferences.getString("inforFormEmployee", "empty");
-        if (!inforFormEmployee.equals("empty")){
+        if (!inforFormEmployee.equals("empty")) {
             String[] array = inforFormEmployee.split(";");
             if (array.length > 0) {
                 fullNameEmployee.setText(array[0]);
@@ -106,7 +107,7 @@ public class Employee_Menu_Fragment extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_logout){
+        if (v.getId() == R.id.btn_logout) {
             showDialogLoadingLogout(Gravity.CENTER);
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -116,7 +117,7 @@ public class Employee_Menu_Fragment extends Fragment implements View.OnClickList
                 }
             }, 2000);
         }
-        if (v.getId() == R.id.btn_menu4){
+        if (v.getId() == R.id.btn_menu4) {
             showDialogSwich(Gravity.CENTER);
         }
     }
@@ -152,44 +153,43 @@ public class Employee_Menu_Fragment extends Fragment implements View.OnClickList
 
 
     private void removeTokenId(String curentUserId, String tokenId) {
-        Query query = FirebaseUtil.getTokenId().whereEqualTo("userId",curentUserId);
+        Query query = FirebaseUtil.getTokenId().whereEqualTo("userId", curentUserId);
         query.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
                 if (querySnapshot != null && !querySnapshot.isEmpty()) {
                     DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
                     Token token = documentSnapshot.toObject(Token.class);
                     if (token != null) {
                         List<String> tokenList = token.getTokenList();
-                        for (int i = 0 ; i < tokenList.size() ; i++){
-                            if (tokenList.get(i).equals(tokenId)){
-                                tokenList.remove(i);break;
+                        for (int i = 0; i < tokenList.size(); i++) {
+                            if (tokenList.get(i).equals(tokenId)) {
+                                tokenList.remove(i);
+                                break;
                             }
                         }
-                        updateTonken(documentSnapshot.getId(),tokenList);
+                        updateTonken(documentSnapshot.getId(), tokenList);
                     }
                 }
-            }
-            else {
-                Log.e("ERROR","Lỗi kết nối");
+            } else {
+                Log.e("ERROR", "Lỗi kết nối");
             }
         });
     }
 
     private void updateTonken(String documentSnapshot, List<String> tokenList) {
-        Token token = new Token(tokenList,currentUserId);
+        Token token = new Token(tokenList, currentUserId);
         FirebaseUtil.getTokenByDocument(documentSnapshot).set(token).addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                Log.d("SUCCESSFULL","Update tokenList thành công");
-            }
-            else Log.e("ERROR","Lỗi kết nối");
+            if (task.isSuccessful()) {
+                Log.d("SUCCESSFULL", "Update tokenList thành công");
+            } else Log.e("ERROR", "Lỗi kết nối");
         });
     }
 
     private void removeAllSharedPreferences() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("profile","empty");
-        editor.putString("inforFormUser","empty");
+        editor.putString("profile", "empty");
+        editor.putString("inforFormUser", "empty");
         editor.apply();
     }
 
@@ -197,10 +197,10 @@ public class Employee_Menu_Fragment extends Fragment implements View.OnClickList
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_loading);
         Window window = dialog.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
@@ -212,6 +212,7 @@ public class Employee_Menu_Fragment extends Fragment implements View.OnClickList
 
         dialog.show();
     }
+
     private void showDialogSwich(int center) {
         sharedPreferences = getContext().getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -220,10 +221,10 @@ public class Employee_Menu_Fragment extends Fragment implements View.OnClickList
         dialogSwitch.requestWindowFeature(Window.FEATURE_NO_TITLE); // Đảm bảo gọi requestFeature() trước khi thêm nội dung
         dialogSwitch.setContentView(R.layout.custom_swich);
         Window window = dialogSwitch.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
@@ -233,24 +234,23 @@ public class Employee_Menu_Fragment extends Fragment implements View.OnClickList
 
         // cài đặt trạng thái switch theo isCloseNotice
         String isCloseNotice = sharedPreferences.getString("isCloseNotice", "No");
-        if (isCloseNotice.equals("Yes")){
+        if (isCloseNotice.equals("Yes")) {
             switchNotice.setChecked(false);
-        }
-        else switchNotice.setChecked(true);
+        } else switchNotice.setChecked(true);
 
         // cài đặt isCloseNotice theo switch
         switchNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (switchNotice.isChecked()){
-                    editor.putString("isCloseNotice","No");
-                }
-                else editor.putString("isCloseNotice","Yes");
+                if (switchNotice.isChecked()) {
+                    editor.putString("isCloseNotice", "No");
+                } else editor.putString("isCloseNotice", "Yes");
                 editor.apply();
             }
         });
         dialogSwitch.show();
     }
+
     public interface TokenFetchCallback {
         void onTokenFetchComplete();
     }

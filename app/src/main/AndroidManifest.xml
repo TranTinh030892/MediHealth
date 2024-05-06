@@ -40,29 +40,33 @@
         android:theme="@style/Theme.MediHealth"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
-            android:name=".activities.profile.EditProfileRelative"
+            android:name=".activities.appointment.DoctorDetail"
+            android:exported="false" />
+        <activity
+            android:name=".trang.profile.activity.EditProfileRelative"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activities.profile.AddRelative"
+            android:name=".trang.profile.activity.AddRelative"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".activities.appointment.ConfirmAppointment"
             android:exported="false" />
         <activity
-            android:name=".activities.profile.ListProfile"
+            android:name=".trang.profile.activity.ListProfile"
             android:exported="false" />
         <activity
-            android:name=".activities.Search.DrugDetailActivity"
+            android:name=".trang.search.activity.DrugDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.profile.EditProfileUser"
+            android:name=".trang.profile.activity.EditProfileUser"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activities.Search.SearchDrugActivity"
+            android:name=".trang.search.activity.SearchDrugActivity"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
@@ -78,11 +82,11 @@
             android:name=".activities.chat.ListEmployee"
             android:exported="false" />
         <activity
-            android:name=".activities.Login"
+            android:name=".trang.login.activity.Login"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activities.profile.Profile"
+            android:name=".trang.profile.activity.Profile"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
@@ -151,6 +155,9 @@
                 <action android:name="com.example.medihealth.ACTION_DISMISS_NOTIFICATION" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".receiver.AlarmReciver"
+            android:exported="false" />
 
         <service
             android:name=".services.RemindService"

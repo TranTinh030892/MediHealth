@@ -18,14 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
 import com.example.medihealth.adapters.stat.ScheduleStatMonthApdapter;
+import com.example.medihealth.apiservices.DrugUserService;
+import com.example.medihealth.apiservices.PrescriptionStatService;
 import com.example.medihealth.models.DrugUser;
 import com.example.medihealth.models.PrescriptionStat;
 import com.example.medihealth.retrofitcustom.RetrofitClient;
-import com.example.medihealth.apiservices.DrugUserService;
-import com.example.medihealth.apiservices.PrescriptionStatService;
 import com.example.medihealth.utils.stat.MonthInfo;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -67,8 +66,8 @@ public class StatMonthActivity extends AppCompatActivity {
         editTextMonth.setText(currentMonth.getMonthLabel());
         dayOfMonth = currentMonth.getDayofmonth();
         monthInfoList = generateMonthList();
-        for(int i = 0; i < monthInfoList.size(); i++){
-            if(monthInfoList.get(i).getDayofmonth().equals(currentMonth.getDayofmonth())){
+        for (int i = 0; i < monthInfoList.size(); i++) {
+            if (monthInfoList.get(i).getDayofmonth().equals(currentMonth.getDayofmonth())) {
                 selectedItemPositionMonth = i;
                 break;
             }
@@ -79,7 +78,7 @@ public class StatMonthActivity extends AppCompatActivity {
         drugUserService.getDrugUserofUser(FirebaseAuth.getInstance().getCurrentUser().getUid()).enqueue(new Callback<List<DrugUser>>() {
             @Override
             public void onResponse(Call<List<DrugUser>> call, Response<List<DrugUser>> response) {
-                if(response.isSuccessful() && response.body() != null && !response.body().isEmpty()){
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     Log.d("API_Response", "Data received from API: " + response.body().toString());
 
                     drugUserList.addAll(response.body());
@@ -89,7 +88,7 @@ public class StatMonthActivity extends AppCompatActivity {
                     editTextSelectDU.setText(drugUserList.get(0).toString());
                     selectedItemPositionDU = 0;
                     callAPItoGetPrescriptionStatMonth();
-                }else {
+                } else {
                     Log.e("API_Error", "Response body is empty or null");
                 }
             }
@@ -111,7 +110,7 @@ public class StatMonthActivity extends AppCompatActivity {
                 listView.setAdapter(adapter);
 
                 int itemHeight = (int) getResources().getDisplayMetrics().density * 68;
-                int maxHeight = itemHeight * 4 ;
+                int maxHeight = itemHeight * 4;
                 ViewGroup.LayoutParams params = listView.getLayoutParams();
                 params.height = maxHeight;
                 listView.setLayoutParams(params);
@@ -154,7 +153,7 @@ public class StatMonthActivity extends AppCompatActivity {
                 listView.setAdapter(adapter);
 
                 int itemHeight = (int) getResources().getDisplayMetrics().density * 68;
-                int maxHeight = itemHeight * 4 ;
+                int maxHeight = itemHeight * 4;
                 ViewGroup.LayoutParams params = listView.getLayoutParams();
                 params.height = maxHeight;
                 listView.setLayoutParams(params);
@@ -186,7 +185,7 @@ public class StatMonthActivity extends AppCompatActivity {
             }
         });
 
-        if(duid != null){
+        if (duid != null) {
             //Default call API to Get PrescriptionStat and show
             callAPItoGetPrescriptionStatMonth();
         }
@@ -200,21 +199,21 @@ public class StatMonthActivity extends AppCompatActivity {
         });
     }
 
-    public void updateRecyclerViewAdapter(){
+    public void updateRecyclerViewAdapter() {
         scheduleStatMonthApdapter = new ScheduleStatMonthApdapter(prescriptionStats);
         statMonthRecyclerView.setAdapter(scheduleStatMonthApdapter);
     }
 
-    private void callAPItoGetPrescriptionStatMonth(){
+    private void callAPItoGetPrescriptionStatMonth() {
         prescriptionStats = new ArrayList<>();
         PrescriptionStatService prescriptionStatService = RetrofitClient.createService(PrescriptionStatService.class);
         prescriptionStatService.getPrescriptionStatMonth(duid, dayOfMonth).enqueue(new Callback<List<PrescriptionStat>>() {
             @Override
             public void onResponse(Call<List<PrescriptionStat>> call, Response<List<PrescriptionStat>> response) {
-                if(response.isSuccessful() && !response.body().isEmpty() && response.body() != null){
+                if (response.isSuccessful() && !response.body().isEmpty() && response.body() != null) {
                     Log.d("API_Response", "Data received from API: " + response.body().toString());
                     prescriptionStats.addAll(response.body());
-                }else {
+                } else {
                     Log.e("API_Error", "Response body is null");
                 }
                 //Update StatWeekRecyclerView
@@ -234,6 +233,7 @@ public class StatMonthActivity extends AppCompatActivity {
         LocalDate dayOfMonth = LocalDate.of(currentDate.getYear(), currentDate.getMonth(), 1);
         return new MonthInfo(monthLabel, dayOfMonth);
     }
+
     private List<MonthInfo> generateMonthList() {
         List<MonthInfo> months = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
@@ -246,7 +246,7 @@ public class StatMonthActivity extends AppCompatActivity {
 
         while (calendar.before(endCalendar)) {
             LocalDate dayOfMonth = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, 1);
-            String monthLabel = "Tháng " + (calendar.get(Calendar.MONTH) + 1 > 9 ? calendar.get(Calendar.MONTH) + 1:"0" + (calendar.get(Calendar.MONTH) + 1)) + "/" + calendar.get(Calendar.YEAR);
+            String monthLabel = "Tháng " + (calendar.get(Calendar.MONTH) + 1 > 9 ? calendar.get(Calendar.MONTH) + 1 : "0" + (calendar.get(Calendar.MONTH) + 1)) + "/" + calendar.get(Calendar.YEAR);
             MonthInfo monthInfo = new MonthInfo(monthLabel, dayOfMonth);
             months.add(monthInfo);
             calendar.add(Calendar.MONTH, 1);

@@ -12,9 +12,11 @@ import retrofit2.http.Query;
 
 public interface PrescriptionStatService {
     @GET("stat/day")
-    Call<List<Prescription>> getPrescriptionStatDay(@Query("duid") Long duid, @Query("date")LocalDate date);
+    Call<List<Prescription>> getPrescriptionStatDay(@Query("duid") Long duid, @Query("date") LocalDate date);
+
     @GET("stat/week")
-    Call<List<Prescription>> getPrescriptionStatWeek(@Query("duid") Long duid, @Query("start")LocalDate start, @Query("end") LocalDate end);
+    Call<List<Prescription>> getPrescriptionStatWeek(@Query("duid") Long duid, @Query("start") LocalDate start, @Query("end") LocalDate end);
+
     @GET("stat/month")
-    Call<List<PrescriptionStat>> getPrescriptionStatMonth(@Query("duid") Long duid, @Query("dayofmonth")LocalDate dayofmonth);
+    Call<List<PrescriptionStat>> getPrescriptionStatMonth(@Query("duid") Long duid, @Query("dayofmonth") LocalDate dayofmonth);
 }

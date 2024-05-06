@@ -27,28 +27,28 @@ public class ChatRecyclerAdapter extends FirestoreRecyclerAdapter<ChatMessage, C
 
     @Override
     protected void onBindViewHolder(@NonNull ChatModelViewHolder holder, int position, @NonNull ChatMessage model) {
-       if(model.getSenderId().equals(FirebaseUtil.currentUserId())){
-          holder.leftChatLayout.setVisibility(View.GONE);
-          holder.rightChatLayout.setVisibility(View.VISIBLE);
-          holder.rightChatTextview.setText(model.getMessage());
-       }else{
-           holder.rightChatLayout.setVisibility(View.GONE);
-           holder.leftChatLayout.setVisibility(View.VISIBLE);
-           holder.leftChatTextview.setText(model.getMessage());
-       }
+        if (model.getSenderId().equals(FirebaseUtil.currentUserId())) {
+            holder.leftChatLayout.setVisibility(View.GONE);
+            holder.rightChatLayout.setVisibility(View.VISIBLE);
+            holder.rightChatTextview.setText(model.getMessage());
+        } else {
+            holder.rightChatLayout.setVisibility(View.GONE);
+            holder.leftChatLayout.setVisibility(View.VISIBLE);
+            holder.leftChatTextview.setText(model.getMessage());
+        }
     }
 
     @NonNull
     @Override
     public ChatModelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.chat_message_recycler_row,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.chat_message_recycler_row, parent, false);
         return new ChatModelViewHolder(view);
     }
 
-    class ChatModelViewHolder extends RecyclerView.ViewHolder{
+    class ChatModelViewHolder extends RecyclerView.ViewHolder {
 
-        LinearLayout leftChatLayout,rightChatLayout;
-        TextView leftChatTextview,rightChatTextview;
+        LinearLayout leftChatLayout, rightChatLayout;
+        TextView leftChatTextview, rightChatTextview;
 
         public ChatModelViewHolder(@NonNull View itemView) {
             super(itemView);

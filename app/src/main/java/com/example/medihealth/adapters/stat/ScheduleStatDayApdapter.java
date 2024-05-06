@@ -16,7 +16,7 @@ import com.example.medihealth.models.Schedule;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class ScheduleStatDayApdapter extends RecyclerView.Adapter<ScheduleStatDayApdapter.ScheduleStatDayViewHolder>{
+public class ScheduleStatDayApdapter extends RecyclerView.Adapter<ScheduleStatDayApdapter.ScheduleStatDayViewHolder> {
 
     private List<Schedule> scheduleList;
 
@@ -36,16 +36,16 @@ public class ScheduleStatDayApdapter extends RecyclerView.Adapter<ScheduleStatDa
         Schedule schedule = scheduleList.get(position);
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         holder.txtSchedule.setText(schedule.getTime().format(timeFormatter));
-        if(schedule.getConfirmNotifications() == null || schedule.getConfirmNotifications().isEmpty()){
+        if (schedule.getConfirmNotifications() == null || schedule.getConfirmNotifications().isEmpty()) {
             holder.txtConfirm.setText("Chưa uống");
             holder.txtReason.setVisibility(View.GONE);
-        }else{
+        } else {
             ConfirmNotification confirmNotification = schedule.getConfirmNotifications().get(0);
-            if(confirmNotification.isCheck()){
+            if (confirmNotification.isCheck()) {
                 holder.txtConfirm.setText("Đã uống");
                 holder.txtConfirm.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_confirm));
                 holder.txtReason.setVisibility(View.GONE);
-            }else{
+            } else {
                 holder.txtConfirm.setText("Bỏ uống");
                 holder.txtConfirm.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_cancel));
                 holder.txtReason.setVisibility(View.VISIBLE);
@@ -59,8 +59,9 @@ public class ScheduleStatDayApdapter extends RecyclerView.Adapter<ScheduleStatDa
         return this.scheduleList.size();
     }
 
-    public static class ScheduleStatDayViewHolder extends RecyclerView.ViewHolder{
+    public static class ScheduleStatDayViewHolder extends RecyclerView.ViewHolder {
         TextView txtSchedule, txtConfirm, txtReason;
+
         public ScheduleStatDayViewHolder(@NonNull View itemView) {
             super(itemView);
             txtSchedule = itemView.findViewById(R.id.txtSchedule);

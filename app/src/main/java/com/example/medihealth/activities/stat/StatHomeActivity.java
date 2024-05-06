@@ -23,7 +23,7 @@ public class StatHomeActivity extends AppCompatActivity {
     private int status_selectStat;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stat_home);
 
@@ -103,7 +103,7 @@ public class StatHomeActivity extends AppCompatActivity {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(active_btnContinue){
+                if (active_btnContinue) {
                     Intent intent;
                     switch (status_selectStat) {
                         case 1:
