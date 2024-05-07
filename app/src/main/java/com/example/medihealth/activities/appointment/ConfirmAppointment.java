@@ -1,7 +1,4 @@
-package com.example.medihealth.activites.appointment;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
+package com.example.medihealth.activities.appointment;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -23,8 +20,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+
 import com.example.medihealth.R;
-import com.example.medihealth.activites.MainActivity;
+import com.example.medihealth.activities.MainActivity;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.AppointmentConfirm;
 import com.example.medihealth.models.AppointmentDTO;
@@ -39,14 +39,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
-public class ConfirmAppointment extends AppCompatActivity implements View.OnClickListener{
+public class ConfirmAppointment extends AppCompatActivity implements View.OnClickListener {
     SharedPreferences sharedPreferences;
-    TextView personName,personGenderAndBirth,personPhone,relationship,specialist,doctorName,
-            bookDate,symptom,reminderDate,reminderTime,time,date,price;
+    TextView personName, personGenderAndBirth, personPhone, relationship, specialist, doctorName,
+            bookDate, symptom, reminderDate, reminderTime, time, date, price;
     SwitchCompat btnRemider;
     ImageView imageAccount;
     ImageButton btnBack;
-    RelativeLayout change,btnBook,backAppointment;
+    RelativeLayout change, btnBook, backAppointment;
     AppointmentDTO appointmentDTO;
     AppointmentConfirm appointmentConfirm;
     boolean isReminder = true;
@@ -71,9 +71,9 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
     }
 
     private void setupUserImage(AppointmentConfirm appointmentConfirm) {
-        if (!appointmentConfirm.getRelationship().equals("Tôi"))return;
+        if (!appointmentConfirm.getRelationship().equals("Tôi")) return;
         String profileString = sharedPreferences.getString("profile", "empty");
-        if (!profileString.equals("empty")){
+        if (!profileString.equals("empty")) {
             String[] array = profileString.split(";");
             if (array.length > 0) {
                 Picasso.get().load(array[1]).into(imageAccount);
@@ -102,6 +102,7 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
         backAppointment = findViewById(R.id.btn_back);
         btnBook = findViewById(R.id.btn_book);
     }
+
     private void setOnclick() {
         change.setOnClickListener(this);
         btnBack.setOnClickListener(this);
@@ -109,25 +110,25 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
         btnRemider.setOnClickListener(this);
         backAppointment.setOnClickListener(this);
     }
+
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_book){
+        if (v.getId() == R.id.btn_book) {
             saveAppointment();
         }
-        if (v.getId() == R.id.back_btn){
+        if (v.getId() == R.id.back_btn) {
             finish();
         }
-        if (v.getId() == R.id.btn_back){
+        if (v.getId() == R.id.btn_back) {
             finish();
         }
-        if (v.getId() == R.id.change){
+        if (v.getId() == R.id.change) {
             showDialogRemider(Gravity.CENTER);
         }
-        if (v.getId() == R.id.notificationSwitch){
-            if (!btnRemider.isChecked()){
+        if (v.getId() == R.id.notificationSwitch) {
+            if (!btnRemider.isChecked()) {
                 isReminder = false;
-            }
-            else {
+            } else {
                 isReminder = true;
             }
         }
@@ -138,18 +139,17 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_reminder);
         Window window = dialog.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
         window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
+        if (Gravity.BOTTOM == center) {
             dialog.setCancelable(false);
-        }
-        else{
+        } else {
             dialog.setCancelable(true);
         }
         RelativeLayout btnCancel, btnEnter, blockTime, blockDate;
@@ -200,18 +200,17 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_datepicker);
         Window window = dialog.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
         window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
+        if (Gravity.BOTTOM == center) {
             dialog.setCancelable(false);
-        }
-        else{
+        } else {
             dialog.setCancelable(true);
         }
         DatePicker datePicker;
@@ -242,9 +241,9 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
         int monthOfYear = datePicker.getMonth();
         int year = datePicker.getYear();
         String dayOfMonthStr = String.valueOf(dayOfMonth),
-                monthOfYearStr = String.valueOf(monthOfYear+1);
+                monthOfYearStr = String.valueOf(monthOfYear + 1);
         if (dayOfMonth < 10) dayOfMonthStr = "0" + dayOfMonth;
-        if (monthOfYear+1 < 10) monthOfYearStr = "0" + (monthOfYear+1);
+        if (monthOfYear + 1 < 10) monthOfYearStr = "0" + (monthOfYear + 1);
         String selectedDate = dayOfMonthStr + "/" + monthOfYearStr + "/" + year;
         date.setText(selectedDate);
     }
@@ -254,18 +253,17 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_timepicker);
         Window window = dialog.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
         window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
+        if (Gravity.BOTTOM == center) {
             dialog.setCancelable(false);
-        }
-        else{
+        } else {
             dialog.setCancelable(true);
         }
         TimePicker timePicker;
@@ -295,34 +293,33 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
         int hour = timePicker.getHour();
         int minute = timePicker.getMinute();
         String hourStr = String.valueOf(hour);
-        if (hour < 10)hourStr = "0" + hourStr;
+        if (hour < 10) hourStr = "0" + hourStr;
         String minuteStr = String.valueOf(minute);
-        if (minute < 10)minuteStr = "0" + minuteStr;
+        if (minute < 10) minuteStr = "0" + minuteStr;
         String timeStr = hourStr + ":" + minuteStr;
         time.setText(timeStr);
     }
 
     private void saveAppointment() {
         Appointment appointment = null;
-        if (!(userModel == null && relative == null) && doctor != null){
-            if (userModel != null){
-                appointment = new Appointment(userModel,appointmentDTO.getBookDate(),appointmentDTO.getAppointmentDate(),
-                        appointmentDTO.getSpecialist(),doctor,appointmentDTO.getTime(),appointmentDTO.getSymptom(),0,
-                        reminderTime.getText().toString(),reminderDate.getText().toString(),isReminder);
+        if (!(userModel == null && relative == null) && doctor != null) {
+            if (userModel != null) {
+                appointment = new Appointment(userModel, appointmentDTO.getBookDate(), appointmentDTO.getAppointmentDate(),
+                        appointmentDTO.getSpecialist(), doctor, appointmentDTO.getTime(), appointmentDTO.getSymptom(), 0,
+                        reminderTime.getText().toString(), reminderDate.getText().toString(), isReminder);
             }
-            if (relative != null){
-                appointment = new Appointment(relative,appointmentDTO.getBookDate(),appointmentDTO.getAppointmentDate(),
-                        appointmentDTO.getSpecialist(),doctor,appointmentDTO.getTime(),appointmentDTO.getSymptom(),0,
-                        reminderTime.getText().toString(),reminderDate.getText().toString(),isReminder);
+            if (relative != null) {
+                appointment = new Appointment(relative, appointmentDTO.getBookDate(), appointmentDTO.getAppointmentDate(),
+                        appointmentDTO.getSpecialist(), doctor, appointmentDTO.getTime(), appointmentDTO.getSymptom(), 0,
+                        reminderTime.getText().toString(), reminderDate.getText().toString(), isReminder);
             }
         }
-        if (appointment != null){
+        if (appointment != null) {
             FirebaseUtil.getAppointmentCollectionReference().add(appointment).addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     showDialogNotice(Gravity.BOTTOM);
-                }
-                else {
-                    Log.e("ERROR","Lỗi kết nối");
+                } else {
+                    Log.e("ERROR", "Lỗi kết nối");
                 }
             });
         }
@@ -333,18 +330,17 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_notify_successfull);
         Window window = dialog.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = bottom;
         window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == bottom){
+        if (Gravity.BOTTOM == bottom) {
             dialog.setCancelable(false);
-        }
-        else{
+        } else {
             dialog.setCancelable(true);
         }
         Button btnHome, btnDetail;
@@ -366,7 +362,7 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
             public void onClick(View v) {
                 dialog.dismiss();
                 Intent intent = new Intent(ConfirmAppointment.this, MainActivity.class);
-                intent.putExtra("requestCode",131);
+                intent.putExtra("requestCode", 131);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -375,18 +371,17 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
     }
 
     private void getDoctorModel(String doctorId) {
-        Query query = FirebaseUtil.allDoctorCollectionReference().whereEqualTo("doctorId",doctorId);
+        Query query = FirebaseUtil.allDoctorCollectionReference().whereEqualTo("doctorId", doctorId);
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     String documentId = documentSnapshot.getId();
                     FirebaseUtil.allDoctorCollectionReference().document(documentId).get().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             doctor = task.getResult().toObject(Doctor.class);
-                        }
-                        else {
-                            Log.e("ERROR","Lỗi kết nối");
+                        } else {
+                            Log.e("ERROR", "Lỗi kết nối");
                         }
                     });
                 }
@@ -395,18 +390,17 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
     }
 
     private void getRelativeModel(String relativePhone) {
-        Query query = FirebaseUtil.getRelativeCollectionReference().whereEqualTo("phoneNumber",relativePhone);
+        Query query = FirebaseUtil.getRelativeCollectionReference().whereEqualTo("phoneNumber", relativePhone);
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     String documentId = documentSnapshot.getId();
                     FirebaseUtil.getRelativeCollectionReference().document(documentId).get().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             relative = task.getResult().toObject(Relative.class);
-                        }
-                        else {
-                            Log.e("ERROR","Lỗi kết nối");
+                        } else {
+                            Log.e("ERROR", "Lỗi kết nối");
                         }
                     });
                 }
@@ -416,25 +410,24 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
 
     private void getUserModel() {
         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 userModel = task.getResult().toObject(UserModel.class);
-            }
-            else {
-                Log.e("ERROR","Lỗi kết nối");
+            } else {
+                Log.e("ERROR", "Lỗi kết nối");
             }
         });
     }
 
     private void setupDetailAppoitment(AppointmentConfirm appointmentConfirm) {
         personName.setText(appointmentConfirm.getPersonName());
-        personPhone.setText("Điện thoại: "+appointmentConfirm.getPhoneNumber());
+        personPhone.setText("Điện thoại: " + appointmentConfirm.getPhoneNumber());
         relationship.setText(appointmentConfirm.getRelationship());
-        personGenderAndBirth.setText(appointmentConfirm.getGender()+" - "+appointmentConfirm.getBirth());
+        personGenderAndBirth.setText(appointmentConfirm.getGender() + " - " + appointmentConfirm.getBirth());
         specialist.setText(appointmentConfirm.getSpecialist());
         doctorName.setText(appointmentConfirm.getDoctorName());
-        bookDate.setText(appointmentConfirm.getTime()+" - "+appointmentConfirm.getAppointmentDate());
+        bookDate.setText(appointmentConfirm.getTime() + " - " + appointmentConfirm.getAppointmentDate());
         symptom.setText(appointmentConfirm.getSymptom());
-        price.setText(AndroidUtil.formatPrice(appointmentConfirm.getPrice())+" đ");
+        price.setText(AndroidUtil.formatPrice(appointmentConfirm.getPrice()) + " đ");
         reminderDate.setText(appointmentConfirm.getAppointmentDate());
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="mainColor">#006ba1</color>
-<!--    <color name="mainColor">#00A651</color>-->
+    <!--    <color name="mainColor">#00A651</color>-->
     <color name="text_Color">#012537</color>
     <color name="my_secondary">#FFE74C</color>
     <color name="my_primary">#1976D2</color>
@@ -17,6 +17,13 @@
     <color name="colorStateApproved">#DCFBDE</color>
     <color name="colorStatePending">#EDF191</color>
     <color name="pink">#FAD9D6</color>
+    <color name="main_color">#006ba1</color>
+    <color name="background_color">#EBEEF8</color>
+    <color name="color_cancel">#DE1313</color>
+    <color name="color_confirm">#16EF1F</color>
+    <color name="baclground_cancel">#BBBBBB</color>
+    <color name="button_send">#CCCCCC</color>
+    <color name="calender_color">#555555</color>
+    <color name="color_yelow">#FFEB3B</color>
     <color name="icon_notselect">#353535</color>
-</resources>
-<!--    #388E3C-->
+</resources><!--    #388E3C-->

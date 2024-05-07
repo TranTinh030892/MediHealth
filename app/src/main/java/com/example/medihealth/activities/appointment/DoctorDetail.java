@@ -1,4 +1,4 @@
-package com.example.medihealth.activites.appointment;
+package com.example.medihealth.activities.appointment;
 
 import androidx.appcompat.app.AppCompatActivity;
 

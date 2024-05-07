@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activites.chat.UserChat_Activity;
+import com.example.medihealth.activities.chat.UserChat_Activity;
 import com.example.medihealth.adapters.appointment.TimeAdapter;
 import com.example.medihealth.models.Employee;
 import com.example.medihealth.utils.AndroidUtil;
