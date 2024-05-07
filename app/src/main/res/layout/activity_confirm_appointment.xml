@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/top_Layout"
         android:background="@color/mainColor"
-        android:paddingBottom="15dp"
+        android:paddingBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout
@@ -49,7 +49,7 @@
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/block_loading"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:paddingStart="27dp"
             android:paddingEnd="27dp"
             android:layout_below="@id/toolbar"
@@ -58,57 +58,127 @@
             <RelativeLayout
                 android:id="@+id/block_icon_one"
                 android:layout_alignParentStart="true"
-                android:padding="4dp"
+                android:padding="5dp"
                 android:background="@drawable/bg_icon_selected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <ImageView
+                    android:id="@+id/icon_one"
                     android:layout_width="13dp"
                     android:layout_height="13dp"
-                    android:background="@drawable/custom_calendar"
+                    android:background="@drawable/medical"
                     android:backgroundTint="@color/white"
                     android:layout_alignParentStart="true"/>
             </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_height="0.7dp"
-                android:background="@color/white"
-                android:layout_toEndOf="@id/block_icon_one"
-                android:layout_toStartOf="@id/block_icon_two"/>
             <RelativeLayout
-                android:id="@+id/block_icon_two"
+                android:id="@+id/block_outside_icon_two"
+                android:layout_toStartOf="@id/block_icon_three"
+                android:layout_toEndOf="@id/block_icon_one"
+                android:layout_centerHorizontal="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <View
+                    android:id="@+id/line_one"
+                    android:layout_width="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_height="0.7dp"
+                    android:background="@color/white"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/block_icon_two"/>
+                <RelativeLayout
+                    android:id="@+id/block_icon_two"
+                    android:layout_centerHorizontal="true"
+                    android:padding="4dp"
+                    android:background="@drawable/bg_icon_selected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/icon_two"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:background="@drawable/health"
+                        android:backgroundTint="@color/white"/>
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/line_two"
+                    android:layout_width="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_height="0.7dp"
+                    android:background="@color/white"
+                    android:layout_alignParentEnd="true"
+                    android:layout_toEndOf="@id/block_icon_two"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/block_icon_three"
                 android:layout_centerHorizontal="true"
                 android:padding="4dp"
                 android:background="@drawable/bg_icon_selected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <ImageView
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:background="@drawable/edit_icon"
+                    android:id="@+id/icon_three"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:background="@drawable/icon_alarm"
                     android:backgroundTint="@color/white"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_height="0.7dp"
-                android:background="@color/white"
-                android:layout_toEndOf="@id/block_icon_two"
-                android:layout_toStartOf="@id/block_icon_three"/>
+
             <RelativeLayout
-                android:id="@+id/block_icon_three"
+                android:id="@+id/block_outside_icon_four"
+                android:layout_toStartOf="@id/block_icon_five"
+                android:layout_toEndOf="@id/block_icon_three"
+                android:layout_centerHorizontal="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <View
+                    android:id="@+id/line_three"
+                    android:layout_width="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_height="0.7dp"
+                    android:background="@color/white"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/block_icon_four"/>
+                <RelativeLayout
+                    android:id="@+id/block_icon_four"
+                    android:layout_centerHorizontal="true"
+                    android:padding="4dp"
+                    android:background="@drawable/bg_icon_selected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/icon_four"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:background="@drawable/person_icon"
+                        android:backgroundTint="@color/white"/>
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/line_four"
+                    android:layout_width="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_height="0.7dp"
+                    android:background="@color/white"
+                    android:layout_alignParentEnd="true"
+                    android:layout_toEndOf="@id/block_icon_four"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/block_icon_five"
                 android:layout_alignParentEnd="true"
                 android:padding="4dp"
                 android:background="@drawable/bg_icon_selected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <ImageView
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:background="@drawable/icon_checked"
-                    android:backgroundTint="@color/white"/>
+                    android:id="@+id/icon_five"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:backgroundTint="@color/white"
+                    android:background="@drawable/icon_checked"/>
             </RelativeLayout>
 
         </RelativeLayout>
@@ -128,7 +198,7 @@
 
             <RelativeLayout
                 android:id="@+id/block_one"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_edittext_profile"
@@ -224,7 +294,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/block_one"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="7dp"
                 android:background="@drawable/custom_edittext_profile"
                 android:paddingStart="9dp"
                 android:paddingBottom="7dp">
@@ -267,7 +337,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/block_two"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="7dp"
                 android:background="@drawable/custom_edittext_profile"
                 android:paddingStart="11dp"
                 android:paddingBottom="7dp">
@@ -311,7 +381,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/block_three"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="7dp"
                 android:background="@drawable/custom_edittext_profile"
                 android:paddingStart="10dp"
                 android:paddingBottom="5dp">
@@ -355,7 +425,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/block_four"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="7dp"
                 android:background="@drawable/custom_edittext_profile"
                 android:paddingStart="10dp"
                 android:paddingBottom="7dp">
@@ -399,7 +469,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/block_five"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="7dp"
                 android:background="@drawable/custom_edittext_profile"
                 android:paddingStart="10dp"
                 android:paddingBottom="7dp">
@@ -409,7 +479,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/edit_icon"
+                    android:background="@drawable/icon_contract"
                     android:backgroundTint="#06C60E" />
 
                 <RelativeLayout
@@ -439,11 +509,55 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/block_reminder"
+                android:id="@+id/block_seven"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/block_six"
-                android:layout_marginTop="26dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/custom_edittext_profile"
+                android:paddingStart="10dp"
+                android:paddingBottom="7dp">
+
+                <ImageView
+                    android:id="@+id/icon_price"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/icon_price"
+                    android:backgroundTint="#06C60E" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:layout_toEndOf="@id/icon_price">
+
+                    <TextView
+                        android:id="@+id/text_price"
+                        android:text="Giá khám"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"/>
+
+                    <TextView
+                        android:id="@+id/price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/text_price"
+                        android:layout_marginTop="3dp"
+                        android:text="100000"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/block_reminder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/block_seven"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/custom_btn_detail_doctor"
                 android:backgroundTint="#E2F4F6"
                 android:paddingStart="10dp"
@@ -452,14 +566,14 @@
                 <RelativeLayout
                     android:id="@+id/reminder_block_one"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="38dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:fontFamily="sans-serif-medium"
-                        android:text="Nhắc hẹn khám"
+                        android:text="Nhắc lịch khám"
                         android:textColor="@color/text_Color"
                         android:textSize="17sp" />
 
@@ -499,10 +613,10 @@
                 <RelativeLayout
                     android:id="@+id/reminder_block_two"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="70dp"
                     android:layout_below="@id/reminder_block_one"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="8dp">
+                    android:paddingTop="8dp"
+                    android:paddingBottom="6dp">
 
                     <RelativeLayout
                         android:id="@+id/block_remider_date"
@@ -514,7 +628,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/text_Color"
-                            android:textSize="14sp"
+                            android:textSize="15sp"
                             android:text="Ngày nhắc" />
 
                         <TextView
@@ -533,14 +647,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/block_remider_date"
-                        android:layout_marginTop="12dp">
+                        android:layout_marginTop="10dp">
 
                         <TextView
                             android:id="@+id/reminder_text_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/text_Color"
-                            android:textSize="14sp"
+                            android:textSize="15sp"
                             android:text="Giờ nhắc" />
 
                         <TextView
@@ -563,7 +677,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="38dp"
                     android:layout_below="@id/reminder_block_two">
 
                     <TextView
@@ -571,7 +685,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:textColor="@color/text_Color"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         android:text="Bật/Tắt nhắc hẹn" />
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/notificationSwitch"
@@ -584,14 +698,6 @@
                         app:track="@drawable/custom_track"
                         android:thumb="@drawable/custom_thumb"
                         android:layout_height="50dp"/>
-<!--                    <Switch-->
-<!--                        android:id="@+id/notificationSwitch"-->
-<!--                        android:layout_width="70dp"-->
-<!--                        android:layout_height="45dp"-->
-<!--                        android:layout_alignParentEnd="true"-->
-<!--                        android:layout_centerVertical="true"-->
-<!--                        android:checked="true"-->
-<!--                        tools:ignore="UseSwitchCompatOrMaterialXml" />-->
                 </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>

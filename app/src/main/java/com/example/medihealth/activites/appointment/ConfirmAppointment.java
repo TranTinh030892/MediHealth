@@ -17,9 +17,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -42,10 +42,11 @@ import com.squareup.picasso.Picasso;
 public class ConfirmAppointment extends AppCompatActivity implements View.OnClickListener{
     SharedPreferences sharedPreferences;
     TextView personName,personGenderAndBirth,personPhone,relationship,specialist,doctorName,
-            bookDate,symptom,reminderDate,reminderTime,time,date;
+            bookDate,symptom,reminderDate,reminderTime,time,date,price;
     SwitchCompat btnRemider;
     ImageView imageAccount;
-    RelativeLayout btnBack,change,btnBook;
+    ImageButton btnBack;
+    RelativeLayout change,btnBook,backAppointment;
     AppointmentDTO appointmentDTO;
     AppointmentConfirm appointmentConfirm;
     boolean isReminder = true;
@@ -65,11 +66,12 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
         getDoctorModel(appointmentDTO.getDoctorId());
         initView();
         setOnclick();
-        setupUserImage();
+        setupUserImage(appointmentConfirm);
         setupDetailAppoitment(appointmentConfirm);
     }
 
-    private void setupUserImage() {
+    private void setupUserImage(AppointmentConfirm appointmentConfirm) {
+        if (!appointmentConfirm.getRelationship().equals("Tôi"))return;
         String profileString = sharedPreferences.getString("profile", "empty");
         if (!profileString.equals("empty")){
             String[] array = profileString.split(";");
@@ -92,10 +94,12 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
         bookDate = findViewById(R.id.time);
         symptom = findViewById(R.id.symptom);
         change = findViewById(R.id.change);
+        price = findViewById(R.id.price);
         reminderDate = findViewById(R.id.reminder_date);
         reminderTime = findViewById(R.id.reminder_time);
         btnRemider = findViewById(R.id.notificationSwitch);
-        btnBack = findViewById(R.id.btn_back);
+        btnBack = findViewById(R.id.back_btn);
+        backAppointment = findViewById(R.id.btn_back);
         btnBook = findViewById(R.id.btn_book);
     }
     private void setOnclick() {
@@ -103,11 +107,15 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
         btnBack.setOnClickListener(this);
         btnBook.setOnClickListener(this);
         btnRemider.setOnClickListener(this);
+        backAppointment.setOnClickListener(this);
     }
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_book){
             saveAppointment();
+        }
+        if (v.getId() == R.id.back_btn){
+            finish();
         }
         if (v.getId() == R.id.btn_back){
             finish();
@@ -118,11 +126,9 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
         if (v.getId() == R.id.notificationSwitch){
             if (!btnRemider.isChecked()){
                 isReminder = false;
-                Log.e("CHECK",isReminder+"");
             }
             else {
                 isReminder = true;
-                Log.e("CHECK",isReminder+"");
             }
         }
     }
@@ -428,6 +434,7 @@ public class ConfirmAppointment extends AppCompatActivity implements View.OnClic
         doctorName.setText(appointmentConfirm.getDoctorName());
         bookDate.setText(appointmentConfirm.getTime()+" - "+appointmentConfirm.getAppointmentDate());
         symptom.setText(appointmentConfirm.getSymptom());
+        price.setText(AndroidUtil.formatPrice(appointmentConfirm.getPrice())+" đ");
         reminderDate.setText(appointmentConfirm.getAppointmentDate());
     }
 }

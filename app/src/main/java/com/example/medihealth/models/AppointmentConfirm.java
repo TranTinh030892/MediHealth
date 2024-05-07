@@ -8,6 +8,7 @@ public class AppointmentConfirm {
     String birth;
     String specialist;
     String doctorName;
+    int price;
     String time;
     String appointmentDate;
     String symptom;
@@ -16,7 +17,7 @@ public class AppointmentConfirm {
     }
 
     public AppointmentConfirm(String personName, String relationship, String phoneNumber,
-                              String gender, String birth, String specialist, String doctorName, String time, String appointmentDate, String symptom) {
+                              String gender, String birth, String specialist, String doctorName, int price, String time, String appointmentDate, String symptom) {
         this.personName = personName;
         this.relationship = relationship;
         this.phoneNumber = phoneNumber;
@@ -24,6 +25,7 @@ public class AppointmentConfirm {
         this.birth = birth;
         this.specialist = specialist;
         this.doctorName = doctorName;
+        this.price = price;
         this.time = time;
         this.appointmentDate = appointmentDate;
         this.symptom = symptom;
@@ -83,6 +85,14 @@ public class AppointmentConfirm {
 
     public void setDoctorName(String doctorName) {
         this.doctorName = doctorName;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public String getTime() {

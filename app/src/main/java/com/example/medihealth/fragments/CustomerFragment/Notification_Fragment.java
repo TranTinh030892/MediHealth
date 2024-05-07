@@ -53,7 +53,8 @@ public class Notification_Fragment extends Fragment {
     }
     private void setupNotificationsRecyclerView(String currentId) {
         Query query = FirebaseUtil.getNotificationsCollectionReference()
-                .whereEqualTo("userId",currentId);
+                .whereEqualTo("userId",currentId)
+                .orderBy("timestamp", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<NotificationModel> options = new FirestoreRecyclerOptions.Builder<NotificationModel>()
                 .setQuery(query,NotificationModel.class).build();
         notificationAdapter = new NotificationAdapter(options, getContext(), new NotificationAdapter.INotificationViewHolder() {

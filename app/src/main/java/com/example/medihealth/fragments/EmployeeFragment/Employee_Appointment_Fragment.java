@@ -483,7 +483,12 @@ public class Employee_Appointment_Fragment extends Fragment implements View.OnCl
         Intent intent = new Intent(getContext(), AlarmReciver.class);
         intent.setAction("reminder");
         intent.putExtra("reminderDate",appointment.getReminderDate());
-        intent.putExtra("detailAppointment",appointment.getTime()+";"+appointment.getAppointmentDate()+";"+appointment.getUserModel().getUserId());
+        if (appointment.getUserModel() != null){
+            intent.putExtra("detailAppointment",appointment.getTime()+";"+appointment.getAppointmentDate()+";"+appointment.getUserModel().getUserId());
+        }
+        if (appointment.getRelative() != null){
+            intent.putExtra("detailAppointment",appointment.getTime()+";"+appointment.getAppointmentDate()+";"+appointment.getRelative().getUserId());
+        }
         alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         pendingIntent = PendingIntent.getBroadcast(getContext(),11,intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);

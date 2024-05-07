@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.medihealth.R;
@@ -29,6 +30,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
 
@@ -39,10 +41,11 @@ public class EmployeeChat_Activity extends AppCompatActivity implements View.OnC
     String chatroomId;
     ChatRoom chatRoom;
     ImageView image_user;
-    TextView textViewName;
+    TextView textViewName,text_state;
     EditText editTextChat;
     ImageButton btnSend,btnBack;
     UserModel userModel;
+    RelativeLayout icon;
     ChatRecyclerAdapter adapter;
     RecyclerView recyclerView;
     @Override
@@ -103,21 +106,28 @@ public class EmployeeChat_Activity extends AppCompatActivity implements View.OnC
     }
 
     private void setInforUser() {
-        textViewName.setText(String.format( userModel.getFullName()));
-        SharedPreferences sharedPreferences;
-        sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
-        String profileString = sharedPreferences.getString("profile", "empty");
-        if (!profileString.equals("empty")){
-            String[] array = profileString.split(";");
-            if (array.length > 0) {
-                Picasso.get().load(array[1]).into(image_user);
-            } else {
-                Log.e("ERROR", "profileString rỗng");
-            }
+        if (userModel != null){
+            textViewName.setText(String.format( userModel.getFullName()));
+            FirebaseFirestore.getInstance().collection("state").document(userModel.getUserId())
+                    .addSnapshotListener((documentSnapshot, error) -> {
+                        if (error != null) {
+                            return;
+                        }
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                            boolean state = documentSnapshot.getBoolean("isState");
+                            if (state) {
+                                icon.setBackgroundResource(R.drawable.custom_olline);
+                                text_state.setText("Olline");
+                            } else {
+                                icon.setBackgroundResource(R.drawable.custom_offline);
+                                text_state.setText("Offline");
+                            }
+                        } else {
+                            Log.e("ERROR","ERROR");
+                        }
+                    });
         }
-        else {
-            image_user.setImageResource(R.drawable.profile);
-        }
+        image_user.setImageResource(R.drawable.profile);
     }
     private void initReference() {
         image_user = findViewById(R.id.image_chat);
@@ -127,6 +137,8 @@ public class EmployeeChat_Activity extends AppCompatActivity implements View.OnC
         btnBack = findViewById(R.id.btnBack);
         btnSend = findViewById(R.id.message_send_btn);
         recyclerView = findViewById(R.id.chat_recycler_view);
+        icon = findViewById(R.id.icon);
+        text_state = findViewById(R.id.state);
     }
 
     @Override

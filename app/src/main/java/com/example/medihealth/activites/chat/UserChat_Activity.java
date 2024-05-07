@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.medihealth.R;
@@ -37,11 +38,12 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
     Employee employee;
     String chatroomId ;
     ChatRoom chatRoom;
-    TextView textViewName;
+    TextView textViewName,textState;
     EditText editTextChat;
     ImageButton btnSend, btnBack;
     ChatRecyclerAdapter adapter;
     RecyclerView recyclerView;
+    RelativeLayout iconSate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,8 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
         btnSend = findViewById(R.id.message_send_btn);
         btnBack = findViewById(R.id.btnBack);
         recyclerView = findViewById(R.id.chat_recycler_view);
+        iconSate = findViewById(R.id.icon);
+        textState = findViewById(R.id.state);
     }
     private void setOnclick() {
         btnBack.setOnClickListener(this);
@@ -81,7 +85,27 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
         }
     }
     private void setInforEmployee() {
-        textViewName.setText(employee.getFullName());
+        if (employee != null){
+            textViewName.setText(employee.getFullName());
+            FirebaseFirestore.getInstance().collection("state").document(employee.getUserId())
+                    .addSnapshotListener((documentSnapshot, error) -> {
+                        if (error != null) {
+                            return;
+                        }
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                            boolean state = documentSnapshot.getBoolean("isState");
+                            if (state) {
+                                iconSate.setBackgroundResource(R.drawable.custom_olline);
+                                textState.setText("Online");
+                            } else {
+                                iconSate.setBackgroundResource(R.drawable.custom_offline);
+                                textState.setText("Offline");
+                            }
+                        } else {
+                            Log.e("ERROR","ERROR");
+                        }
+                    });
+        }
     }
     private void getOrCreateChatroomModel() {
         FirebaseUtil.getChatroomReference(chatroomId).get().addOnCompleteListener(task -> {
@@ -122,11 +146,15 @@ public class UserChat_Activity extends AppCompatActivity implements View.OnClick
         });
     }
     private void sendMessage(String message) {
-        chatRoom.setLastMessageTimestamp(Timestamp.now());
-        chatRoom.setLastMessageSenderId(FirebaseUtil.currentUserId());
-        chatRoom.setLastMessage(message);
-        FirebaseUtil.getChatroomReference(chatroomId).set(chatRoom);
-
+        if (chatRoom == null){
+            getOrCreateChatroomModel();
+        }
+        else {
+            chatRoom.setLastMessageTimestamp(Timestamp.now());
+            chatRoom.setLastMessageSenderId(FirebaseUtil.currentUserId());
+            chatRoom.setLastMessage(message);
+            FirebaseUtil.getChatroomReference(chatroomId).set(chatRoom);
+        }
         ChatMessage chatMessageModel = new ChatMessage(message, FirebaseUtil.currentUserId(), Timestamp.now());
         FirebaseUtil.getChatroomMessageReference(chatroomId).add(chatMessageModel)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {

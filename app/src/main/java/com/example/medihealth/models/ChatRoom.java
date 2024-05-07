@@ -1,5 +1,7 @@
 package com.example.medihealth.models;
 
+import android.net.Uri;
+
 import com.google.firebase.Timestamp;
 
 import java.util.List;

@@ -11,6 +11,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -53,14 +54,17 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
 public class Infor_Appoitment_Activity extends AppCompatActivity implements View.OnClickListener {
     private EditText editTextSymptom;
+    ImageView iconOne,iconTwo,iconThree,iconFour,iconFive;
+    View lineOne,lineTwo,lineThree,lineFour;
     private ImageButton btnDateDialog, btnSpecialist, btnBack;
     RelativeLayout  btnInforDoctor, btnEnter,blockLoadTimeList, blockNotify,formCurrentUser,tick,
-    btnAdd;
+    btnAdd, blockIconOne, blockIconTwo, blockIconThree,blockIconFour,blockIconFive;
     ProgressBar progressBarLoadDoctors;
     private TextView editTextDate, editTextSpecialist, textViewName,btnDetailCurrentUser,nameCurrentUser;
     RecyclerView recyclerView, recyclerViewTime, recyclerViewRelative;
@@ -72,6 +76,8 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     private int indexPersonSelected = -1;
     private String timeSelected = "";
     UserModel userModel;
+    int color;
+    int colorDefault ;
 
     @Override
     protected void onStart() {
@@ -90,6 +96,8 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_infor_appointment);
+        color = ContextCompat.getColor(this, R.color.white);
+        colorDefault = ContextCompat.getColor(this, R.color.icon_notselect);
         sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE);
         initReference();
         getDataDoctors();
@@ -108,10 +116,12 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
             FirebaseUtil.getAppointmentCollectionReference()
                     .whereEqualTo("doctor.doctorId", doctorId)
                     .whereEqualTo("appointmentDate", date)
+                    .whereIn("stateAppointment", Arrays.asList(0, 1))
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             List<String> timeList = new ArrayList<>();
+                            List<String> results = new ArrayList<>();
                             timeList.add("07:30");timeList.add("08:00");timeList.add("08:30");
                             timeList.add("09:00");timeList.add("09:30");timeList.add("10:00");
                             timeList.add("10:30");timeList.add("11:00");timeList.add("13:30");
@@ -121,7 +131,15 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
                                 Appointment appointment = document.toObject(Appointment.class);
                                 timeList.remove(appointment.getTime());
                             }
-                            updateUI(timeList);
+                            if (date.equals(getCurrentDate())){
+                                for (String time : timeList){
+                                    if (time.compareTo(AndroidUtil.currentTime()) > 0){
+                                        results.add(time);
+                                    }
+                                }
+                                updateUI(results);
+                            }
+                            else updateUI(timeList);
                         } else {
                             Log.e("TAG", "Error getting documents: ", task.getException());
                         }
@@ -142,6 +160,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         timeAdapter = new TimeAdapter(getApplicationContext(), timeList, new TimeAdapter.ITimeViewHolder() {
             @Override
             public void onClickItem(int position) {
+                setColorBlockThree();
                 timeSelected = timeList.get(position);
             }
         });
@@ -179,6 +198,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         adapterModel = new DoctorAdapter(options, getApplicationContext(), new DoctorAdapter.IDoctorViewHolder() {
             @Override
             public void onClickItem(int positon) {
+                setColorBlockTwo();
                 if (positon == indexDoctorSelected)return;
                 indexDoctorSelected = positon;
                 setTextNameDoctor(indexDoctorSelected);
@@ -281,6 +301,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         relativeAdapter = new RelativeAdapter(options, getApplicationContext(), new RelativeAdapter.IRelativeViewHolder() {
             @Override
             public void onClickItem(int positon) {
+                setColorBlockFour();
                 setBackgroundNotSelectedItem(formCurrentUser);
                 tick.setVisibility(View.GONE);
                 indexPersonSelected = positon;
@@ -331,6 +352,20 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         tick = findViewById(R.id.tick);
         btnDetailCurrentUser = findViewById(R.id.btn_Detail_currentUser);
         btnAdd = findViewById(R.id.form_add);
+        blockIconOne = findViewById(R.id.block_icon_one);
+        blockIconTwo = findViewById(R.id.block_icon_two);
+        blockIconThree= findViewById(R.id.block_icon_three);
+        blockIconFour = findViewById(R.id.block_icon_four);
+        blockIconFive = findViewById(R.id.block_icon_five);
+        lineOne = findViewById(R.id.line_one);
+        lineTwo = findViewById(R.id.line_two);
+        lineThree = findViewById(R.id.line_three);
+        lineFour = findViewById(R.id.line_four);
+        iconOne = findViewById(R.id.icon_one);
+        iconTwo = findViewById(R.id.icon_two);
+        iconThree = findViewById(R.id.icon_three);
+        iconFour = findViewById(R.id.icon_four);
+        iconFive= findViewById(R.id.icon_five);
     }
 
     private String getCurrentDate() {
@@ -420,6 +455,8 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         btnSpecialistAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setColorBlockOne();
+                refreshColorBlockTwo();
                 editTextSpecialist.setText(textSpecialistAll.getText().toString());
                 dialog.dismiss();
                 refreshOnclickSpecialist();
@@ -429,6 +466,8 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         btnSpecialist2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setColorBlockOne();
+                refreshColorBlockTwo();
                 editTextSpecialist.setText(textSpecialist2.getText().toString());
                 dialog.dismiss();
                 refreshOnclickSpecialist();
@@ -438,6 +477,8 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         btnSpecialist3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setColorBlockOne();
+                refreshColorBlockTwo();
                 editTextSpecialist.setText(textSpecialist3.getText().toString());
                 dialog.dismiss();
                 refreshOnclickSpecialist();
@@ -447,6 +488,8 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         btnSpecialist4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setColorBlockOne();
+                refreshColorBlockTwo();
                 editTextSpecialist.setText(textSpecialist4.getText().toString());
                 dialog.dismiss();
                 refreshOnclickSpecialist();
@@ -456,6 +499,8 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         btnSpecialist5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setColorBlockOne();
+                refreshColorBlockTwo();
                 editTextSpecialist.setText(textSpecialist5.getText().toString());
                 dialog.dismiss();
                 refreshOnclickSpecialist();
@@ -465,6 +510,8 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         btnSpecialist6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setColorBlockOne();
+                refreshColorBlockTwo();
                 editTextSpecialist.setText(textSpecialist6.getText().toString());
                 dialog.dismiss();
                 refreshOnclickSpecialist();
@@ -474,6 +521,8 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         btnSpecialist7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setColorBlockOne();
+                refreshColorBlockTwo();
                 editTextSpecialist.setText(textSpecialist7.getText().toString());
                 dialog.dismiss();
                 refreshOnclickSpecialist();
@@ -483,6 +532,8 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         btnSpecialist8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setColorBlockOne();
+                refreshColorBlockTwo();
                 editTextSpecialist.setText(textSpecialist8.getText().toString());
                 dialog.dismiss();
                 refreshOnclickSpecialist();
@@ -507,7 +558,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
                         editTextSpecialist.getText().toString(),timeSelected,getCurrentDate(),
                         editTextDate.getText().toString(),editTextSymptom.getText().toString());
                 appointmentConfirm = new AppointmentConfirm(userModel.getFullName(),"Tôi",userModel.getPhoneNumber(),userModel.getGender(),
-                        userModel.getBirth(),editTextSpecialist.getText().toString(),doctor.getFullName(),
+                        userModel.getBirth(),editTextSpecialist.getText().toString(),doctor.getFullName(),doctor.getPrice(),
                         timeSelected,editTextDate.getText().toString(),editTextSymptom.getText().toString());
             }
             else {
@@ -519,7 +570,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
                             editTextSpecialist.getText().toString(),timeSelected,getCurrentDate(),
                             editTextDate.getText().toString(),editTextSymptom.getText().toString());
                     appointmentConfirm = new AppointmentConfirm(relative.getFullName(),relative.getRelationship(),relative.getPhoneNumber(),relative.getGender(),
-                            relative.getBirth(),editTextSpecialist.getText().toString(),doctor.getFullName(),
+                            relative.getBirth(),editTextSpecialist.getText().toString(),doctor.getFullName(),doctor.getPrice(),
                             timeSelected,editTextDate.getText().toString(),editTextSymptom.getText().toString());
                 } else {
                     appointmentDTO = null;
@@ -530,16 +581,6 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
                 AndroidUtil.passAppoitmentDTOModelAsIntent(intent,appointmentDTO);
                 AndroidUtil.passAppoitmentConfirmModelAsIntent(intent,appointmentConfirm);
                 startActivity(intent);
-//                FirebaseFirestore.getInstance().collection("appointment").add(appointment).addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()){
-//                        Intent intent = new Intent(getApplicationContext(), ConfirmAppointment.class);
-//                        AndroidUtil.passAppoitmentModelAsIntent(intent,appointment);
-//                        startActivity(intent);
-//                    }
-//                    else {
-//                        Log.e("ERROR","Lỗi kết nối mạng");
-//                    }
-//                });
             }
         }
         else CustomToast.showToast(getApplicationContext(),"ERROR",Toast.LENGTH_SHORT);
@@ -663,6 +704,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     }
     private void refreshOnclickDoctorOrDate(){
         blockNotify.setVisibility(View.GONE);
+        refreshColorBlockThree();
         timeSelected = "";
         setIndexSelectedSharedPreferences("indexTimeSelected",-1);
     }
@@ -673,6 +715,7 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
         recyclerViewTime.setVisibility(View.INVISIBLE);
         blockLoadTimeList.setVisibility(View.VISIBLE);
         indexDoctorSelected = 0;
+        refreshColorBlockThree();
         timeSelected = "";
         textViewName.setText("");
         setIndexSelectedSharedPreferences("indexDoctorSelected",0);
@@ -691,5 +734,38 @@ public class Infor_Appoitment_Activity extends AppCompatActivity implements View
     private String getNameFromFullName(String fullName){
         String[]str = fullName.split(" ");
         return str[str.length-1];
+    }
+    private void setColorBlockOne(){
+        iconOne.setBackgroundTintList(ColorStateList.valueOf(color));
+        blockIconOne.setBackgroundResource(R.drawable.bg_icon_selected);
+    }
+    private void refreshColorBlockThree(){
+        lineTwo.setBackgroundTintList(ColorStateList.valueOf(colorDefault));
+        iconThree.setBackgroundTintList(ColorStateList.valueOf(colorDefault));
+        blockIconThree.setBackgroundResource(R.drawable.bg_icon_notselect);
+    }
+    private void setColorBlockTwo(){
+        setColorBlockOne();
+        lineOne.setBackgroundTintList(ColorStateList.valueOf(color));
+        iconTwo.setBackgroundTintList(ColorStateList.valueOf(color));
+        blockIconTwo.setBackgroundResource(R.drawable.bg_icon_selected);
+    }
+    private void refreshColorBlockTwo(){
+        lineOne.setBackgroundTintList(ColorStateList.valueOf(colorDefault));
+        iconTwo.setBackgroundTintList(ColorStateList.valueOf(colorDefault));
+        blockIconTwo.setBackgroundResource(R.drawable.bg_icon_notselect);
+    }
+    private void setColorBlockThree(){
+        setColorBlockTwo();
+        lineTwo.setBackgroundTintList(ColorStateList.valueOf(color));
+        iconThree.setBackgroundTintList(ColorStateList.valueOf(color));
+        blockIconThree.setBackgroundResource(R.drawable.bg_icon_selected);
+    }
+    private void setColorBlockFour(){
+        setColorBlockOne();
+        setColorBlockTwo();
+        lineThree.setBackgroundTintList(ColorStateList.valueOf(color));
+        iconFour.setBackgroundTintList(ColorStateList.valueOf(color));
+        blockIconFour.setBackgroundResource(R.drawable.bg_icon_selected);
     }
 }

@@ -48,19 +48,42 @@
             android:src="@drawable/chat"
             android:layout_height="60dp"/>
         <RelativeLayout
-            android:id="@+id/form"
             android:layout_toEndOf="@id/image_chat"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
-            android:layout_centerVertical="true"
             android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/fullName_Chat"
+            <RelativeLayout
+                android:id="@+id/form"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nhân viên tư vấn"
-                android:textSize="18sp"
-                android:layout_centerVertical="true"/>
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/fullName_Chat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nhân viên tư vấn"
+                    android:textSize="18sp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/block_state"
+                android:layout_below="@id/form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:id="@+id/icon"
+                    android:layout_centerVertical="true"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/custom_offline"/>
+                <TextView
+                    android:id="@+id/state"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/icon"
+                    android:text="olline"/>
+            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

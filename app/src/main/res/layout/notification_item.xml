@@ -85,7 +85,7 @@
                 android:id="@+id/status_appointment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Chưa xem"
+                android:text="NEW"
                 android:textSize="11sp"
                 android:textColor="@color/Red"
                 android:layout_centerVertical="true"

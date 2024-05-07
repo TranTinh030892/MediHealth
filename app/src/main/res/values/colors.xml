@@ -17,5 +17,6 @@
     <color name="colorStateApproved">#DCFBDE</color>
     <color name="colorStatePending">#EDF191</color>
     <color name="pink">#FAD9D6</color>
+    <color name="icon_notselect">#353535</color>
 </resources>
 <!--    #388E3C-->

@@ -19,6 +19,9 @@ import com.example.medihealth.models.Employee;
 import com.example.medihealth.models.Relative;
 import com.example.medihealth.models.UserModel;
 
+import java.text.DecimalFormat;
+import java.util.Calendar;
+
 
 public class AndroidUtil {
 
@@ -75,6 +78,7 @@ public class AndroidUtil {
         intent.putExtra("birth",model.getBirth());
         intent.putExtra("specialist",model.getSpecialist());
         intent.putExtra("doctorName",model.getDoctorName());
+        intent.putExtra("price",model.getPrice());
         intent.putExtra("time",model.getTime());
         intent.putExtra("appointmentDate",model.getAppointmentDate());
         intent.putExtra("symptom",model.getSymptom());
@@ -88,6 +92,7 @@ public class AndroidUtil {
         appointmentConfirm.setBirth(intent.getStringExtra("birth"));
         appointmentConfirm.setSpecialist(intent.getStringExtra("specialist"));
         appointmentConfirm.setDoctorName(intent.getStringExtra("doctorName"));
+        appointmentConfirm.setPrice(intent.getIntExtra("price",1000000));
         appointmentConfirm.setTime(intent.getStringExtra("time"));
         appointmentConfirm.setAppointmentDate(intent.getStringExtra("appointmentDate"));
         appointmentConfirm.setSymptom(intent.getStringExtra("symptom"));
@@ -179,5 +184,20 @@ public class AndroidUtil {
         double BMI = (double) weight/(heightDouble * heightDouble);
         double roundedNumber = Math.round(BMI * 10) / 10.0;
         return String.valueOf(roundedNumber);
+    }
+    public static String formatPrice(int price){
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        String formattedNumber = decimalFormat.format(price);
+        return formattedNumber;
+    }
+    public static String currentTime (){
+        Calendar calendar = Calendar.getInstance();
+        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = calendar.get(Calendar.MINUTE);
+        String hourStr = String.valueOf(currentHour);
+        String minuteStr = String.valueOf(currentMinute);
+        if (currentHour < 10)hourStr = "0"+currentHour;
+        if (currentMinute < 10)minuteStr = "0"+currentMinute;
+        return hourStr+":"+minuteStr;
     }
 }

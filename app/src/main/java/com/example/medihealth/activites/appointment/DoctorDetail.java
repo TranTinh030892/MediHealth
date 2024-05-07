@@ -2,6 +2,7 @@ package com.example.medihealth.activites.appointment;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -61,7 +62,7 @@ public class DoctorDetail extends AppCompatActivity {
         degree.setText(doctor.getDegree());
         gender.setText(doctor.getGender());
         specialist.setText(doctor.getSpecialist());
-        price.setText(formatPrice(doctor.getPrice())+" đ");
+        price.setText(AndroidUtil.formatPrice(doctor.getPrice())+" đ");
         experience.setText(doctor.getExperience());
         if (!doctor.getAchievement().equals("")){
             String formatAchievement = doctor.getAchievement().replace(". ", ".<br>");
@@ -87,9 +88,5 @@ public class DoctorDetail extends AppCompatActivity {
             }
         });
     }
-    private String formatPrice(int price){
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");
-        String formattedNumber = decimalFormat.format(price);
-        return formattedNumber;
-    }
+
 }
