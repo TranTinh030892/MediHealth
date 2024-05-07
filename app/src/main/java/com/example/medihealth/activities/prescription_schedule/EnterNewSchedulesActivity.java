@@ -151,7 +151,7 @@ public class EnterNewSchedulesActivity extends AppCompatActivity implements Item
         CustomDialog dialog = new CustomDialog(this);
         dialog.setTitle("Xác nhận lưu đơn thuốc");
         dialog.setHint("Tên đơn thuốc");
-        if (!prescription.getTitle().isEmpty()) {
+        if (prescription.getTitle() != null && !prescription.getTitle().isEmpty()) {
             dialog.setContent(prescription.getTitle());
         }
 
