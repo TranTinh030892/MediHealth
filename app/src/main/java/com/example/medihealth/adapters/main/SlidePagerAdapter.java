@@ -21,25 +21,24 @@ public class SlidePagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        if (position == 0){
+        if (position == 0) {
             return new slide1();
         }
-        if (position == 1){
+        if (position == 1) {
             return new slide2();
         }
-        if (position == 2){
+        if (position == 2) {
             return new slide3();
         }
-        if (position == 3){
+        if (position == 3) {
             return new slide4();
         }
-        if (position == 4){
+        if (position == 4) {
             return new slide5();
         }
-        if (position == 5){
+        if (position == 5) {
             return new slide6();
-        }
-        else return null;
+        } else return null;
     }
 
     @Override

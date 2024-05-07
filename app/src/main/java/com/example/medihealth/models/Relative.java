@@ -1,7 +1,5 @@
 package com.example.medihealth.models;
 
-import com.google.firebase.Timestamp;
-
 public class Relative {
     private String fullName;
     private String gender;
@@ -12,6 +10,7 @@ public class Relative {
     private int weight;
     private String relationship;
     private String userId;
+
     public Relative() {
     }
 

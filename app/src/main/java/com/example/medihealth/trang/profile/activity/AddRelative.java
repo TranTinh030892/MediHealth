@@ -1,7 +1,5 @@
 package com.example.medihealth.trang.profile.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -18,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.medihealth.R;
 import com.example.medihealth.models.CustomToast;
 import com.example.medihealth.models.Relative;
@@ -26,9 +26,10 @@ import com.example.medihealth.utils.FirebaseUtil;
 public class AddRelative extends AppCompatActivity implements View.OnClickListener {
     ImageButton btnBack;
     TextView birthRelative;
-    EditText fullName, phoneNumber, address,  height, weight,relationship;
+    EditText fullName, phoneNumber, address, height, weight, relationship;
     RadioButton male, female;
     RelativeLayout save;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +52,7 @@ public class AddRelative extends AppCompatActivity implements View.OnClickListen
         relationship = findViewById(R.id.relationship);
         save = findViewById(R.id.btn_saveRelative);
     }
+
     private void setOnclick() {
         btnBack.setOnClickListener(this);
         birthRelative.setOnClickListener(this);
@@ -59,13 +61,13 @@ public class AddRelative extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.back_btn){
+        if (v.getId() == R.id.back_btn) {
             finish();
         }
-        if (v.getId() == R.id.birth_user){
+        if (v.getId() == R.id.birth_user) {
             showDatePickerRalative(Gravity.CENTER);
         }
-        if (v.getId() == R.id.btn_saveRelative){
+        if (v.getId() == R.id.btn_saveRelative) {
             saveRelative();
         }
     }
@@ -75,18 +77,17 @@ public class AddRelative extends AppCompatActivity implements View.OnClickListen
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog_datepicker);
         Window window = dialog.getWindow();
-        if (window == null){
+        if (window == null) {
             return;
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = center;
         window.setAttributes(windowAttributes);
-        if (Gravity.BOTTOM == center){
+        if (Gravity.BOTTOM == center) {
             dialog.setCancelable(false);
-        }
-        else{
+        } else {
             dialog.setCancelable(true);
         }
         DatePicker datePicker;
@@ -118,12 +119,13 @@ public class AddRelative extends AppCompatActivity implements View.OnClickListen
         int monthOfYear = datePicker.getMonth();
         int year = datePicker.getYear();
         String dayOfMonthStr = String.valueOf(dayOfMonth),
-                monthOfYearStr = String.valueOf(monthOfYear+1);
+                monthOfYearStr = String.valueOf(monthOfYear + 1);
         if (dayOfMonth < 10) dayOfMonthStr = "0" + dayOfMonth;
-        if (monthOfYear+1 < 10) monthOfYearStr = "0" + (monthOfYear+1);
+        if (monthOfYear + 1 < 10) monthOfYearStr = "0" + (monthOfYear + 1);
         String selectedDate = dayOfMonthStr + "/" + monthOfYearStr + "/" + year;
         birthRelative.setText(selectedDate);
     }
+
     private void saveRelative() {
         String name = fullName.getText().toString();
         String gender = "";
@@ -139,8 +141,8 @@ public class AddRelative extends AppCompatActivity implements View.OnClickListen
         String weightStr = weight.getText().toString();
         String relationshipStr = relationship.getText().toString();
         if (name.isEmpty() || gender.isEmpty() || phone.isEmpty() ||
-                addressUser.isEmpty() || birthUser.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty()|| relationshipStr.isEmpty()) {
-            CustomToast.showToast(getApplicationContext(),"Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT);
+                addressUser.isEmpty() || birthUser.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty() || relationshipStr.isEmpty()) {
+            CustomToast.showToast(getApplicationContext(), "Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT);
             return;
         }
 
@@ -148,23 +150,22 @@ public class AddRelative extends AppCompatActivity implements View.OnClickListen
         int userWeight = Integer.parseInt(weightStr);
 
         if (userHeight <= 0) {
-            CustomToast.showToast(getApplicationContext(),"Chiều cao không hợp lệ",Toast.LENGTH_SHORT);
+            CustomToast.showToast(getApplicationContext(), "Chiều cao không hợp lệ", Toast.LENGTH_SHORT);
             return;
         }
 
         if (userWeight <= 0) {
-            CustomToast.showToast(getApplicationContext(),"Cân nặng không hợp lệ",Toast.LENGTH_SHORT);
+            CustomToast.showToast(getApplicationContext(), "Cân nặng không hợp lệ", Toast.LENGTH_SHORT);
             return;
         }
         String currentUserId = FirebaseUtil.currentUserId();
         Relative relative = new Relative(name, gender, phone, addressUser, birthUser, userHeight, userWeight, relationshipStr, currentUserId);
         FirebaseUtil.getRelativeCollectionReference().add(relative).addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 finish();
-                CustomToast.showToast(getApplicationContext(),"Lưu thành công",Toast.LENGTH_SHORT);
-            }
-            else {
-                CustomToast.showToast(getApplicationContext(),"Lưu không thành công",Toast.LENGTH_SHORT);
+                CustomToast.showToast(getApplicationContext(), "Lưu thành công", Toast.LENGTH_SHORT);
+            } else {
+                CustomToast.showToast(getApplicationContext(), "Lưu không thành công", Toast.LENGTH_SHORT);
             }
         });
     }

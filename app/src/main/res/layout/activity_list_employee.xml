@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EBEEF8"
-    tools:context=".activites.chat.ListEmployee">
+    tools:context=".activities.chat.ListEmployee">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +25,8 @@
             android:fontFamily="sans-serif-medium"
             android:textColor="@color/white"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true" />
+
         <ImageButton
             android:layout_width="32dp"
             android:layout_height="25dp"
@@ -32,14 +34,14 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="@color/white"
             android:layout_centerVertical="true"
-            android:id="@+id/back_btn"/>
+            android:id="@+id/back_btn" />
     </RelativeLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
         android:background="#EBEEF8"
-        android:id="@+id/recycler_view_listUser"
-        />
+        android:id="@+id/recycler_view_listUser" />
 
 </RelativeLayout>

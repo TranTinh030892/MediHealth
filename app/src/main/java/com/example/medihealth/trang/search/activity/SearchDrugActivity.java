@@ -1,10 +1,5 @@
 package com.example.medihealth.trang.search.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,9 +9,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.medihealth.R;
-import com.example.medihealth.trang.search.adapter.DrugAdapter;
 import com.example.medihealth.models.Drug;
+import com.example.medihealth.trang.search.adapter.DrugAdapter;
 import com.example.medihealth.utils.AndroidUtil;
 import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -30,6 +30,7 @@ public class SearchDrugActivity extends AppCompatActivity {
     EditText textSearch;
     ImageView iconClose;
     ImageButton back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,11 +63,10 @@ public class SearchDrugActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence searchStr, int start, int before, int count) {
-                if (!searchStr.toString().equals("")){
+                if (!searchStr.toString().equals("")) {
                     iconClose.setVisibility(View.VISIBLE);
                     showResultBySearchStr(searchStr.toString());
-                }
-                else{
+                } else {
                     iconClose.setVisibility(View.GONE);
                     drugAdapter.clear();
                 }
@@ -109,7 +109,7 @@ public class SearchDrugActivity extends AppCompatActivity {
             public void onClickItem(int positon) {
                 Drug drug = drugAdapter.getItem(positon);
                 Intent intent = new Intent(SearchDrugActivity.this, DrugDetailActivity.class);
-                AndroidUtil.passDrugModelAsIntent(intent,drug);
+                AndroidUtil.passDrugModelAsIntent(intent, drug);
                 startActivity(intent);
             }
 
@@ -123,7 +123,7 @@ public class SearchDrugActivity extends AppCompatActivity {
         drugAdapter.startListening();
     }
 
-    private String standardizedNameDrug(String name){
-        return name.substring(0,1).toUpperCase()+name.substring(1).toLowerCase();
+    private String standardizedNameDrug(String name) {
+        return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
     }
 }

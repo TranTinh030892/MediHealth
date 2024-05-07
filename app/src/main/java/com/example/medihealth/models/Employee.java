@@ -1,7 +1,5 @@
 package com.example.medihealth.models;
 
-import com.google.firebase.Timestamp;
-
 public class Employee {
     private String fullName;
     private String userId;

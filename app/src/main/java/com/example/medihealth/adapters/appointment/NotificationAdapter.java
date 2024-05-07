@@ -15,18 +15,19 @@ import com.example.medihealth.R;
 import com.example.medihealth.models.NotificationModel;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-public class NotificationAdapter extends FirestoreRecyclerAdapter<NotificationModel,NotificationAdapter.NotificationViewHolder> {
+
+public class NotificationAdapter extends FirestoreRecyclerAdapter<NotificationModel, NotificationAdapter.NotificationViewHolder> {
 
     Context context;
     private INotificationViewHolder iViewHolder;
-    public NotificationAdapter(@NonNull FirestoreRecyclerOptions<NotificationModel> options,Context context,
+
+    public NotificationAdapter(@NonNull FirestoreRecyclerOptions<NotificationModel> options, Context context,
                                INotificationViewHolder iViewHolder) {
         super(options);
         this.context = context;
@@ -41,10 +42,9 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<NotificationMo
     protected void onBindViewHolder(@NonNull NotificationViewHolder holder, @SuppressLint("RecyclerView") int position, @NonNull NotificationModel model) {
         holder.textTitle.setText(model.getTitle());
         holder.textTime.setText(timestampToString(model.getTimestamp()));
-        if (!model.isSeen()){
+        if (!model.isSeen()) {
             holder.stateNew.setVisibility(View.VISIBLE);
-        }
-        else holder.stateNew.setVisibility(View.GONE);
+        } else holder.stateNew.setVisibility(View.GONE);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +57,7 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<NotificationMo
     @NonNull
     @Override
     public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.notification_item,parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.notification_item, parent, false);
         return new NotificationAdapter.NotificationViewHolder(itemView);
     }
 
@@ -66,9 +66,10 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<NotificationMo
         return super.getItemCount();
     }
 
-    public static class NotificationViewHolder extends RecyclerView.ViewHolder{
+    public static class NotificationViewHolder extends RecyclerView.ViewHolder {
         TextView textTitle, textTime;
         RelativeLayout stateNew;
+
         public NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
             textTitle = itemView.findViewById(R.id.title);
@@ -76,14 +77,17 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<NotificationMo
             stateNew = itemView.findViewById(R.id.state_news);
         }
     }
+
     public static String timestampToString(Timestamp timestamp) {
         Date date = timestamp.toDate();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
         sdf.setTimeZone(TimeZone.getDefault());
         return sdf.format(date);
     }
-    public interface INotificationViewHolder{
+
+    public interface INotificationViewHolder {
         void onClickItem(int positon, DocumentSnapshot documentSnapshot);
+
         void onDataLoaded(int size);
     }
 }

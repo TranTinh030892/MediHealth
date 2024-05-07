@@ -1,7 +1,6 @@
 package com.example.medihealth.adapters.appointment;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,24 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.medihealth.R;
 import com.example.medihealth.models.Appointment;
 import com.example.medihealth.models.Doctor;
-import com.example.medihealth.models.NotificationModel;
 import com.example.medihealth.models.Relative;
-import com.example.medihealth.models.Token;
 import com.example.medihealth.models.UserModel;
-import com.example.medihealth.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.List;
 
 public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Employee_AppointmentAdapter.AppointmentViewHolder> {
     Context context;
     private OnItemClickListener mListener;
-    public Employee_AppointmentAdapter(@NonNull FirestoreRecyclerOptions<Appointment> options, Context context,OnItemClickListener onItemClickListener) {
+
+    public Employee_AppointmentAdapter(@NonNull FirestoreRecyclerOptions<Appointment> options, Context context, OnItemClickListener onItemClickListener) {
         super(options);
         this.context = context;
         this.mListener = onItemClickListener;
@@ -43,10 +34,10 @@ public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appoin
 
     @Override
     protected void onBindViewHolder(@NonNull AppointmentViewHolder holder, int position, @NonNull Appointment model) {
-        if(model.getStateAppointment() == 1){
+        if (model.getStateAppointment() == 1) {
             holder.btnApprove.setVisibility(View.GONE);
         }
-        if(model.getStateAppointment() == -1){
+        if (model.getStateAppointment() == -1) {
             holder.blockOne.setVisibility(View.GONE);
             holder.blockTwo.setVisibility(View.VISIBLE);
         }
@@ -56,21 +47,19 @@ public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appoin
         if (userModel != null && relative == null) {
             holder.userName.setText(userModel.getFullName());
             holder.userPhonenumber.setText(userModel.getPhoneNumber());
-        }
-        else if (userModel == null && relative != null){
+        } else if (userModel == null && relative != null) {
             holder.userName.setText(relative.getFullName());
             holder.userPhonenumber.setText(relative.getPhoneNumber());
-        }
-        else {
+        } else {
             holder.userName.setText("");
             holder.userPhonenumber.setText("");
         }
 
-        String calendarStr =  model.getTime()+" - "+model.getAppointmentDate();
+        String calendarStr = model.getTime() + " - " + model.getAppointmentDate();
         holder.calendar.setText(calendarStr);
         Doctor doctor = model.getDoctor();
         if (doctor != null) {
-            holder.doctorName.setText("BS."+doctor.getFullName());
+            holder.doctorName.setText("BS." + doctor.getFullName());
         } else {
             holder.doctorName.setText("");
         }
@@ -101,20 +90,23 @@ public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appoin
             }
         });
     }
+
     @Override
     public int getItemCount() {
         return super.getItemCount();
     }
+
     @NonNull
     @Override
     public AppointmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_appointment_employee,parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_appointment_employee, parent, false);
         return new Employee_AppointmentAdapter.AppointmentViewHolder(itemView);
     }
 
     public static class AppointmentViewHolder extends RecyclerView.ViewHolder {
         TextView userName, userPhonenumber, calendar, doctorName;
-        RelativeLayout blockOne, blockTwo, btnApprove, btnCancel, btnRestore,btnDelete;
+        RelativeLayout blockOne, blockTwo, btnApprove, btnCancel, btnRestore, btnDelete;
+
         public AppointmentViewHolder(@NonNull View itemView) {
             super(itemView);
             blockOne = itemView.findViewById(R.id.block_one);
@@ -129,10 +121,14 @@ public class Employee_AppointmentAdapter extends FirestoreRecyclerAdapter<Appoin
             btnDelete = itemView.findViewById(R.id.block_delete_appointment);
         }
     }
+
     public interface OnItemClickListener {
         void onApproveClick(String appointmentId);
+
         void onCancelClick(String appointmentId);
+
         void onRestoreClick(String appointmentId);
+
         void onDeleteClick(String appointmentId);
     }
 }

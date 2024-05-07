@@ -4,6 +4,30 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
     <application
         android:name=".applications.MainApplication"
         android:allowBackup="true"
@@ -14,9 +38,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MediHealth"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
-            android:name=".activites.appointment.DoctorDetail"
+            android:name=".activities.appointment.DoctorDetail"
             android:exported="false" />
         <activity
             android:name=".trang.profile.activity.EditProfileRelative"
@@ -27,7 +53,7 @@
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activites.appointment.ConfirmAppointment"
+            android:name=".activities.appointment.ConfirmAppointment"
             android:exported="false" />
         <activity
             android:name=".trang.profile.activity.ListProfile"
@@ -44,16 +70,16 @@
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activites.appointment.Infor_Appoitment_Activity"
+            android:name=".activities.appointment.Infor_Appoitment_Activity"
             android:exported="false" />
         <activity
-            android:name=".activites.chat.EmployeeChat_Activity"
+            android:name=".activities.chat.EmployeeChat_Activity"
             android:exported="false" />
         <activity
-            android:name=".activites.chat.Employee_MainActivity"
+            android:name=".activities.chat.Employee_MainActivity"
             android:exported="false" />
         <activity
-            android:name=".activites.chat.ListEmployee"
+            android:name=".activities.chat.ListEmployee"
             android:exported="false" />
         <activity
             android:name=".trang.login.activity.Login"
@@ -64,14 +90,14 @@
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activites.MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".activites.chat.UserChat_Activity"
+            android:name=".activities.chat.UserChat_Activity"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activites.Splash"
+            android:name=".activities.Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -79,6 +105,39 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.example.medihealth.activities.prescription_schedule.PrescriptionManagement" />
+        <activity
+            android:name=".activities.prescription_schedule.PrescriptionDetailManagement"
+            android:exported="false" />
+        <activity
+            android:name=".activities.prescription_schedule.EnterNewPrescriptionItemsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.prescription_schedule.EnterNewSchedulesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.prescription_schedule.EditPrescriptionItemsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.prescription_schedule.EditSchedulesActivity"
+            android:exported="false" />
+        <activity android:name="com.example.medihealth.activities.prescription_schedule.DrugUserManagement" />
+
+        <activity android:name="com.example.medihealth.activities.show_schedule_totay.ScheduleTodayDetailActivity" />
+        <activity android:name="com.example.medihealth.activities.show_schedule_totay.ScheduleTodayActivity" />
+        <activity android:name="com.example.medihealth.activities.show_schedule_totay.ConfirmScheduleActivity" />
+        <activity android:name="com.example.medihealth.activities.show_schedule_totay.SkipScheduleActivity" />
+        <activity android:name="com.example.medihealth.activities.stat.StatDayActivity" />
+        <activity android:name="com.example.medihealth.activities.stat.StatHomeActivity" />
+        <activity android:name="com.example.medihealth.activities.stat.StatMonthActivity" />
+        <activity android:name="com.example.medihealth.activities.stat.StatWeeksActivity" />
+
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            tools:replace="android:screenOrientation" />
 
         <service
             android:name=".notifications.FCM_Notification.MyFirebaseMessagingService"
@@ -97,8 +156,22 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".models.AlarmReciver"
+            android:name=".receiver.AlarmReciver"
             android:exported="false" />
+
+        <service
+            android:name=".services.RemindService"
+            android:foregroundServiceType="specialUse" />
+
+        <receiver android:name=".receiver.RemindReceiver" />
+        <receiver android:name=".receiver.SnoozeRemindReceiver" />
+        <receiver
+            android:name=".receiver.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -5,10 +5,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.CustomerFragment.Home_Fragment">
+
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <RelativeLayout
             android:id="@+id/top_layout_title"
             android:layout_width="match_parent"
@@ -17,38 +19,44 @@
             android:paddingBottom="5dp"
             android:background="@color/mainColor"
             android:layout_height="wrap_content">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Medihealth"
                 android:textSize="18dp"
                 android:textStyle="bold"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white" />
+
             <RelativeLayout
                 android:id="@+id/form_weather"
                 android:layout_width="75dp"
                 android:background="@drawable/custom_home_form_weather"
                 android:layout_alignParentEnd="true"
                 android:layout_height="24dp">
+
                 <RelativeLayout
                     android:id="@+id/icon_weather"
                     android:layout_width="28dp"
                     android:layout_centerVertical="true"
                     android:paddingStart="5dp"
                     android:layout_height="20dp">
+
                     <ImageButton
                         android:id="@+id/sunny"
                         android:background="@drawable/icon_sunny"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
+
                     <ImageButton
                         android:id="@+id/cloud"
                         android:layout_marginTop="4dp"
                         android:layout_marginLeft="4dp"
                         android:background="@drawable/icon_cloud"
                         android:layout_width="16dp"
-                        android:layout_height="17dp"/>
+                        android:layout_height="17dp" />
                 </RelativeLayout>
+
                 <TextView
                     android:id="@+id/temp"
                     android:layout_centerVertical="true"
@@ -56,7 +64,7 @@
                     android:layout_toEndOf="@id/icon_weather"
                     android:layout_marginLeft="2dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
@@ -65,25 +73,31 @@
         android:layout_below="@id/top_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:background="@color/mainColor"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="14dp">
+
                 <RelativeLayout
                     android:id="@+id/infor_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:background="@drawable/custom_top_layout_home"
-                        android:layout_height="70dp"/>
+                        android:layout_height="70dp" />
+
                     <androidx.cardview.widget.CardView
                         android:id="@+id/infor_user"
                         app:cardCornerRadius="15dp"
@@ -94,30 +108,35 @@
                         android:layout_marginBottom="5dp"
                         android:layout_height="148dp"
                         android:elevation="3dp">
+
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:padding="10dp"
                             android:layout_height="match_parent">
+
                             <RelativeLayout
                                 android:id="@+id/top_infor"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
+
                                 <RelativeLayout
                                     android:id="@+id/image_user"
                                     android:layout_width="57dp"
                                     android:layout_height="57dp">
+
                                     <de.hdodenhof.circleimageview.CircleImageView
                                         android:id="@+id/image_account_google"
                                         android:layout_width="55dp"
                                         android:layout_height="55dp"
                                         android:padding="2dp"
-                                        android:src="@drawable/profile"/>
+                                        android:src="@drawable/profile" />
+
                                     <ImageButton
                                         android:layout_width="20dp"
                                         android:layout_height="20dp"
                                         android:layout_alignParentBottom="true"
                                         android:layout_alignParentEnd="true"
-                                        android:background="@drawable/tick"/>
+                                        android:background="@drawable/tick" />
                                 </RelativeLayout>
 
                                 <RelativeLayout
@@ -127,6 +146,7 @@
                                     android:layout_marginLeft="10dp"
                                     android:layout_centerVertical="true"
                                     android:layout_toEndOf="@id/image_user">
+
                                     <TextView
                                         android:id="@+id/fullName_user"
                                         android:layout_width="match_parent"
@@ -134,16 +154,18 @@
                                         android:textSize="18sp"
                                         android:fontFamily="sans-serif-medium"
                                         android:textColor="#012537" />
+
                                     <TextView
                                         android:id="@+id/gender_birth"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_below="@id/fullName_user"
                                         android:layout_marginTop="3dp"
-                                        android:textSize="15sp"/>
+                                        android:textSize="15sp" />
                                 </RelativeLayout>
                             </RelativeLayout>
                             //
+
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="57dp"
@@ -164,6 +186,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_centerVertical="true"
                                         android:layout_centerHorizontal="true">
+
                                         <TextView
                                             android:id="@+id/text_heigth"
                                             android:layout_width="wrap_content"
@@ -188,6 +211,7 @@
                                     android:layout_width="110dp"
                                     android:layout_centerHorizontal="true"
                                     android:layout_height="match_parent">
+
                                     <View
                                         android:id="@+id/divider1"
                                         android:layout_width="1dp"
@@ -195,17 +219,20 @@
                                         android:layout_centerVertical="true"
                                         android:layout_alignParentStart="true"
                                         android:background="#E8E8E8" />
+
                                     <RelativeLayout
                                         android:layout_width="wrap_content"
                                         android:layout_centerVertical="true"
                                         android:layout_centerHorizontal="true"
                                         android:layout_height="wrap_content">
+
                                         <TextView
                                             android:id="@+id/text_weigth"
                                             android:text="Cân nặng"
                                             android:textSize="15dp"
                                             android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"/>
+                                            android:layout_height="wrap_content" />
+
                                         <TextView
                                             android:id="@+id/number_weight"
                                             android:layout_centerHorizontal="true"
@@ -214,7 +241,7 @@
                                             android:textColor="@color/mainColor"
                                             android:textSize="17dp"
                                             android:textStyle="bold"
-                                            android:layout_height="wrap_content"/>
+                                            android:layout_height="wrap_content" />
                                     </RelativeLayout>
                                     <!-- Gạch dọc thứ hai -->
                                     <View
@@ -231,18 +258,21 @@
                                     android:layout_height="match_parent"
                                     android:layout_alignParentEnd="true"
                                     android:layout_toEndOf="@id/div_center">
+
                                     <RelativeLayout
                                         android:layout_width="wrap_content"
                                         android:layout_centerVertical="true"
                                         android:layout_centerHorizontal="true"
                                         android:layout_height="wrap_content">
+
                                         <TextView
                                             android:id="@+id/text_BMI"
                                             android:text="BMI"
                                             android:textSize="15dp"
                                             android:layout_centerHorizontal="true"
                                             android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"/>
+                                            android:layout_height="wrap_content" />
+
                                         <TextView
                                             android:id="@+id/number_BMI"
                                             android:layout_centerHorizontal="true"
@@ -267,33 +297,39 @@
                         android:layout_height="132dp"
                         android:layout_marginBottom="7dp"
                         app:cardElevation="4dp">
+
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:paddingEnd="5dp">
+
                             <RelativeLayout
                                 android:id="@+id/block_left"
                                 android:layout_width="120dp"
                                 android:layout_marginLeft="10dp"
                                 android:layout_height="match_parent">
+
                                 <ImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:src="@drawable/advice"/>
+                                    android:src="@drawable/advice" />
                             </RelativeLayout>
+
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:padding="10dp"
                                 android:layout_marginLeft="10dp"
                                 android:layout_toEndOf="@id/block_left">
+
                                 <TextView
                                     android:id="@+id/text1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/text_Color"
-                                    android:text="Hãy"/>
+                                    android:text="Hãy" />
+
                                 <TextView
                                     android:id="@+id/text2"
                                     android:layout_marginLeft="4dp"
@@ -304,7 +340,8 @@
                                     android:text="Đăng nhập"
                                     android:textSize="15sp"
                                     android:textColor="@color/text_Color"
-                                    android:textStyle="bold"/>
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/text3"
                                     android:layout_marginLeft="4dp"
@@ -313,7 +350,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/text_Color"
-                                    android:text="để có trải"/>
+                                    android:text="để có trải" />
+
                                 <TextView
                                     android:id="@+id/tex4"
                                     android:layout_below="@id/text1"
@@ -321,7 +359,8 @@
                                     android:layout_height="wrap_content"
                                     android:text="nghiệm tốt hơn"
                                     android:textColor="@color/text_Color"
-                                    android:layout_marginTop="3dp"/>
+                                    android:layout_marginTop="3dp" />
+
                                 <Button
                                     android:id="@+id/btn_login"
                                     android:text="Đăng nhập"
@@ -332,7 +371,7 @@
                                     android:background="@drawable/custom_button_google"
                                     android:backgroundTint="@color/colorCircleSelected"
                                     android:layout_width="match_parent"
-                                    android:layout_height="27dp"/>
+                                    android:layout_height="27dp" />
                             </RelativeLayout>
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>
@@ -344,12 +383,13 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="20dp"
                         android:layout_height="132dp">
+
                         <ProgressBar
                             android:id="@+id/loading_form"
                             android:layout_width="27dp"
                             android:layout_height="27dp"
                             android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"/>
+                            android:layout_centerVertical="true" />
                     </RelativeLayout>
                 </RelativeLayout>
                 <!--    end top-->
@@ -361,6 +401,7 @@
                     android:layout_height="100dp"
                     android:paddingStart="15dp"
                     android:paddingEnd="15dp">
+
                     <Button
                         android:id="@+id/btn_book"
                         android:text="Đặt lịch khám"
@@ -374,20 +415,22 @@
                         android:layout_marginTop="28dp"
                         android:background="@drawable/custom_home_button_book"
                         android:layout_width="match_parent"
-                        android:layout_height="73dp"/>
+                        android:layout_height="73dp" />
+
                     <Button
                         android:id="@+id/btn_calendar"
                         android:background="@drawable/calendar"
                         android:layout_width="78dp"
                         android:layout_height="78dp"
                         android:layout_marginTop="14dp"
-                        android:layout_marginLeft="28dp"/>
+                        android:layout_marginLeft="28dp" />
+
                     <Button
                         android:id="@+id/shadow_calendar"
                         android:layout_width="72dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="31dp"
-                        android:background="@drawable/custom_shadow_calendar_home"/>
+                        android:background="@drawable/custom_shadow_calendar_home" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -395,8 +438,9 @@
                     android:layout_below="@id/infor_layout"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:layout_marginTop="25dp"/>
+                    android:layout_marginTop="25dp" />
                 //
+
                 <RelativeLayout
                     android:id="@+id/form_menu_outside"
                     android:layout_width="match_parent"
@@ -412,6 +456,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true">
+
                         <RelativeLayout
                             android:id="@+id/form_inside_one_above"
                             android:clickable="true"
@@ -419,16 +464,19 @@
                             android:backgroundTint="@color/white"
                             android:layout_width="80dp"
                             android:layout_height="100dp">
+
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:layout_centerHorizontal="true">
+
                                 <RelativeLayout
                                     android:id="@+id/block_icon_alarm"
                                     android:layout_width="70dp"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/custom_shadow_menu_home">
+
                                     <ImageView
                                         android:id="@+id/icon_alarm"
                                         android:layout_width="50dp"
@@ -437,6 +485,7 @@
                                         android:layout_marginTop="12dp"
                                         android:src="@drawable/alarm" />
                                 </RelativeLayout>
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -446,10 +495,11 @@
                                     android:textSize="12sp"
                                     android:textColor="#012537"
                                     android:fontFamily="sans-serif-medium"
-                                    android:text="Nhắc lịch"/>
+                                    android:text="Nhắc lịch" />
                             </RelativeLayout>
                         </RelativeLayout>
                         //
+
                         <RelativeLayout
                             android:id="@+id/form_inside_one_below"
                             android:layout_below="@id/form_inside_one_above"
@@ -459,10 +509,12 @@
                             android:layout_marginTop="15dp"
                             android:layout_width="80dp"
                             android:layout_height="100dp">
+
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true">
+
                                 <RelativeLayout
                                     android:id="@+id/block_icon_wallet"
                                     android:layout_width="70dp"
@@ -477,6 +529,7 @@
                                         android:layout_centerHorizontal="true"
                                         android:src="@drawable/statistics" />
                                 </RelativeLayout>
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -496,6 +549,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true">
+
                         <RelativeLayout
                             android:id="@+id/form_inside_two_above"
                             android:clickable="true"
@@ -503,11 +557,13 @@
                             android:backgroundTint="@color/white"
                             android:layout_width="80dp"
                             android:layout_height="100dp">
+
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:layout_centerHorizontal="true">
+
                                 <RelativeLayout
                                     android:id="@+id/block_icon_prescription"
                                     android:layout_width="70dp"
@@ -522,6 +578,7 @@
                                         android:layout_marginTop="10dp"
                                         android:src="@drawable/prescription" />
                                 </RelativeLayout>
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -531,10 +588,11 @@
                                     android:textSize="12sp"
                                     android:textColor="#012537"
                                     android:fontFamily="sans-serif-medium"
-                                    android:text="Đơn thuốc"/>
+                                    android:text="Đơn thuốc" />
                             </RelativeLayout>
                         </RelativeLayout>
                         //
+
                         <RelativeLayout
                             android:id="@+id/form_inside_two_below"
                             android:layout_marginTop="15dp"
@@ -544,10 +602,12 @@
                             android:backgroundTint="@color/white"
                             android:layout_width="80dp"
                             android:layout_height="100dp">
+
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true">
+
                                 <RelativeLayout
                                     android:id="@+id/block_icon_shield"
                                     android:layout_width="70dp"
@@ -569,6 +629,7 @@
                                         android:layout_marginTop="35dp"
                                         android:src="@drawable/search" />
                                 </RelativeLayout>
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -578,7 +639,7 @@
                                     android:textSize="12sp"
                                     android:textColor="#012537"
                                     android:fontFamily="sans-serif-medium"
-                                    android:text="Tra cứu"/>
+                                    android:text="Tra cứu" />
                             </RelativeLayout>
                         </RelativeLayout>
                     </RelativeLayout>
@@ -588,6 +649,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true">
+
                         <RelativeLayout
                             android:id="@+id/form_inside_three_above"
                             android:clickable="true"
@@ -595,16 +657,19 @@
                             android:backgroundTint="@color/white"
                             android:layout_width="80dp"
                             android:layout_height="100dp">
+
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:layout_centerHorizontal="true">
+
                                 <RelativeLayout
                                     android:id="@+id/block_icon_healthcare"
                                     android:layout_width="70dp"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/custom_shadow_menu_home">
+
                                     <ImageView
                                         android:id="@+id/icon_healthcare"
                                         android:layout_width="51dp"
@@ -613,6 +678,7 @@
                                         android:layout_centerHorizontal="true"
                                         android:src="@drawable/healthcare" />
                                 </RelativeLayout>
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -622,10 +688,11 @@
                                     android:textSize="12sp"
                                     android:textColor="#012537"
                                     android:fontFamily="sans-serif-medium"
-                                    android:text="Dịch vụ"/>
+                                    android:text="Dịch vụ" />
                             </RelativeLayout>
                         </RelativeLayout>
                         //
+
                         <RelativeLayout
                             android:id="@+id/form_inside_three_below"
                             android:layout_width="80dp"
@@ -635,15 +702,18 @@
                             android:background="@drawable/custom_button"
                             android:backgroundTint="@color/white"
                             android:clickable="true">
+
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true">
+
                                 <RelativeLayout
                                     android:id="@+id/block_icon_folder"
                                     android:layout_width="70dp"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/custom_shadow_menu_home">
+
                                     <ImageView
                                         android:id="@+id/icon_folder"
                                         android:layout_width="45dp"
@@ -652,6 +722,7 @@
                                         android:layout_marginTop="13dp"
                                         android:src="@drawable/folder" />
                                 </RelativeLayout>
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -676,16 +747,19 @@
                     android:layout_marginEnd="15dp"
                     android:layout_marginTop="17dp"
                     android:layout_height="151dp">
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
                         <androidx.viewpager2.widget.ViewPager2
                             android:id="@+id/slide"
                             android:background="@drawable/custom_form_slide_home"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
+                            android:layout_height="match_parent" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
+
                 <RelativeLayout
                     android:id="@+id/circles"
                     android:layout_below="@id/block_slide"
@@ -693,48 +767,55 @@
                     android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
                     <ImageButton
                         android:id="@+id/circle_one"
                         android:background="@drawable/icon_circle_slide"
                         android:backgroundTint="@color/colorCircleSelected"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
+
                     <ImageButton
                         android:id="@+id/circle_two"
                         android:background="@drawable/icon_circle_slide"
                         android:layout_toEndOf="@id/circle_one"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
+
                     <ImageButton
                         android:id="@+id/circle_three"
                         android:background="@drawable/icon_circle_slide"
                         android:layout_toEndOf="@id/circle_two"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
+
                     <ImageButton
                         android:id="@+id/circle_four"
                         android:background="@drawable/icon_circle_slide"
                         android:layout_toEndOf="@id/circle_three"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
+
                     <ImageButton
                         android:id="@+id/circle_five"
                         android:background="@drawable/icon_circle_slide"
                         android:layout_toEndOf="@id/circle_four"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
+
                     <ImageButton
                         android:id="@+id/circle_six"
                         android:background="@drawable/icon_circle_slide"
                         android:layout_toEndOf="@id/circle_five"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
                 </RelativeLayout>
                 <!--news-->
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
     //
+
     <RelativeLayout
         android:id="@+id/btn_chat"
         android:layout_width="55dp"
@@ -745,6 +826,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="670dp"
         android:layout_marginRight="15dp">
+
         <ImageView
             android:id="@+id/icon_chat"
             android:layout_width="51dp"
@@ -754,5 +836,4 @@
             android:layout_centerVertical="true"
             android:src="@drawable/chat" />
     </RelativeLayout>
-</RelativeLayout>
-<!--    #1C6285 mau trong suot-->
+</RelativeLayout><!--    #1C6285 mau trong suot-->

@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/custom_form_slide_home"
     tools:context=".fragments.CustomerFragment.slide2">
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/slide2"
-            android:scaleType="centerCrop"/> <!-- ScaleType để đảm bảo ảnh kín hết khu vực của ImageView -->
+            android:scaleType="centerCrop" /> <!-- ScaleType để đảm bảo ảnh kín hết khu vực của ImageView -->
 
     </androidx.cardview.widget.CardView>
 

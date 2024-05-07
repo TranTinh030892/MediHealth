@@ -19,11 +19,12 @@ import com.example.medihealth.models.Doctor;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-public class DoctorAdapter extends FirestoreRecyclerAdapter<Doctor,DoctorAdapter.DoctorViewHolder> {
+public class DoctorAdapter extends FirestoreRecyclerAdapter<Doctor, DoctorAdapter.DoctorViewHolder> {
     Context context;
     private IDoctorViewHolder iViewHolder;
     private int selectedPosition = RecyclerView.NO_POSITION;
-    SharedPreferences sharedPreferences ;
+    SharedPreferences sharedPreferences;
+
     public DoctorAdapter(@NonNull FirestoreRecyclerOptions<Doctor> options, Context context, IDoctorViewHolder iDoctorViewHolder) {
         super(options);
         this.context = context;
@@ -44,7 +45,7 @@ public class DoctorAdapter extends FirestoreRecyclerAdapter<Doctor,DoctorAdapter
             holder.imageDoctor.setImageResource(R.drawable.doctor2);
         }
 
-        int selectedPosition = sharedPreferences.getInt("indexDoctorSelected",0);
+        int selectedPosition = sharedPreferences.getInt("indexDoctorSelected", 0);
         if (position == selectedPosition) {
             setBackgroundItem(holder);
         } else {
@@ -72,6 +73,7 @@ public class DoctorAdapter extends FirestoreRecyclerAdapter<Doctor,DoctorAdapter
     public int getItemCount() {
         return super.getItemCount();
     }
+
     @Override
     public void onDataChanged() {
         super.onDataChanged();
@@ -83,13 +85,14 @@ public class DoctorAdapter extends FirestoreRecyclerAdapter<Doctor,DoctorAdapter
     @NonNull
     @Override
     public DoctorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_pic_view,parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_pic_view, parent, false);
         return new DoctorViewHolder(itemView);
     }
 
-    public static class DoctorViewHolder extends RecyclerView.ViewHolder{
+    public static class DoctorViewHolder extends RecyclerView.ViewHolder {
         TextView fullName;
         ImageView imageDoctor;
+
         public DoctorViewHolder(@NonNull View itemView) {
             super(itemView);
             fullName = itemView.findViewById(R.id.fullName_doctor);
@@ -97,11 +100,13 @@ public class DoctorAdapter extends FirestoreRecyclerAdapter<Doctor,DoctorAdapter
         }
     }
 
-    public interface IDoctorViewHolder{
+    public interface IDoctorViewHolder {
         void onClickItem(int positon);
+
         void onDataLoaded(int size);
     }
-    private void setIndexSelectedSharedPreferences(String key, int value){
+
+    private void setIndexSelectedSharedPreferences(String key, int value) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(key, value);
         editor.apply();

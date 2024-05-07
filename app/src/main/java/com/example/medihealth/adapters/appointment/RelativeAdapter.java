@@ -3,17 +3,13 @@ package com.example.medihealth.adapters.appointment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,11 +18,12 @@ import com.example.medihealth.models.Relative;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-public class RelativeAdapter extends FirestoreRecyclerAdapter<Relative,RelativeAdapter.RelativeViewHolder> {
+public class RelativeAdapter extends FirestoreRecyclerAdapter<Relative, RelativeAdapter.RelativeViewHolder> {
     Context context;
     private RelativeAdapter.IRelativeViewHolder iViewHolder;
     private int selectedPosition = RecyclerView.NO_POSITION;
-    public RelativeAdapter(@NonNull FirestoreRecyclerOptions<Relative> options,Context context,IRelativeViewHolder iViewHolder) {
+
+    public RelativeAdapter(@NonNull FirestoreRecyclerOptions<Relative> options, Context context, IRelativeViewHolder iViewHolder) {
         super(options);
         this.context = context;
         this.iViewHolder = iViewHolder;
@@ -68,13 +65,14 @@ public class RelativeAdapter extends FirestoreRecyclerAdapter<Relative,RelativeA
     @NonNull
     @Override
     public RelativeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.person_item,parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.person_item, parent, false);
         return new RelativeAdapter.RelativeViewHolder(itemView);
     }
 
-    public static class RelativeViewHolder extends RecyclerView.ViewHolder{
-        RelativeLayout formRelative,tick;
-        TextView name,detail;
+    public static class RelativeViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout formRelative, tick;
+        TextView name, detail;
+
         public RelativeViewHolder(@NonNull View itemView) {
             super(itemView);
             formRelative = itemView.findViewById(R.id.form_relative);
@@ -83,14 +81,18 @@ public class RelativeAdapter extends FirestoreRecyclerAdapter<Relative,RelativeA
             tick = itemView.findViewById(R.id.tick);
         }
     }
-    private String getNameFromFullName(String fullName){
-        String[]str = fullName.split(" ");
-        return str[str.length-1];
+
+    private String getNameFromFullName(String fullName) {
+        String[] str = fullName.split(" ");
+        return str[str.length - 1];
     }
-    public interface IRelativeViewHolder{
+
+    public interface IRelativeViewHolder {
         void onClickItem(int positon);
+
         void onDataLoaded(int size);
     }
+
     public void clearBackgroundItems() {
         selectedPosition = RecyclerView.NO_POSITION;
         notifyDataSetChanged();

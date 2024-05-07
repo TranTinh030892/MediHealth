@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medihealth.R;
-import com.example.medihealth.activites.chat.EmployeeChat_Activity;
+import com.example.medihealth.activities.chat.EmployeeChat_Activity;
 import com.example.medihealth.models.ChatRoom;
 import com.example.medihealth.models.UserModel;
 import com.example.medihealth.utils.AndroidUtil;
@@ -37,17 +37,17 @@ public class RecentChatRecyclerAdapter extends FirestoreRecyclerAdapter<ChatRoom
     protected void onBindViewHolder(@NonNull ChatroomModelViewHolder holder, int position, @NonNull ChatRoom model) {
         FirebaseUtil.getOtherUserFromChatroom(model.getUserIds())
                 .get().addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         boolean lastMessageSentByMe = model.getLastMessageSenderId().equals(FirebaseUtil.currentUserId());
 
 
                         UserModel userModel = task.getResult().toObject(UserModel.class);
 
-                        if (userModel != null){
+                        if (userModel != null) {
                             holder.usernameText.setText(userModel.getFullName());
                         }
-                        if(lastMessageSentByMe)
-                            holder.lastMessageText.setText("Bạn : "+model.getLastMessage());
+                        if (lastMessageSentByMe)
+                            holder.lastMessageText.setText("Bạn : " + model.getLastMessage());
                         else
                             holder.lastMessageText.setText(model.getLastMessage());
                         Timestamp time = model.getLastMessageTimestamp();
@@ -57,7 +57,7 @@ public class RecentChatRecyclerAdapter extends FirestoreRecyclerAdapter<ChatRoom
                         holder.itemView.setOnClickListener(v -> {
                             //navigate to chat activity
                             Intent intent = new Intent(context, EmployeeChat_Activity.class);
-                            AndroidUtil.passUserModelAsIntent(intent,userModel);
+                            AndroidUtil.passUserModelAsIntent(intent, userModel);
                             context.startActivity(intent);
                         });
 
@@ -68,11 +68,11 @@ public class RecentChatRecyclerAdapter extends FirestoreRecyclerAdapter<ChatRoom
     @NonNull
     @Override
     public ChatroomModelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recent_chat_recycler_row,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recent_chat_recycler_row, parent, false);
         return new ChatroomModelViewHolder(view);
     }
 
-    class ChatroomModelViewHolder extends RecyclerView.ViewHolder{
+    class ChatroomModelViewHolder extends RecyclerView.ViewHolder {
         TextView usernameText;
         TextView lastMessageText;
         TextView lastMessageTime;
@@ -86,6 +86,7 @@ public class RecentChatRecyclerAdapter extends FirestoreRecyclerAdapter<ChatRoom
             profilePic = itemView.findViewById(R.id.profile_pic_image_view);
         }
     }
+
     public static String timestampToString(Timestamp timestamp) {
         Date date = timestamp.toDate();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");

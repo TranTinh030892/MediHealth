@@ -1,13 +1,12 @@
 package com.example.medihealth.trang.search.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.medihealth.R;
@@ -18,7 +17,8 @@ public class DrugDetailActivity extends AppCompatActivity {
     Drug drug;
     ImageView imageDrug;
     ImageButton back;
-    TextView name,ingredients,function,expiry,sideEffects,contraindicated,interactions;
+    TextView name, ingredients, function, expiry, sideEffects, contraindicated, interactions;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +54,7 @@ public class DrugDetailActivity extends AppCompatActivity {
         sideEffects.setText(drug.getSideEffects());
         contraindicated.setText(drug.getContraindicated());
         interactions.setText(drug.getInteractions());
-        if(drug.getImage() != null){
+        if (drug.getImage() != null) {
             Glide.with(this)
                     .load(drug.getImage())
                     .into(imageDrug);

@@ -22,6 +22,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 public class Customer_AppoitnmentAdapter extends FirestoreRecyclerAdapter<Appointment, Customer_AppoitnmentAdapter.AppointmentViewHolder> {
     Context context;
+
     public Customer_AppoitnmentAdapter(@NonNull FirestoreRecyclerOptions<Appointment> options, Context context) {
         super(options);
         this.context = context;
@@ -33,22 +34,21 @@ public class Customer_AppoitnmentAdapter extends FirestoreRecyclerAdapter<Appoin
         Relative relative = model.getRelative();
         if (userModel != null && relative == null) {
             holder.userName.setText(userModel.getFullName());
-        }
-        else if (userModel == null && relative != null) {
+        } else if (userModel == null && relative != null) {
             holder.userName.setText(relative.getFullName());
-        }
-        else  holder.userName.setText("");
-        setColorStateAppoiment(model,holder);
+        } else holder.userName.setText("");
+        setColorStateAppoiment(model, holder);
 
-        String calendarStr = model.getTime()+" - "+model.getAppointmentDate();
+        String calendarStr = model.getTime() + " - " + model.getAppointmentDate();
         holder.calendar.setText(calendarStr);
         Doctor doctor = model.getDoctor();
         if (doctor != null) {
-            holder.doctorName.setText("BS."+doctor.getFullName());
+            holder.doctorName.setText("BS." + doctor.getFullName());
         } else {
             holder.doctorName.setText("");
         }
     }
+
     @Override
     public int getItemCount() {
         return super.getItemCount();
@@ -57,13 +57,14 @@ public class Customer_AppoitnmentAdapter extends FirestoreRecyclerAdapter<Appoin
     @NonNull
     @Override
     public AppointmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_appontment_customer,parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_appontment_customer, parent, false);
         return new Customer_AppoitnmentAdapter.AppointmentViewHolder(itemView);
     }
 
-    public static class AppointmentViewHolder extends RecyclerView.ViewHolder{
+    public static class AppointmentViewHolder extends RecyclerView.ViewHolder {
         TextView userName, status, calendar, doctorName;
         RelativeLayout blockStateAppointment;
+
         public AppointmentViewHolder(@NonNull View itemView) {
             super(itemView);
             userName = itemView.findViewById(R.id.fullName_user);
@@ -73,7 +74,8 @@ public class Customer_AppoitnmentAdapter extends FirestoreRecyclerAdapter<Appoin
             blockStateAppointment = itemView.findViewById(R.id.block_state_appointment);
         }
     }
-    private void setColorStateAppoiment(Appointment appoiment,AppointmentViewHolder holder){
+
+    private void setColorStateAppoiment(Appointment appoiment, AppointmentViewHolder holder) {
         int bgColorState0 = ContextCompat.getColor(context, R.color.colorStatePending);
         int textColorState0 = ContextCompat.getColor(context, R.color.Red);
         int bgColorState1 = ContextCompat.getColor(context, R.color.colorStateApproved);
@@ -81,22 +83,22 @@ public class Customer_AppoitnmentAdapter extends FirestoreRecyclerAdapter<Appoin
         int bgColorState2 = ContextCompat.getColor(context, R.color.chat_color_sender);
         int textColorState2 = ContextCompat.getColor(context, R.color.white);
         int bgColorState3 = ContextCompat.getColor(context, R.color.pink);
-        if (appoiment.getStateAppointment() == 1){
+        if (appoiment.getStateAppointment() == 1) {
             holder.blockStateAppointment.setBackgroundTintList(ColorStateList.valueOf(bgColorState1));
             holder.status.setTextColor(ColorStateList.valueOf(textColorState1));
             holder.status.setText("Chờ khám");
         }
-        if (appoiment.getStateAppointment() == 0){
+        if (appoiment.getStateAppointment() == 0) {
             holder.blockStateAppointment.setBackgroundTintList(ColorStateList.valueOf(bgColorState0));
             holder.status.setTextColor(ColorStateList.valueOf(textColorState0));
             holder.status.setText("Chờ duyệt");
         }
-        if (appoiment.getStateAppointment() == 2){
+        if (appoiment.getStateAppointment() == 2) {
             holder.blockStateAppointment.setBackgroundTintList(ColorStateList.valueOf(bgColorState2));
             holder.status.setTextColor(ColorStateList.valueOf(textColorState2));
             holder.status.setText("Đã khám");
         }
-        if (appoiment.getStateAppointment() == -1){
+        if (appoiment.getStateAppointment() == -1) {
             holder.blockStateAppointment.setBackgroundTintList(ColorStateList.valueOf(bgColorState3));
             holder.status.setTextColor(ColorStateList.valueOf(textColorState0));
             holder.status.setText("Đã hủy");

@@ -9,6 +9,7 @@ public class Drug {
     private String contraindicated;
     private String interactions;
     private String image;
+
     public Drug() {
     }
 

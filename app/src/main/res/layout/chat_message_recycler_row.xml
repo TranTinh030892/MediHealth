@@ -13,14 +13,16 @@
         android:layout_marginEnd="80dp"
         android:id="@+id/left_chat_layout"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:text="Hello"
-            android:id="@+id/left_chat_textview"/>
+            android:id="@+id/left_chat_textview" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,12 +32,13 @@
         android:padding="8dp"
         android:layout_marginStart="80dp"
         android:id="@+id/right_chat_layout">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:textSize="18sp"
-            android:id="@+id/right_chat_textview"/>
+            android:id="@+id/right_chat_textview" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activites.MainActivity">
+    tools:context=".activities.MainActivity">
+
     <FrameLayout
         android:id="@+id/page_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/menu">
-    </FrameLayout>
+        android:layout_above="@id/menu"></FrameLayout>
     <!--    menu-->
     <RelativeLayout
         android:id="@+id/menu"
@@ -36,6 +36,7 @@
             android:background="@color/white"
             android:paddingTop="5dp"
             android:layout_height="wrap_content">
+
             <Button
                 android:id="@+id/btnHome"
                 android:background="@drawable/circular_bg"
@@ -45,8 +46,9 @@
                 android:paddingStart="9dp"
                 android:paddingTop="4dp"
                 android:layout_width="48dp"
-                android:layout_height="48dp"/>
+                android:layout_height="48dp" />
         </com.google.android.material.bottomnavigation.BottomNavigationView>
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/notification_bg"
             android:visibility="gone"
@@ -56,13 +58,14 @@
             android:layout_marginTop="3dp"
             android:background="@drawable/custom_notice"
             android:layout_height="19dp">
+
             <TextView
                 android:id="@+id/notice_Number"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text=""
                 android:textColor="@color/white"
-                android:gravity="center"/>
+                android:gravity="center" />
         </com.google.android.material.bottomnavigation.BottomNavigationView>
     </RelativeLayout>
 </RelativeLayout>

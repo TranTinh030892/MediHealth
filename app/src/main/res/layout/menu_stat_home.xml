@@ -1,0 +1,42 @@
+<!-- custom_menu_layout.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/menu_background">
+
+    <TextView
+        android:id="@+id/menu_item_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingLeft="10dp"
+        android:text="Thống kê theo ngày"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/menu_item_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingLeft="10dp"
+        android:text="Thống kê theo tuần"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/menu_item_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingLeft="10dp"
+        android:text="Thống kê theo tháng"
+        android:textColor="@android:color/black" />
+
+
+</LinearLayout>
